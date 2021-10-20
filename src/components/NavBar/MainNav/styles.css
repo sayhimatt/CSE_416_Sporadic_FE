@@ -1,0 +1,117 @@
+.navBar {
+  /* Auto Layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px 0px;
+
+  position: fixed;
+  width: 100vw;
+  height: 50px;
+
+  background: #d4f1f4;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+
+  z-index: 1;
+}
+
+.navBar > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.account {
+  /* Auto Layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+
+  /* Inside Auto Layout */
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  margin: 0px 0px;
+}
+
+.logo.logo {
+  /* Auto Layout */
+  margin: 0px;
+  margin-left: 10px;
+  padding-bottom: 2px;
+  /* Inside Auto Layout */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.logo img {
+  width: 200px;
+}
+
+.profilePicture {
+  width: 32px;
+  height: 32px;
+  padding-right: 8px;
+}
+
+.rightNav {
+  /* Auto Layout */
+  justify-content: flex-end;
+  padding: 10px;
+
+  /* Inside Auto Layout */
+  order: 2;
+  flex-grow: 1;
+  margin: 0px 20px;
+
+  font-size: 14px;
+}
+
+.rightNavItems {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  width: 200px;
+}
+
+.searchBar {
+  /* Auto Layout */
+  padding: 4px 22px;
+
+  position: static;
+  width: 20%;
+  height: 30px;
+
+  background: #ffffff;
+  border-radius: 30px;
+
+  /* Inside Auto Layout */
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  margin: 0px 20px;
+}
+
+.search {
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 25px;
+  border: none;
+
+  width: 100%;
+
+  /* identical to box height */
+  display: flex;
+  align-items: center;
+  text-align: left;
+}
+
+.search:focus {
+  outline: none;
+}

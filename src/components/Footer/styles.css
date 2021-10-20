@@ -1,0 +1,30 @@
+.footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+
+    position: fixed;
+    bottom: 0%;
+    width: 100vw;
+    height: 35px;
+
+    background: #189AB4;
+}
+
+.items {
+    display: flex;
+    flex-direction: row;
+    margin-right: 10px;
+}
+
+.navItem {
+    padding: 10px;
+    margin: 0px 2px;
+    font-size: 12px;
+}
+
+.link {
+    color: white;
+    text-decoration: none;
+}
