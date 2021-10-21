@@ -13,7 +13,7 @@ const LargeCard = ({ children, cardType, cardInfo, cardLink }) => {
       <div className="card d-flex flex-column">
         <div className="topCard d-flex flex-row">
           <div>
-            <img className="icon" src="/propic.png" alt="icon" />
+            <img className="icon" src="/platformIcon.png" alt="icon" />
           </div>
           <div className="info flex-grow-1">
             <div className="title">{cardInfo.title}</div>
