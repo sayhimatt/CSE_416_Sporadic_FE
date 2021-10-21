@@ -1,0 +1,36 @@
+.card {
+  position: relative;
+  top: 200px;
+  left: 30px;
+  width: 60vw;
+}
+
+.icon {
+  margin-right: 5px;
+  margin-top: 3px;
+  height: 40px;
+  width: 40px;
+}
+
+.title {
+  font-size: 24px;
+}
+
+.description {
+  font-size: 14px;
+}
+
+.subtext {
+  padding-left: 10px;
+  padding-bottom: 5px;
+}
+
+.feedbackItem {
+  margin: 5px 10px;
+}
+
+.feedbackImage {
+  height: 32px;
+  width: 32px;
+  margin-right: 5px;
+}
