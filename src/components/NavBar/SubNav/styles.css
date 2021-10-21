@@ -1,0 +1,26 @@
+.subNav {
+  display: flex;
+  flex-direction: row;
+  background: #d4f1f4;
+  position: fixed;
+  top: 66px;
+  width: 100vw;
+  padding: 10px 0px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+p {
+  margin: 0px;
+}
+
+.heading {
+  margin-left: 20px;
+  font-size: 2vw;
+  font-weight: 700;
+  color: #189ab4;
+}
+
+.buttons {
+  margin-right: 20px;
+}
