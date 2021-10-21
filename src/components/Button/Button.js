@@ -13,7 +13,7 @@ const Button = ({ children, type, onClick, buttonStyle, buttonSize }) => {
 
   return (
     <button
-      className={`btn ${checkButtonStyle} ${checkbuttonSize}`}
+      className={`custombtn ${checkButtonStyle} ${checkbuttonSize}`}
       onClick={onClick}
       type={type}
     >

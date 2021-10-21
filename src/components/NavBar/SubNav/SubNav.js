@@ -4,9 +4,7 @@ import "./styles.css";
 const SubNav = ({ children, heading, buttons }) => {
   return (
     <div className="subNav">
-      <div className="heading">
-        <p>{heading}</p>
-      </div>
+      <div className="heading">{heading}</div>
       <div className="buttons">{buttons}</div>
     </div>
   );
