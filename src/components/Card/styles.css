@@ -1,4 +1,4 @@
-.card {
+.cardContainer .card {
   background: #d4f1f4;
   padding: 5px 10px;
   box-shadow: 1px 4px 4px rgba(0, 0, 0, 0.25);

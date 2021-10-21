@@ -7,6 +7,8 @@ import reportWebVitals from "./reportWebVitals";
 import Amplify from "aws-amplify";
 import { Auth } from "aws-amplify";
 
+import "bootstrap/dist/css/bootstrap.css";
+
 Amplify.configure({
   Auth: {
     identityPoolId: "us-east-1:c87c6503-30c3-4252-a7e3-35c2a9d1c112",
