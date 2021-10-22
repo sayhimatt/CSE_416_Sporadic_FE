@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Button from "../../../components/Button/Button";
-import "../styles.css";
-import { Auth } from "aws-amplify";
+import axios from "axios";
 import { useHistory } from "react-router";
 
-const MainCreateAccount = () => {
+import Button from "../../../components/Button/Button";
+import "../styles.css";
 
+const MainCreateAccount = () => {
   const history = useHistory();
   const [credentials, setCredentials] = useState({
     email: "",
@@ -14,25 +14,28 @@ const MainCreateAccount = () => {
     password: "",
     passwordConfirm: "",
   });
-  
+
   const createAccount = async () => {
+    if (credentials.password !== credentials.passwordConfirm) {
+      alert("Passwords do not match.");
+      return;
+    }
     try {
-      const { user } = await Auth.signUp({
-        username: credentials.username,
-        password: credentials.password,
-        attributes: {
-          email: credentials.email, 
-        },
-      });
+      const user = await axios
+        .post("https://cse-416-sporadic-api-prod.herokuapp.com/users/", {
+          username: credentials.username,
+          password: credentials.password,
+          email: credentials.email,
+        })
+        .catch((error) => alert("Could not create account"));
+      history.push("/login");
       console.log(user);
     } catch (error) {
-      console.log("error signing up:", error);
+      console.log(error);
     }
-    return;
   };
 
   return (
-    
     <div className="page d-flex flex-column align-items-center justify-content-start">
       <div className="logo">
         <img className="logoImage" src="/logo.svg" alt="logo" />
@@ -85,7 +88,7 @@ const MainCreateAccount = () => {
                 type="password"
                 onChange={(e) => {
                   setCredentials((prevState) => {
-                    return { ...prevState, password: e.target.value };
+                    return { ...prevState, passwordConfirm: e.target.value };
                   });
                 }}
               ></input>
