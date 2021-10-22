@@ -41,12 +41,10 @@ const MainRouter = () => {
     <Router>
       <Switch>
         <Route
-          exact
           path="/login"
-          component={() => <Login loginHandler={login} />}
+          component={() => <Login auth={auth} loginHandler={login} />}
         />
-        <Route path="/createAccount" component={CreateAccount} /> 
-
+        <Route path="/createAccount" component={CreateAccount} />
         <MainNav />
         <GuardedRoute path="/" auth={auth} component={Feed}></GuardedRoute>
         <GuardedRoute path="/About" auth={auth} component={Feed}></GuardedRoute>

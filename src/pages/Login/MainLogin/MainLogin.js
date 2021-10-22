@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, Redirect } from "react-router-dom";
 import Button from "../../../components/Button/Button";
 import "../styles.css";
 
-const MainLogin = ({ children, loginHandler }) => {
+const MainLogin = ({ children, auth, loginHandler }) => {
   const history = useHistory();
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
   });
 
-  return (
+  return auth ? (
+    <Redirect to="/" />
+  ) : (
     <div className="page d-flex flex-column align-items-center justify-content-start">
       <div className="logo">
         <img className="logoImage" src="/logo.svg" alt="logo" />
