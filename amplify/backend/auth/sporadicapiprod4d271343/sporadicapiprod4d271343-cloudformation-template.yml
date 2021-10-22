@@ -119,10 +119,6 @@ Parameters:
   
             
         
-  usernameAttributes:
-    Type: CommaDelimitedList
-      
-        
   userPoolGroupList:
     Type: CommaDelimitedList
       
@@ -153,7 +149,7 @@ Resources:
   # Created to allow the UserPool SMS Config to publish via the Simple Notification Service during MFA Process
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !If [ShouldNotCreateEnvResources, 'matttr7b6f0ad5_sns-role', !Join ['',[ 'sns', '7b6f0ad5', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
+      RoleName: !If [ShouldNotCreateEnvResources, 'sporad4d271343_sns-role', !Join ['',[ 'sns', '4d271343', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -165,10 +161,10 @@ Resources:
               - "sts:AssumeRole"
             Condition:
               StringEquals:
-                sts:ExternalId: matttr7b6f0ad5_role_external_id
+                sts:ExternalId: sporad4d271343_role_external_id
       Policies:
         -
-          PolicyName: matttr7b6f0ad5-sns-policy
+          PolicyName: sporad4d271343-sns-policy
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -217,15 +213,13 @@ Resources:
           RequireSymbols: false
           RequireUppercase: false
       
-      UsernameAttributes: !Ref usernameAttributes
-      
       
       MfaConfiguration: !Ref mfaConfiguration
       SmsVerificationMessage: !Ref smsVerificationMessage
       SmsAuthenticationMessage: !Ref smsAuthenticationMessage
       SmsConfiguration:
         SnsCallerArn: !GetAtt SNSRole.Arn
-        ExternalId: matttr7b6f0ad5_role_external_id
+        ExternalId: sporad4d271343_role_external_id
     
   
   UserPoolClientWeb:
@@ -233,7 +227,7 @@ Resources:
   # Depends on UserPool for ID reference
     Type: "AWS::Cognito::UserPoolClient"
     Properties:
-      ClientName: matttr7b6f0ad5_app_clientWeb
+      ClientName: sporad4d271343_app_clientWeb
       
       RefreshTokenValidity: !Ref userpoolClientRefreshTokenValidity
       UserPoolId: !Ref UserPool
@@ -243,7 +237,7 @@ Resources:
   # Depends on UserPool for ID reference
     Type: "AWS::Cognito::UserPoolClient"
     Properties:
-      ClientName: matttr7b6f0ad5_app_client
+      ClientName: sporad4d271343_app_client
       
       GenerateSecret: !Ref userpoolClientGenerateSecret
       RefreshTokenValidity: !Ref userpoolClientRefreshTokenValidity
@@ -254,7 +248,7 @@ Resources:
   # Created to execute Lambda which gets userpool app client config values
     Type: 'AWS::IAM::Role'
     Properties:
-      RoleName: !If [ShouldNotCreateEnvResources, !Ref userpoolClientLambdaRole, !Join ['',['upClientLambdaRole', '7b6f0ad5', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
+      RoleName: !If [ShouldNotCreateEnvResources, !Ref userpoolClientLambdaRole, !Join ['',['upClientLambdaRole', '4d271343', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -308,7 +302,7 @@ Resources:
   # Marked as depending on UserPoolClientRole for easier to understand CFN sequencing
     Type: 'AWS::IAM::Policy'
     Properties:
-      PolicyName: matttr7b6f0ad5_userpoolclient_lambda_iam_policy
+      PolicyName: sporad4d271343_userpoolclient_lambda_iam_policy
       Roles:
         - !Ref UserPoolClientRole
       PolicyDocument:
@@ -325,7 +319,7 @@ Resources:
   # Marked as depending on UserPoolClientLambdaPolicy for easier to understand CFN sequencing
     Type: 'AWS::IAM::Policy'
     Properties:
-      PolicyName: matttr7b6f0ad5_userpoolclient_lambda_log_policy
+      PolicyName: sporad4d271343_userpoolclient_lambda_log_policy
       Roles:
         - !Ref UserPoolClientRole
       PolicyDocument:
@@ -365,7 +359,7 @@ Resources:
   # Always created
     Type: AWS::Cognito::IdentityPool
     Properties:
-      IdentityPoolName: !If [ShouldNotCreateEnvResources, 'matttraining4167b6f0ad5_identitypool_7b6f0ad5', !Join ['',['matttraining4167b6f0ad5_identitypool_7b6f0ad5', '__', !Ref env]]]
+      IdentityPoolName: !If [ShouldNotCreateEnvResources, 'sporadicapiprod4d271343_identitypool_4d271343', !Join ['',['sporadicapiprod4d271343_identitypool_4d271343', '__', !Ref env]]]
       
       CognitoIdentityProviders:
         - ClientId:  !Ref UserPoolClient
