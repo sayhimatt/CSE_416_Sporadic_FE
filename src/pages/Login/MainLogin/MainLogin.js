@@ -1,12 +1,24 @@
 import React from "react";
-import { Link } from "react-router-dom";
-
+import { Link, Redirect } from "react-router-dom";
+import axios from 'axios';
 import Button from "../../../components/Button/Button";
 import "../styles.css";
 import "./styles.css";
+import { Auth } from 'aws-amplify';
+import { useHistory } from "react-router";
+
+
 
 const MainLogin = () => {
-  const login = () => {
+  const login = async () => {
+    console.log(document.getElementById("username").value);
+    console.log(document.getElementById("password").value);
+    try {
+      const success = Auth.signIn(document.getElementById("username").value, document.getElementById("password").value);   
+    } catch (error) {
+      console.log('error signing in', error);
+      window.alert('Invalid Login');
+    }
     return;
   };
 
@@ -30,6 +42,7 @@ const MainLogin = () => {
                 id="password"
                 className="textInput"
                 placeholder="Password"
+                type="password"
               ></input>
             </div>
           </div>

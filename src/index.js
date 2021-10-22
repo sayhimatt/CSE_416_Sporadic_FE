@@ -11,10 +11,10 @@ import "bootstrap/dist/css/bootstrap.css";
 
 Amplify.configure({
   Auth: {
-    identityPoolId: "us-east-1:c87c6503-30c3-4252-a7e3-35c2a9d1c112",
+    identityPoolId: "us-east-1:2fb9bb37-a2ed-4c01-8875-cfd0cadadeb4",
     region: "us-east-1",
-    userPoolId: "us-east-1_eDxyVw4Db",
-    userPoolWebClientId: "75qdrepaagbasjgoopuv05ub00",
+    userPoolId: "us-east-1_STt8RuvC6",
+    userPoolWebClientId: "28b2mfltdfri759991ftg5l9p6",
   },
   API: {
     endpoints: [
