@@ -1,31 +1,14 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Button from "../../../components/Button/Button";
 import "../styles.css";
-import { Auth } from "aws-amplify";
-import { useHistory } from "react-router";
 
-const MainLogin = () => {
+const MainLogin = ({ children, loginHandler }) => {
   const history = useHistory();
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
   });
-  
-  const login = async () => {
-    console.log("Logging in...");
-    try {
-      const success = await Auth.signIn(
-        credentials.username,
-        credentials.password
-      );
-      history.push("/homepage");
-    } catch (error) {
-      console.log("error signing in", error);
-      window.alert("Invalid Login");
-    }
-    return;
-  };
 
   return (
     <div className="page d-flex flex-column align-items-center justify-content-start">
@@ -61,7 +44,13 @@ const MainLogin = () => {
               ></input>
             </div>
           </div>
-          <Button type="button" onClick={login}>
+          <Button
+            type="button"
+            onClick={async () => {
+              await loginHandler(credentials.username, credentials.password);
+              history.push("/homepage");
+            }}
+          >
             Log In
           </Button>
         </form>
