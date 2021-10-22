@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Auth } from "aws-amplify";
 
-import GuardedRoute from "./components/GuardedRoot/GuardedRoot";
+import GuardedRoute from "./components/GuardedRoute/GuardedRoute";
 import Feed from "./pages/Feed/Feed";
 import Login from "./pages/Login/MainLogin/MainLogin";
 import CreateAccount from "./pages/Login/MainCreateAccount/MainCreateAccount";
+import ConfirmEmail from "./pages/Login/ConfirmEmail";
+
+import "./App.scss";
 
 const MainRouter = () => {
   const [auth, setAuth] = useState(false);
@@ -47,7 +50,12 @@ const MainRouter = () => {
           path="/login"
           component={() => <Login auth={auth} loginHandler={login} />}
         />
-        <Route path="/createAccount" component={CreateAccount} />
+        <Route exact path="/createAccount" component={CreateAccount} />
+        <Route
+          exact
+          path="/createAccount/confirmation"
+          component={ConfirmEmail}
+        />
         <GuardedRoute
           path="/"
           auth={auth}

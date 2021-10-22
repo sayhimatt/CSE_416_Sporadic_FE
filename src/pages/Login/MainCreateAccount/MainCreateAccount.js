@@ -21,15 +21,20 @@ const MainCreateAccount = () => {
       return;
     }
     try {
-      const user = await axios
+      await axios
         .post("https://cse-416-sporadic-api-prod.herokuapp.com/users/", {
           username: credentials.username,
           password: credentials.password,
           email: credentials.email,
         })
+        .then((res) => {
+          const userID = res.data._id;
+          history.push({
+            pathname: "/createAccount/confirmation",
+            state: { id: userID },
+          });
+        })
         .catch((error) => alert("Could not create account"));
-      history.push("/login");
-      console.log(user);
     } catch (error) {
       console.log(error);
     }
