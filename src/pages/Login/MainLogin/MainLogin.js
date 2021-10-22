@@ -1,23 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 import Button from "../../../components/Button/Button";
 import "../styles.css";
 import "./styles.css";
-import { Auth } from 'aws-amplify';
+import { Auth } from "aws-amplify";
 import { useHistory } from "react-router";
 
-
-
 const MainLogin = () => {
+  const history = useHistory();
+  const [credentials, setCredentials] = useState({
+    username: "",
+    password: "",
+  });
   const login = async () => {
-    console.log(document.getElementById("username").value);
-    console.log(document.getElementById("password").value);
+    console.log("Logging in...");
     try {
-      const success = Auth.signIn(document.getElementById("username").value, document.getElementById("password").value);   
+      const success = await Auth.signIn(
+        credentials.username,
+        credentials.password
+      );
+      history.push("/homepage");
     } catch (error) {
-      console.log('error signing in', error);
-      window.alert('Invalid Login');
+      console.log("error signing in", error);
+      window.alert("Invalid Login");
     }
     return;
   };
@@ -35,6 +41,11 @@ const MainLogin = () => {
                 id="username"
                 className="textInput"
                 placeholder="Username"
+                onChange={(e) => {
+                  setCredentials((prevState) => {
+                    return { ...prevState, username: e.target.value };
+                  });
+                }}
               ></input>
             </div>
             <div className="inputBox">
@@ -43,6 +54,11 @@ const MainLogin = () => {
                 className="textInput"
                 placeholder="Password"
                 type="password"
+                onChange={(e) => {
+                  setCredentials((prevState) => {
+                    return { ...prevState, password: e.target.value };
+                  });
+                }}
               ></input>
             </div>
           </div>
