@@ -3,8 +3,6 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Auth } from "aws-amplify";
 
 import GuardedRoute from "./components/GuardedRoot/GuardedRoot";
-import MainNav from "./components/NavBar/MainNav/MainNav";
-import Footer from "./components/Footer/Footer";
 import Feed from "./pages/Feed/Feed";
 import Login from "./pages/Login/MainLogin/MainLogin";
 import CreateAccount from "./pages/Login/MainCreateAccount/MainCreateAccount";
@@ -16,7 +14,7 @@ const MainRouter = () => {
     onLoad();
   }, []);
 
-  async function onLoad() {
+  const onLoad = async () => {
     try {
       await Auth.currentSession();
       console.log("Logged in");
@@ -24,7 +22,12 @@ const MainRouter = () => {
     } catch (e) {
       console.log("Failed login");
     }
-  }
+  };
+
+  const logout = async () => {
+    await Auth.signOut();
+    setAuth(false);
+  };
 
   const login = async (username, password) => {
     try {
@@ -45,15 +48,21 @@ const MainRouter = () => {
           component={() => <Login auth={auth} loginHandler={login} />}
         />
         <Route path="/createAccount" component={CreateAccount} />
-        <MainNav />
-        <GuardedRoute path="/" auth={auth} component={Feed}></GuardedRoute>
-        <GuardedRoute path="/About" auth={auth} component={Feed}></GuardedRoute>
+        <GuardedRoute
+          path="/"
+          auth={auth}
+          component={() => <Feed logoutHandler={logout} />}
+        ></GuardedRoute>
+        <GuardedRoute
+          path="/About"
+          auth={auth}
+          component={() => <Feed logoutHandler={logout} />}
+        ></GuardedRoute>
         <GuardedRoute
           path="/Contact"
           auth={auth}
-          component={Feed}
+          component={() => <Feed logoutHandler={logout} />}
         ></GuardedRoute>
-        <Footer />
       </Switch>
     </Router>
   );
