@@ -3,11 +3,14 @@ import MainNav from "./components/NavBar/MainNav/MainNav";
 import Footer from "./components/Footer/Footer";
 import Feed from "./pages/Feed/Feed";
 import Login from "./pages/Login/MainLogin/MainLogin";
+import CreateAccount from "./pages/Login/MainCreateAccount/MainCreateAccount";
 
 const MainRouter = () => {
   return (
     <Router>
       <Route path="/login" component={Login} />
+      <Route path="/createAccount" component={CreateAccount} /> 
+
       <MainNav />
       <Route path="/Homepage" component={Feed}></Route>
       <Route path="/About"></Route>

@@ -6,3 +6,48 @@
   padding: 40px 30px;
   margin-top: 80px;
 }
+
+
+.page {
+  width: 100vw;
+  height: 100vh;
+  background: #f7f7f7;
+  padding: 30px 20px;
+}
+
+.inputBox {
+  border: 2px solid #cdcdcd;
+  border-radius: 15px;
+  padding: 8px 10px;
+  margin: 10px 0px;
+}
+
+.inputs {
+  margin-bottom: 20px;
+}
+
+.textInput {
+  border: none;
+  width: 100%;
+}
+
+.textInput:focus {
+  outline: none;
+}
+
+.loginForm {
+  margin-bottom: 20px;
+}
+
+.links {
+  margin-top: 20px;
+}
+
+.links .link {
+  color: black;
+}
+
+.page .logoImage {
+  width: 320px;
+  margin-top: 40px;
+}
