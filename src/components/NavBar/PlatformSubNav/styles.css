@@ -1,0 +1,13 @@
+.icon--large {
+  height: 20vh;
+  overflow-y: visible;
+}
+
+.icon--small {
+  height: 4vh;
+}
+
+.banner {
+  width: 100vw;
+  height: 20vh;
+}
