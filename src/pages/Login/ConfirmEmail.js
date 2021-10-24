@@ -12,10 +12,10 @@ const ConfirmEmail = () => {
 
   const confirmCode = async () => {
     try {
-      const uid = history.location.state.id;
+      const username = history.location.state.username;
       await axios
         .post(
-          `https://cse-416-sporadic-api-prod.herokuapp.com/users/${uid}/confirm`,
+          `https://cse-416-sporadic-api-prod.herokuapp.com/users/${username}/confirm`,
           {
             confirmCode: confirmation,
           }

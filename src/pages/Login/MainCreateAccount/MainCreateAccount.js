@@ -28,10 +28,9 @@ const MainCreateAccount = () => {
           email: credentials.email,
         })
         .then((res) => {
-          const userID = res.data._id;
           history.push({
             pathname: "/createAccount/confirmation",
-            state: { id: userID },
+            state: { username: credentials.username },
           });
         })
         .catch((error) => alert("Could not create account"));
