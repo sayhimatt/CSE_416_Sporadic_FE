@@ -1,14 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useHistory, Redirect } from "react-router-dom";
+import { Auth } from "aws-amplify";
+
+import { AuthContext } from "../../../contexts/AuthContext";
 import Button from "../../../components/Button/Button";
+
 import "../styles.css";
 
-const MainLogin = ({ children, auth, loginHandler }) => {
+const MainLogin = () => {
   const history = useHistory();
+  const { auth, dispatch } = useContext(AuthContext);
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
   });
+
+  const login = async (username, password) => {
+    try {
+      const success = await Auth.signIn(username, password);
+      dispatch({ type: "LOGIN" });
+    } catch (error) {
+      console.log("error signing in", error);
+      window.alert("Invalid Login");
+    }
+  };
 
   return auth ? (
     <Redirect to="/" />
@@ -49,7 +64,7 @@ const MainLogin = ({ children, auth, loginHandler }) => {
           <Button
             type="button"
             onClick={async () => {
-              await loginHandler(credentials.username, credentials.password);
+              await login(credentials.username, credentials.password);
               history.push("/homepage");
             }}
           >
