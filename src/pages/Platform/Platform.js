@@ -41,7 +41,6 @@ const Platform = (props) => {
         heading="Movies"
         bannerSrc="/banner.svg"
         isSubsribed={true}
-        isMain={true}
       />
     </div>
   );

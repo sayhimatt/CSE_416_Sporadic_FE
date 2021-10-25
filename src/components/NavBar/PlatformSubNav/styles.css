@@ -1,13 +1,22 @@
 .icon--large {
-  height: 20vh;
+  height: 15vh;
   overflow-y: visible;
 }
 
 .icon--small {
-  height: 4vh;
+  height: 42px;
 }
 
 .banner {
-  width: 100vw;
+  min-width: 100vw;
   height: 20vh;
+  background-size: cover;
+}
+
+.platformSubNav {
+  padding-top: 66px;
+}
+
+.platformSubNav .subNav {
+  margin-top: 0px;
 }

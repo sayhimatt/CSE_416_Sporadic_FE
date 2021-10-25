@@ -22,16 +22,23 @@ const PlatformSubNav = ({
     );
     buttons.push(subscription);
     /* Handle whether mod view button appears */
+    return buttons;
   };
 
   return (
     <div className="platformSubNav">
       {bannerSrc ? (
-        <img className="banner" src={bannerSrc} alt="Banner" />
+        <div
+          className="banner"
+          style={{ backgroundImage: `url(${bannerSrc})` }}
+        />
       ) : null}
-      <SubNav className="mt-0" heading={heading} buttons={loadButtons}>
+      <SubNav heading={heading} buttons={loadButtons()}>
         <img
-          className={bannerSrc ? "icon--large" : "icon--small"}
+          className={
+            "d-flex align-self-end me-2 " +
+            (bannerSrc ? "icon--large" : "icon--small")
+          }
           src="/platformIcon.svg"
           alt="Icon"
         />
