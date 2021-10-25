@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 
 import MainNav from "../../components/NavBar/MainNav/MainNav";
@@ -10,14 +10,13 @@ import "./styles.css";
 const Platform = (props) => {
   const [platform, setPlatform] = useState({});
   const location = useLocation();
+  const params = useParams();
   useEffect(() => {
     onLoad();
   }, []);
 
   const onLoad = async () => {
-    const path = location.pathname;
-    const regex = /\/\w+\/(\w*)/;
-    const name = regex.exec(path)[1];
+    const name = params.platform;
     if (!name) {
       /* redirect to search for everything */
     }
@@ -38,7 +37,12 @@ const Platform = (props) => {
   return (
     <div>
       <MainNav />
-      <PlatformSubNav heading="Movies" isSubsribed={true} isMain={true} />
+      <PlatformSubNav
+        heading="Movies"
+        bannerSrc="/banner.svg"
+        isSubsribed={true}
+        isMain={true}
+      />
     </div>
   );
 };
