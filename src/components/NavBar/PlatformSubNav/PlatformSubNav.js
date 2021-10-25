@@ -10,7 +10,7 @@ const PlatformSubNav = ({
   heading,
   isSubscribed,
   subscriptionHandler,
-  isMain,
+  bannerSrc,
   ...props
 }) => {
   const loadButtons = () => {
@@ -25,11 +25,13 @@ const PlatformSubNav = ({
   };
 
   return (
-    <div>
-      <img className="banner" src="/banner.svg" alt="Banner" />
-      <SubNav heading={heading} buttons={loadButtons}>
+    <div className="platformSubNav">
+      {bannerSrc ? (
+        <img className="banner" src={bannerSrc} alt="Banner" />
+      ) : null}
+      <SubNav className="mt-0" heading={heading} buttons={loadButtons}>
         <img
-          className={isMain ? "icon--large" : "icon--small"}
+          className={bannerSrc ? "icon--large" : "icon--small"}
           src="/platformIcon.svg"
           alt="Icon"
         />
