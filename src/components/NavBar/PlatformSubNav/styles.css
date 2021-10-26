@@ -1,3 +1,5 @@
+/* Images */
+
 .icon--large {
   height: 15vh;
   overflow-y: visible;
@@ -17,10 +19,16 @@
   background-size: cover;
 }
 
+/* Platform */
+
 .platformSubNav {
   padding-top: 66px;
 }
 
 .platformSubNav .subNav {
-  margin-top: 0px;
+  top: 0px;
+}
+
+.content {
+  margin-top: 30px;
 }

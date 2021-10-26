@@ -2,7 +2,8 @@
   display: flex;
   flex-direction: row;
   background: #d4f1f4;
-  margin-top: 66px;
+  position: relative;
+  top: 66px;
   height: 8vh;
   width: 100vw;
   padding: 10px 30px;
