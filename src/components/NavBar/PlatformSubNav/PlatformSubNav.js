@@ -33,12 +33,16 @@ const PlatformSubNav = ({
           style={{ backgroundImage: `url(${bannerSrc})` }}
         />
       ) : null}
-      <SubNav heading={heading} buttons={loadButtons()}>
+      <SubNav
+        heading={
+          <Link className="link color-secondary" to={`/p/${heading}`}>
+            {heading}
+          </Link>
+        }
+        buttons={loadButtons()}
+      >
         <img
-          className={
-            "d-flex align-self-end me-2 " +
-            (bannerSrc ? "icon--large" : "icon--small")
-          }
+          className={"d-flex " + (bannerSrc ? "icon--large" : "icon--small")}
           src="/platformIcon.svg"
           alt="Icon"
         />

@@ -1,10 +1,14 @@
 .icon--large {
   height: 15vh;
   overflow-y: visible;
+  align-self: end;
+  margin-right: 10px;
 }
 
 .icon--small {
   height: 42px;
+  align-self: center;
+  margin-right: 0.5vw;
 }
 
 .banner {
