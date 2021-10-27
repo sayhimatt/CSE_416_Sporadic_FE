@@ -11,12 +11,17 @@ import "./styles.scss";
 
 const Platform = (props) => {
   const [platform, setPlatform] = useState({});
+  const [quizCards, setQuizCards] = useState([]);
   const history = useHistory();
   const params = useParams();
 
   useEffect(() => {
     onLoad();
   }, []);
+
+  useEffect(() => {
+    renderCards();
+  }, [platform]);
 
   const onLoad = async () => {
     const name = params.platform;
@@ -32,7 +37,6 @@ const Platform = (props) => {
       )
       .then((res) => {
         setPlatform(res.data);
-        console.log(res.data);
       })
       .catch((error) => {
         if (error.response.status === 400) {
@@ -43,6 +47,22 @@ const Platform = (props) => {
           history.replace("/error");
         }
       });
+  };
+
+  const renderCards = () => {
+    if (!Object.keys(platform).length) {
+      return;
+    }
+    const cards = platform.quizzes.map((quiz) => (
+      <LargeCard
+        cardInfo={{
+          title: quiz,
+          description: "Description",
+          subtext: "Subtext",
+        }}
+      />
+    ));
+    setQuizCards(cards);
   };
 
   return (
@@ -56,15 +76,7 @@ const Platform = (props) => {
       <div className="content d-flex flex-row align-items-start me-5 justify-content-between">
         <div className="d-flex flex-column m-5 align-items-end">
           <div className="sort"></div>
-          <div className="quizzes d-flex flex-column m-10">
-            <LargeCard
-              cardInfo={{
-                title: "title",
-                description: "Description",
-                subtext: "Subtext",
-              }}
-            ></LargeCard>
-          </div>
+          <div className="quizzes d-flex flex-column m-10">{quizCards}</div>
         </div>
         <div className="information d-flex flex-column">
           <div className="searchBar searchBar--border">
