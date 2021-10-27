@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import { Auth } from "aws-amplify";
+import axios from "axios";
 
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
@@ -33,8 +35,36 @@ const CreatePlatform = () => {
     return;
   };
 
-  const createPlatform = () => {
-    return;
+  const createPlatform = async () => {
+    if (!checkValidInputs()) {
+      alert("Invalid inputs");
+      return;
+    }
+    const session = await Auth.currentSession();
+    const token = session.getIdToken().getJwtToken();
+    await axios
+      .post(
+        "https://cse-416-sporadic-api-prod.herokuapp.com/platforms/",
+        { title: platformData.title, description: platformData.description },
+        { headers: { authorization: `Bearer: ${token}` } }
+      )
+      .then((res) => {
+        history.push(`/p/${platformData.title}`);
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          alert("Platform title already in use");
+        }
+      });
+  };
+
+  const checkValidInputs = () => {
+    return (
+      0 < platformData.title.length &&
+      platformData.title.length <= 100 &&
+      0 < platformData.description.length &&
+      platformData.description.length <= 500
+    );
   };
 
   return (
