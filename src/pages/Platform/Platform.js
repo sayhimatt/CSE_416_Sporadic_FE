@@ -4,8 +4,9 @@ import axios from "axios";
 
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
+import LargeCard from "../../components/Card/LargeCard/LargeCard";
 
-import "./styles.css";
+import "./styles.scss";
 
 const Platform = (props) => {
   const [platform, setPlatform] = useState({});
@@ -42,6 +43,33 @@ const Platform = (props) => {
         bannerSrc="/banner.svg"
         isSubsribed={true}
       />
+      <div className="content d-flex flex-row align-items-start me-5 justify-content-between">
+        <div className="d-flex flex-column m-5 align-items-end">
+          <div className="sort"></div>
+          <div className="quizzes d-flex flex-column m-10">
+            <LargeCard
+              cardInfo={{
+                title: "title",
+                description: "Description",
+                subtext: "Subtext",
+              }}
+            ></LargeCard>
+          </div>
+        </div>
+        <div className="information d-flex flex-column align-items-center">
+          <div className="searchBar searchBar--border">
+            <input className="search" placeholder="Search"></input>
+          </div>
+          <div className="platform-text-block d-flex align-items-center justify-content-start mt-4 text-center">
+            ipsum lorem est ipsum lorem estipsum lorem estipsum lorem estipsum
+            lorem estipsum lorem est
+          </div>
+          <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
+            <div>Your Platform IQ</div>
+            <div className="color-special fw-bold fs-1">100</div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
