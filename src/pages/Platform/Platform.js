@@ -56,11 +56,11 @@ const Platform = (props) => {
             ></LargeCard>
           </div>
         </div>
-        <div className="information d-flex flex-column align-items-center">
+        <div className="information d-flex flex-column">
           <div className="searchBar searchBar--border">
             <input className="search" placeholder="Search"></input>
           </div>
-          <div className="platform-text-block d-flex align-items-center justify-content-start mt-4 text-center">
+          <div className="platform-text-block d-flex align-items-center justify-content-start mt-4">
             ipsum lorem est ipsum lorem estipsum lorem estipsum lorem estipsum
             lorem estipsum lorem est
           </div>

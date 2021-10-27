@@ -1,8 +1,11 @@
 @import "../../App.scss";
 
+.information {
+  width: 20vw;
+}
+
 .platform-text-block {
   background: $primaryColor;
-  width: 15vw;
   border-radius: 20px;
   padding: 15px;
   text-align: center;
