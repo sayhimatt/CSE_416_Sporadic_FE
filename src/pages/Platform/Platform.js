@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 import Auth from "@aws-amplify/auth";
 
@@ -11,8 +11,9 @@ import "./styles.scss";
 
 const Platform = (props) => {
   const [platform, setPlatform] = useState({});
-  const location = useLocation();
+  const history = useHistory();
   const params = useParams();
+
   useEffect(() => {
     onLoad();
   }, []);
@@ -34,10 +35,12 @@ const Platform = (props) => {
         console.log(res.data);
       })
       .catch((error) => {
-        if (error.response.status == "") {
+        if (error.response.status === 400) {
           /* If platform not in the DB, redirect to search for similar platforms */
+          history.replace(`/search?=${name}`);
         } else {
           /* Load error page */
+          history.replace("/error");
         }
       });
   };
