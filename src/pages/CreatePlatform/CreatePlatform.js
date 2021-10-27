@@ -86,18 +86,23 @@ const CreatePlatform = () => {
               <textarea
                 className="input"
                 placeholder="Platform Title"
+                maxLength={30}
                 onChange={setTitle}
               />
             </div>
           </div>
           <div className="input-item d-flex flex-column mt-4">
             <div className="input-title">Description</div>
-            <div className="input-box description-box">
+            <div className="input-box description-box d-flex flex-column justify-content-between">
               <textarea
                 className="input"
                 placeholder="Platform Description"
+                maxLength={500}
                 onChange={setDescription}
               />
+              <div className="character-count align-self-end">
+                Characters Left: {500 - platformData.description.length}
+              </div>
             </div>
           </div>
           <div className="image-upload d-flex flex-row justify-content-around mt-4">
