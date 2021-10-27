@@ -31,7 +31,7 @@ const CreatePlatform = () => {
       <SubNav
         heading="Platform Creation"
         buttons={
-          <Button onClick={history.push("/notifications")}>
+          <Button onClick={() => history.push("/notifications")}>
             Notifications
           </Button>
         }
