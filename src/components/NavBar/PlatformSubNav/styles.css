@@ -1,0 +1,34 @@
+/* Images */
+
+.icon--large {
+  height: 15vh;
+  overflow-y: visible;
+  align-self: end;
+  margin-right: 10px;
+}
+
+.icon--small {
+  height: 42px;
+  align-self: center;
+  margin-right: 0.5vw;
+}
+
+.banner {
+  min-width: 100vw;
+  height: 20vh;
+  background-size: cover;
+}
+
+/* Platform */
+
+.platformSubNav {
+  padding-top: 66px;
+}
+
+.platformSubNav .subNav {
+  top: 0px;
+}
+
+.content {
+  margin-top: 30px;
+}

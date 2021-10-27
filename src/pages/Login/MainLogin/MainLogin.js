@@ -65,7 +65,7 @@ const MainLogin = () => {
             type="button"
             onClick={async () => {
               await login(credentials.username, credentials.password);
-              history.push("/homepage");
+              history.push("/");
             }}
           >
             Log In

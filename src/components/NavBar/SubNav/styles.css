@@ -2,10 +2,11 @@
   display: flex;
   flex-direction: row;
   background: #d4f1f4;
-  position: fixed;
+  position: relative;
   top: 66px;
+  height: 8vh;
   width: 100vw;
-  padding: 10px 0px;
+  padding: 10px 30px;
   justify-content: space-between;
   align-items: center;
 }
@@ -15,12 +16,7 @@ p {
 }
 
 .heading {
-  margin-left: 20px;
   font-size: 2vw;
   font-weight: 700;
   color: #189ab4;
-}
-
-.buttons {
-  margin-right: 20px;
 }

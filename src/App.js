@@ -7,6 +7,8 @@ import Feed from "./pages/Feed/Feed";
 import Login from "./pages/Login/MainLogin/MainLogin";
 import CreateAccount from "./pages/Login/MainCreateAccount/MainCreateAccount";
 import ConfirmEmail from "./pages/Login/ConfirmEmail";
+import Platform from "./pages/Platform/Platform";
+import NotFound from "./pages/NotFound/NotFound";
 
 import "./App.scss";
 
@@ -22,9 +24,11 @@ const MainRouter = () => {
             path="/createAccount/confirmation"
             component={ConfirmEmail}
           />
-          <GuardedRoute path="/" component={Feed}></GuardedRoute>
-          <GuardedRoute path="/About" component={Feed}></GuardedRoute>
-          <GuardedRoute path="/Contact" component={Feed}></GuardedRoute>
+          <GuardedRoute exact path="/" component={Feed}></GuardedRoute>
+          <GuardedRoute exact path="/About" component={Feed}></GuardedRoute>
+          <GuardedRoute exact path="/Contact" component={Feed}></GuardedRoute>
+          <GuardedRoute exact path="/p/:platform" component={Platform} />
+          <GuardedRoute path="/" component={NotFound} />
         </Switch>
       </Router>
     </AuthContextProvider>
