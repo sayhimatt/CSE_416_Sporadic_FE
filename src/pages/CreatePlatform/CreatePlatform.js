@@ -36,8 +36,8 @@ const CreatePlatform = () => {
   };
 
   const createPlatform = async () => {
-    if (!checkValidInputs()) {
-      alert("Invalid inputs");
+    if (invalidInputs()) {
+      alert("Platform title cannot contain spaces");
       return;
     }
     const session = await Auth.currentSession();
@@ -58,13 +58,8 @@ const CreatePlatform = () => {
       });
   };
 
-  const checkValidInputs = () => {
-    return (
-      0 < platformData.title.length &&
-      platformData.title.length <= 100 &&
-      0 < platformData.description.length &&
-      platformData.description.length <= 500
-    );
+  const invalidInputs = () => {
+    return platformData.title.includes(" ");
   };
 
   return (
