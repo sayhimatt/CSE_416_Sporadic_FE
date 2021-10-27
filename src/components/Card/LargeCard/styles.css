@@ -1,8 +1,6 @@
 .cardContainer .card {
-  position: relative;
-  top: 200px;
-  left: 30px;
   width: 60vw;
+  margin: 5px 0px;
 }
 
 .icon {
