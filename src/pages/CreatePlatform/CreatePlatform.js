@@ -5,7 +5,7 @@ import MainNav from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Button/Button";
 
-import "./styles.css";
+import "./styles.scss";
 
 const CreatePlatform = () => {
   const [platformData, setPlatformData] = useState({
@@ -25,6 +25,18 @@ const CreatePlatform = () => {
     setPlatformData({ ...platformData, description: e.target.value });
   };
 
+  const uploadIcon = (e) => {
+    return;
+  };
+
+  const uploadBanner = (e) => {
+    return;
+  };
+
+  const createPlatform = () => {
+    return;
+  };
+
   return (
     <div>
       <MainNav />
@@ -36,12 +48,12 @@ const CreatePlatform = () => {
           </Button>
         }
       />
-      <div className="content d-flex justify-content-center align-items-center">
+      <div className="page-content d-flex flex-column justify-content-center align-items-center">
         <div className="create-platform-container d-flex flex-column justify-content-center">
-          <div className="input-item d-flex flex-column">
+          <div className="input-item d-flex flex-column align-items-start">
             <div className="input-title">Title</div>
-            <div className="input-box">
-              <input
+            <div className="input-box title-box">
+              <textarea
                 className="input"
                 placeholder="Platform Title"
                 onChange={setTitle}
@@ -51,26 +63,29 @@ const CreatePlatform = () => {
           <div className="input-item d-flex flex-column mt-4">
             <div className="input-title">Description</div>
             <div className="input-box description-box">
-              <input
+              <textarea
                 className="input"
-                placeholder="Platform Title"
+                placeholder="Platform Description"
                 onChange={setDescription}
               />
             </div>
           </div>
-          <div className="image-upload d-flex flex-row justify-content-around">
-            <div className="upload-container d-flex flex-column">
+          <div className="image-upload d-flex flex-row justify-content-around mt-4">
+            <div className="upload-container d-flex flex-column align-items-center">
               <div className="upload-title">Icon</div>
               <img alt="" src="" />
-              <Button>Upload Icon</Button>
+              <Button onClick={uploadIcon}>Upload Icon</Button>
             </div>
-            <div className="upload-container d-flex flex-column">
+            <div className="upload-container d-flex flex-column align-items-center">
               <div className="upload-title">Banner</div>
               <img alt="" src="" />
-              <Button>Upload Banner</Button>
+              <Button onClick={uploadBanner}>Upload Banner</Button>
             </div>
           </div>
         </div>
+        <Button buttonStyle="btn--special" onClick={createPlatform}>
+          Create Platform
+        </Button>
       </div>
     </div>
   );
