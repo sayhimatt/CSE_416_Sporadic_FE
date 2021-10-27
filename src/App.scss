@@ -1,6 +1,7 @@
 $primaryColor: #d4f1f4;
 $secondaryColor: #189ab4;
 $highlightColor: #7df9ff;
+$specialColor: #ff6c6c;
 
 /* Colors */
 .color-primary {
@@ -13,4 +14,8 @@ $highlightColor: #7df9ff;
 
 .color-highlight {
   color: $highlightColor !important;
+}
+
+.color-special {
+  color: $specialColor;
 }
