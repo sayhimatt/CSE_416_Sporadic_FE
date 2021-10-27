@@ -79,19 +79,19 @@
 .searchBar {
   /* Auto Layout */
   padding: 4px 22px;
-
-  position: static;
-  width: 20%;
-  height: 30px;
+  min-width: 15vw;
 
   background: #ffffff;
   border-radius: 30px;
 
   /* Inside Auto Layout */
-  flex: none;
-  order: 1;
-  flex-grow: 0;
   margin: 0px 20px;
+}
+
+.searchBar--border {
+  border-style: solid;
+  border-color: #cdcdcd;
+  border-width: 1px;
 }
 
 .search {
