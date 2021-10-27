@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import axios from "axios";
+import Auth from "@aws-amplify/auth";
 
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
@@ -21,10 +22,16 @@ const Platform = (props) => {
     if (!name) {
       /* redirect to search for everything */
     }
+    const session = await Auth.currentSession();
+    const token = session.idToken.jwtToken;
     await axios
-      .get(`https://cse-416-sporadic-api-prod.herokuapp.com/platforms/${name}`)
+      .get(
+        `https://cse-416-sporadic-api-prod.herokuapp.com/platforms/${name}`,
+        { headers: { authorization: `Bearer: ${token}` } }
+      )
       .then((res) => {
-        setPlatform(res.data.platform);
+        setPlatform(res.data);
+        console.log(res.data);
       })
       .catch((error) => {
         if (error.response.status == "") {
@@ -39,7 +46,7 @@ const Platform = (props) => {
     <div>
       <MainNav />
       <PlatformSubNav
-        heading="Movies"
+        heading={platform.title}
         bannerSrc="/banner.svg"
         isSubsribed={true}
       />
@@ -60,9 +67,8 @@ const Platform = (props) => {
           <div className="searchBar searchBar--border">
             <input className="search" placeholder="Search"></input>
           </div>
-          <div className="platform-text-block d-flex align-items-center justify-content-start mt-4">
-            ipsum lorem est ipsum lorem estipsum lorem estipsum lorem estipsum
-            lorem estipsum lorem est
+          <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">
+            {platform.description}
           </div>
           <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
             <div>Your Platform IQ</div>
