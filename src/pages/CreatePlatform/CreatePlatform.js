@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { Auth } from "aws-amplify";
-import axios from "axios";
 
+import { postCreateAccount } from "../../API/API";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Button/Button";
@@ -40,14 +39,7 @@ const CreatePlatform = () => {
       alert("Platform title cannot contain spaces");
       return;
     }
-    const session = await Auth.currentSession();
-    const token = session.getIdToken().getJwtToken();
-    await axios
-      .post(
-        "https://cse-416-sporadic-api-prod.herokuapp.com/platforms/",
-        { title: platformData.title, description: platformData.description },
-        { headers: { authorization: `Bearer: ${token}` } }
-      )
+    await postCreateAccount(platformData)
       .then((res) => {
         history.push(`/p/${platformData.title}`);
       })
