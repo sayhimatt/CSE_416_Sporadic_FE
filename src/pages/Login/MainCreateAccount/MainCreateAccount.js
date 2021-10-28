@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { useHistory } from "react-router";
 
+import { postCreateAccount } from "../../../API/API";
 import Button from "../../../components/Button/Button";
 import "../styles.css";
 
@@ -20,23 +20,18 @@ const MainCreateAccount = () => {
       alert("Passwords do not match.");
       return;
     }
-    try {
-      await axios
-        .post("https://cse-416-sporadic-api-prod.herokuapp.com/users/", {
-          username: credentials.username,
-          password: credentials.password,
-          email: credentials.email,
-        })
-        .then((res) => {
-          history.push({
-            pathname: "/createAccount/confirmation",
-            state: { username: credentials.username },
-          });
-        })
-        .catch((error) => alert("Could not create account"));
-    } catch (error) {
-      console.log(error);
-    }
+    await postCreateAccount(
+      credentials.username,
+      credentials.password,
+      credentials.email
+    )
+      .then((res) => {
+        history.push({
+          pathname: "/createAccount/confirmation",
+          state: { username: credentials.username },
+        });
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
