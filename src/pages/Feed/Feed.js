@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Auth } from "aws-amplify";
 
@@ -10,10 +10,20 @@ import Footer from "../../components/Footer/Footer";
 
 const Feed = ({ children }) => {
   const { dispatch } = useContext(AuthContext);
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    getUsername();
+  }, []);
 
   const logout = async () => {
     await Auth.signOut();
     dispatch({ type: "LOGOUT" });
+  };
+
+  const getUsername = async () => {
+    const info = await Auth.currentUserInfo();
+    setUsername(info.username);
   };
 
   const subNavButtons = [
@@ -30,7 +40,7 @@ const Feed = ({ children }) => {
   return (
     <div>
       <MainNav />
-      <SubNav heading="Welcome Back John1!" buttons={subNavButtons} />
+      <SubNav heading={`Welcome Back ${username}!`} buttons={subNavButtons} />
       <Footer />
     </div>
   );
