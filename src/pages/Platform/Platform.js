@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
-import axios from "axios";
-import Auth from "@aws-amplify/auth";
 
 import { getPlatform } from "./../../API/API";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
@@ -26,16 +24,17 @@ const Platform = (props) => {
 
   const onLoad = async () => {
     const name = params.platform;
-    try {
-      const platformData = await getPlatform(name);
-      setPlatform(platformData);
-    } catch (error) {
-      if (error.response.status === 400) {
-        history.replace(`/search?=${name}`);
-      } else {
-        history.replace("/error");
-      }
-    }
+    await getPlatform(name)
+      .then((platformData) => {
+        setPlatform(platformData);
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          history.replace(`/search?=${name}`);
+        } else {
+          history.replace("/error");
+        }
+      });
   };
 
   const renderCards = () => {
