@@ -3,6 +3,7 @@ import { Link, useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 import Auth from "@aws-amplify/auth";
 
+import { getPlatform } from "./../../API/API";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
@@ -25,28 +26,16 @@ const Platform = (props) => {
 
   const onLoad = async () => {
     const name = params.platform;
-    if (!name) {
-      /* redirect to search for everything */
+    try {
+      const platformData = await getPlatform(name);
+      setPlatform(platformData);
+    } catch (error) {
+      if (error.response.status === 400) {
+        history.replace(`/search?=${name}`);
+      } else {
+        history.replace("/error");
+      }
     }
-    const session = await Auth.currentSession();
-    const token = session.idToken.jwtToken;
-    await axios
-      .get(
-        `https://cse-416-sporadic-api-prod.herokuapp.com/platforms/${name}`,
-        { headers: { authorization: `Bearer: ${token}` } }
-      )
-      .then((res) => {
-        setPlatform(res.data);
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          /* If platform not in the DB, redirect to search for similar platforms */
-          history.replace(`/search?=${name}`);
-        } else {
-          /* Load error page */
-          history.replace("/error");
-        }
-      });
   };
 
   const renderCards = () => {
