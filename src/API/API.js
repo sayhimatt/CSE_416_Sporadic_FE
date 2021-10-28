@@ -26,7 +26,7 @@ export const postCreatePlatform = async (platformData) => {
   const token = await getToken();
   try {
     await axios.post(
-      "https://cse-416-sporadic-api-prod.herokuapp.com/platforms/",
+      `${ENDPOINT}/platforms/`,
       { title: platformData.title, description: platformData.description },
       { headers: { authorization: `Bearer: ${token}` } }
     );
@@ -39,15 +39,22 @@ export const postCreatePlatform = async (platformData) => {
 
 export const postCreateAccount = async (username, password, email) => {
   try {
-    const response = await axios.post(
-      "https://cse-416-sporadic-api-prod.herokuapp.com/users/",
-      {
-        username,
-        password,
-        email,
-      }
-    );
+    const response = await axios.post(`${ENDPOINT}/users/`, {
+      username,
+      password,
+      email,
+    });
     return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const postConfirmCode = async (username, confirmCode) => {
+  try {
+    await axios.post(`${ENDPOINT}/users/${username}/confirm`, {
+      confirmCode,
+    });
   } catch (error) {
     throw error;
   }

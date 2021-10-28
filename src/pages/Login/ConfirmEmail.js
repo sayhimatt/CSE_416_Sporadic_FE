@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useHistory } from "react-router";
 
+import { postConfirmCode } from "../../API/API";
 import Button from "../../components/Button/Button";
 import "./styles.css";
 
@@ -11,20 +12,9 @@ const ConfirmEmail = () => {
   const [confirmation, setConfirmation] = useState("");
 
   const confirmCode = async () => {
-    try {
-      const username = history.location.state.username;
-      await axios
-        .post(
-          `https://cse-416-sporadic-api-prod.herokuapp.com/users/${username}/confirm`,
-          {
-            confirmCode: confirmation,
-          }
-        )
-        .then((res) => history.push("/login"))
-        .catch((e) => console.log(e));
-    } catch (error) {
-      alert("Invalid code");
-    }
+    await postConfirmCode(history.location.state.username, confirmation)
+      .then((res) => history.push("/login"))
+      .catch((e) => alert("Invalid code"));
   };
 
   return (
