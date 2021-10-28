@@ -18,14 +18,14 @@ const MainLogin = () => {
   const login = async (username, password) => {
     try {
       const success = await Auth.signIn(username, password);
-      dispatch({ type: "LOGIN" });
+      dispatch({ type: "LOGIN", payload: username });
     } catch (error) {
       console.log("error signing in", error);
       window.alert("Invalid Login");
     }
   };
 
-  return auth ? (
+  return auth.authenticated ? (
     <Redirect to="/" />
   ) : (
     <div className="page d-flex flex-column align-items-center justify-content-start">
