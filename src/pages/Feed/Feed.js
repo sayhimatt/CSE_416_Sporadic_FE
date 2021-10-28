@@ -11,12 +11,10 @@ import Footer from "../../components/Footer/Footer";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
 
 const Feed = ({ children }) => {
-  const { dispatch } = useContext(AuthContext);
-  const [username, setUsername] = useState("");
+  const { auth, dispatch } = useContext(AuthContext);
   const [quizCards, setQuizCards] = useState([]);
 
   useEffect(() => {
-    getUsername();
     loadQuizzes();
   }, []);
 
@@ -25,13 +23,8 @@ const Feed = ({ children }) => {
     dispatch({ type: "LOGOUT" });
   };
 
-  const getUsername = async () => {
-    const info = await Auth.currentUserInfo();
-    setUsername(info.username);
-  };
-
   const loadQuizzes = async () => {
-    await getFeedQuizzes(username)
+    await getFeedQuizzes(auth.username)
       .then((quizzes) => {
         const cards = mapQuizzesToCards(quizzes);
         setQuizCards(cards);
@@ -69,7 +62,10 @@ const Feed = ({ children }) => {
   return (
     <div>
       <MainNav />
-      <SubNav heading={`Welcome Back ${username}!`} buttons={subNavButtons} />
+      <SubNav
+        heading={`Welcome Back ${auth.username}!`}
+        buttons={subNavButtons}
+      />
       <Footer />
     </div>
   );
