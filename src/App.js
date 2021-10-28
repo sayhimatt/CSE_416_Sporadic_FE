@@ -9,6 +9,7 @@ import CreateAccount from "./pages/Login/MainCreateAccount/MainCreateAccount";
 import ConfirmEmail from "./pages/Login/ConfirmEmail";
 import Platform from "./pages/Platform/Platform";
 import NotFound from "./pages/NotFound/NotFound";
+import CreatePlatform from "./pages/CreatePlatform/CreatePlatform";
 
 import "./App.scss";
 
@@ -28,6 +29,11 @@ const MainRouter = () => {
           <GuardedRoute exact path="/About" component={Feed}></GuardedRoute>
           <GuardedRoute exact path="/Contact" component={Feed}></GuardedRoute>
           <GuardedRoute exact path="/p/:platform" component={Platform} />
+          <GuardedRoute
+            exact
+            path="/createPlatform"
+            component={CreatePlatform}
+          />
           <GuardedRoute path="/" component={NotFound} />
         </Switch>
       </Router>
