@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 import Auth from "@aws-amplify/auth";
 
@@ -50,7 +50,7 @@ const Platform = (props) => {
   };
 
   const renderCards = () => {
-    if (!Object.keys(platform).length) {
+    if (!Object.keys(platform).length || !platform.quizzes) {
       return;
     }
     const cards = platform.quizzes.map((quiz) => (
@@ -58,7 +58,11 @@ const Platform = (props) => {
         cardInfo={{
           title: quiz,
           description: "Description",
-          subtext: "Subtext",
+          subtext: (
+            <Link className="link" to={`/p/${params.platform}`}>
+              {params.platform}
+            </Link>
+          ),
         }}
       />
     ));
