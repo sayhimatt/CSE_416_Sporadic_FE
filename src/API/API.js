@@ -22,6 +22,19 @@ export const getPlatform = async (platformName) => {
   }
 };
 
+export const postCreatePlatform = async (platformData) => {
+  const token = await getToken();
+  try {
+    await axios.post(
+      "https://cse-416-sporadic-api-prod.herokuapp.com/platforms/",
+      { title: platformData.title, description: platformData.description },
+      { headers: { authorization: `Bearer: ${token}` } }
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
 /* Login Routing */
 
 export const postCreateAccount = async (username, password, email) => {
