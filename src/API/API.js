@@ -8,6 +8,8 @@ const getToken = async () => {
   return session.getIdToken().getJwtToken();
 };
 
+/* Platforms routing */
+
 export const getPlatform = async (platformName) => {
   const token = await getToken();
   try {
@@ -15,6 +17,24 @@ export const getPlatform = async (platformName) => {
       headers: { authorization: `Bearer: ${token}` },
     });
     return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+/* Login Routing */
+
+export const postCreateAccount = async (username, password, email) => {
+  try {
+    const response = await axios.post(
+      "https://cse-416-sporadic-api-prod.herokuapp.com/users/",
+      {
+        username,
+        password,
+        email,
+      }
+    );
+    return response;
   } catch (error) {
     throw error;
   }
