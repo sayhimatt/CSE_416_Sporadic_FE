@@ -53,6 +53,7 @@ const Platform = () => {
       const name = params.platform;
       return (
         <LargeCard
+          key={quiz.title}
           cardInfo={{
             title: quiz,
             description: "Description",
