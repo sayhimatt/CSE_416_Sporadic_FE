@@ -54,3 +54,8 @@ export const postConfirmCode = async (username, confirmCode) => {
     confirmCode,
   });
 };
+
+/* Feed routing */
+export const getFeedQuizzes = async (username) => {
+  return;
+};

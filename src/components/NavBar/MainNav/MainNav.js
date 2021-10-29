@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import "./styles.css";
+import { AuthContext } from "../../../contexts/AuthContext";
+import Feed from "../../../pages/Feed/Feed";
 
 const NavBar = () => {
+  const { auth, dispatch } = useContext(AuthContext);
   return (
     <div className="navBar">
       <div className="logo">
@@ -22,7 +25,7 @@ const NavBar = () => {
               src="/propic.png"
               alt="placeholder"
             />
-            <div className="navText">John1</div>
+            <div className="navText">{auth.username}</div>
           </div>
           <div className="subscriptionDropdown">
             <div className="navText">Subscription</div>
