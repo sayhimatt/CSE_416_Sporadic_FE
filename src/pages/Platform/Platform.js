@@ -53,10 +53,10 @@ const Platform = () => {
       const name = params.platform;
       return (
         <LargeCard
-          key={quiz.title}
+          key={quiz._id}
           cardInfo={{
-            title: quiz,
-            description: "Description",
+            title: quiz.title,
+            description: quiz.description,
             subtext: (
               <Link className="link" to={`/p/${name}`}>
                 {name}
