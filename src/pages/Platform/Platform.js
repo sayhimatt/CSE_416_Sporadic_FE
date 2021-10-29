@@ -1,28 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 
-import { getPlatform } from "./../../API/API";
+import { getPlatform, getQuizzesFromPlatform } from "./../../API/API";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
 
 import "./styles.scss";
 
-const Platform = (props) => {
+const Platform = () => {
   const [platform, setPlatform] = useState({});
+  const [quizzes, setQuizzes] = useState([]);
   const [quizCards, setQuizCards] = useState([]);
   const history = useHistory();
   const params = useParams();
 
   useEffect(() => {
-    onLoad();
+    getCurrentPlatform();
+    getQuizzes();
   }, []);
 
   useEffect(() => {
     renderCards();
-  }, [platform]);
+  }, [quizzes]);
 
-  const onLoad = async () => {
+  const getCurrentPlatform = async () => {
     const name = params.platform;
     await getPlatform(name)
       .then((platformData) => {
@@ -37,23 +39,34 @@ const Platform = (props) => {
       });
   };
 
-  const renderCards = () => {
-    if (!Object.keys(platform).length || !platform.quizzes) {
-      return;
+  const getQuizzes = async () => {
+    const name = params.platform;
+    try {
+      const response = await getQuizzesFromPlatform(name);
+      setQuizzes(response);
+    } catch (error) {
+      console.log(error);
     }
-    const cards = platform.quizzes.map((quiz) => (
-      <LargeCard
-        cardInfo={{
-          title: quiz,
-          description: "Description",
-          subtext: (
-            <Link className="link" to={`/p/${params.platform}`}>
-              {params.platform}
-            </Link>
-          ),
-        }}
-      />
-    ));
+  };
+
+  const renderCards = () => {
+    const cards = quizzes.map((quiz) => {
+      const name = params.platform;
+      return (
+        <LargeCard
+          key={quiz._id}
+          cardInfo={{
+            title: quiz.title,
+            description: quiz.description,
+            subtext: (
+              <Link className="link" to={`/p/${name}`}>
+                {name}
+              </Link>
+            ),
+          }}
+        />
+      );
+    });
     setQuizCards(cards);
   };
 
@@ -61,9 +74,9 @@ const Platform = (props) => {
     <div>
       <MainNav />
       <PlatformSubNav
-        heading={platform.title}
+        heading={params.platform}
         bannerSrc="/banner.svg"
-        isSubsribed={true}
+        isSubscribed={true}
       />
       <div className="content d-flex flex-row align-items-start me-5 justify-content-between">
         <div className="d-flex flex-column m-5 align-items-end">

@@ -12,50 +12,45 @@ const getToken = async () => {
 
 export const getPlatform = async (platformName) => {
   const token = await getToken();
-  try {
-    const response = await axios.get(`${ENDPOINT}/platforms/${platformName}`, {
-      headers: { authorization: `Bearer: ${token}` },
-    });
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await axios.get(`${ENDPOINT}/platforms/${platformName}`, {
+    headers: { authorization: `Bearer ${token}` },
+  });
+  return response.data;
 };
 
 export const postCreatePlatform = async (platformData) => {
   const token = await getToken();
-  try {
-    await axios.post(
-      `${ENDPOINT}/platforms/`,
-      { title: platformData.title, description: platformData.description },
-      { headers: { authorization: `Bearer: ${token}` } }
-    );
-  } catch (error) {
-    throw error;
-  }
+  await axios.post(
+    `${ENDPOINT}/platforms/`,
+    { title: platformData.title, description: platformData.description },
+    { headers: { authorization: `Bearer ${token}` } }
+  );
+};
+
+export const getQuizzesFromPlatform = async (platformName) => {
+  const token = await getToken();
+  const response = await axios.get(
+    `${ENDPOINT}/quizzes?platform=${platformName}`,
+    {
+      headers: { authorization: `Bearer ${token}` },
+    }
+  );
+  return response.data.items;
 };
 
 /* Login Routing */
 
 export const postCreateAccount = async (username, password, email) => {
-  try {
-    const response = await axios.post(`${ENDPOINT}/users/`, {
-      username,
-      password,
-      email,
-    });
-    return response;
-  } catch (error) {
-    throw error;
-  }
+  const response = await axios.post(`${ENDPOINT}/users/`, {
+    username,
+    password,
+    email,
+  });
+  return response;
 };
 
 export const postConfirmCode = async (username, confirmCode) => {
-  try {
-    await axios.post(`${ENDPOINT}/users/${username}/confirm`, {
-      confirmCode,
-    });
-  } catch (error) {
-    throw error;
-  }
+  await axios.post(`${ENDPOINT}/users/${username}/confirm`, {
+    confirmCode,
+  });
 };
