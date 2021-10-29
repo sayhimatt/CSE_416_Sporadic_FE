@@ -18,8 +18,11 @@ const Platform = () => {
   useEffect(() => {
     getCurrentPlatform();
     getQuizzes();
-    renderCards();
   }, []);
+
+  useEffect(() => {
+    renderCards();
+  }, [quizzes]);
 
   const getCurrentPlatform = async () => {
     const name = params.platform;
