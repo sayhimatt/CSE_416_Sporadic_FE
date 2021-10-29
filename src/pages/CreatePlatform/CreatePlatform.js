@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
-import { postCreateAccount } from "../../API/API";
+import { postCreatePlatform } from "../../API/API";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Button/Button";
@@ -39,7 +39,7 @@ const CreatePlatform = () => {
       alert("Platform title cannot contain spaces");
       return;
     }
-    await postCreateAccount(platformData)
+    await postCreatePlatform(platformData)
       .then((res) => {
         history.push(`/p/${platformData.title}`);
       })
