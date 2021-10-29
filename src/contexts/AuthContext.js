@@ -5,21 +5,25 @@ export const AuthContext = createContext();
 const authReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
-      return true;
+      return { authenticated: true, username: action.payload };
     case "LOGOUT":
-      return false;
+      return { authenticated: false, username: "" };
     default:
       return state;
   }
 };
 
 export const AuthContextProvider = (props) => {
-  const [auth, dispatch] = useReducer(authReducer, false, () => {
-    const data = localStorage.getItem("auth");
-    return data ? data === "true" : false;
-  });
+  const [auth, dispatch] = useReducer(
+    authReducer,
+    { authenticated: false, username: "" },
+    () => {
+      const data = JSON.parse(localStorage.getItem("auth"));
+      return data;
+    }
+  );
   useEffect(() => {
-    localStorage.setItem("auth", auth.toString());
+    localStorage.setItem("auth", JSON.stringify(auth));
   }, [auth]);
   return (
     <AuthContext.Provider value={{ auth, dispatch }}>
