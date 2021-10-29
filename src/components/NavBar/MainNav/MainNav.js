@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
 import axios from "axios";
 import "./styles.css";
-
+const { auth, dispatch } = useContext(AuthContext);
 const NavBar = () => {
   return (
     <div className="navBar">
@@ -22,7 +23,7 @@ const NavBar = () => {
               src="/propic.png"
               alt="placeholder"
             />
-            <div className="navText">John1</div>
+            <div className="navText">${auth.username}</div>
           </div>
           <div className="subscriptionDropdown">
             <div className="navText">Subscription</div>
