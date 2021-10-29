@@ -35,6 +35,7 @@ const Feed = ({ children }) => {
   const mapQuizzesToCards = (quizzes) => {
     return quizzes.map((quiz) => {
       <LargeCard
+        key={quiz._id}
         cardInfo={{
           title: quiz.title,
           description: quiz.description,
