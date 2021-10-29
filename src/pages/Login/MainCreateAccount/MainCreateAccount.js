@@ -46,11 +46,13 @@ const MainCreateAccount = () => {
           pathname: "/createAccount/confirmation",
           state: { username: credentials.username },
         })
-        .catch((error) => setShowMsg((prevState) => {
-          return {...prevState, errorMsg: true};
-        }));
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        setShowMsg((prevState) => {
+          return {...prevState, errorMsg: true};
+        },
+        console.log(error));
+      });
   };
 
   return (
@@ -100,8 +102,6 @@ const MainCreateAccount = () => {
                         checkMsg: (credentials.passwordConfirm.length > 0 && (credentials.passwordConfirm !== e.target.value)),
                       }
                     });
-                    // console.log(e.target.value);
-                    // console.log(e.target.value.length);
                     return { ...prevState, password: e.target.value };
                   });
                 }}
