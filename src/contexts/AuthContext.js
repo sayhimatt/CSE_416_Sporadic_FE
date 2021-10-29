@@ -14,22 +14,14 @@ const authReducer = (state, action) => {
 };
 
 export const AuthContextProvider = (props) => {
-  const [auth, dispatch] = useReducer(
-    authReducer,
-    { authenticated: false, username: "" },
-    () => {
-      const data = JSON.parse(localStorage.getItem("auth"));
-      return data;
-    }
-  );
+  const [auth, dispatch] = useReducer(authReducer, { authenticated: false, username: "" }, () => {
+    const data = JSON.parse(localStorage.getItem("auth"));
+    return data ? data : { authenticated: false, username: "" };
+  });
   useEffect(() => {
     localStorage.setItem("auth", JSON.stringify(auth));
   }, [auth]);
-  return (
-    <AuthContext.Provider value={{ auth, dispatch }}>
-      {props.children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ auth, dispatch }}>{props.children}</AuthContext.Provider>;
 };
 
 export default AuthContextProvider;
