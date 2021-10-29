@@ -8,13 +8,15 @@ const getToken = async () => {
   return session.getIdToken().getJwtToken();
 };
 
+// TODO: Handle errors
+
 /* Platforms routing */
 
 export const getPlatform = async (platformName) => {
   const token = await getToken();
   try {
     const response = await axios.get(`${ENDPOINT}/platforms/${platformName}`, {
-      headers: { authorization: `Bearer: ${token}` },
+      headers: { authorization: `Bearer ${token}` },
     });
     return response.data;
   } catch (error) {
@@ -28,8 +30,23 @@ export const postCreatePlatform = async (platformData) => {
     await axios.post(
       `${ENDPOINT}/platforms/`,
       { title: platformData.title, description: platformData.description },
-      { headers: { authorization: `Bearer: ${token}` } }
+      { headers: { authorization: `Bearer ${token}` } }
     );
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getQuizzesFromPlatform = async (platformName) => {
+  const token = await getToken();
+  try {
+    const response = await axios.get(
+      `${ENDPOINT}/quizzes?platform=${platformName}`,
+      {
+        headers: { authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data.items;
   } catch (error) {
     throw error;
   }
