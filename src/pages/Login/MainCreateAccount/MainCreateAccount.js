@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { useHistory } from "react-router";
 
+import { postCreateAccount } from "../../../API/API";
 import Button from "../../../components/Button/Button";
 import "../styles.css";
 
@@ -36,25 +36,21 @@ const MainCreateAccount = () => {
         return {...prevState, matchMsg: false}
       });
     }
-    try {
-      await axios
-        .post("https://cse-416-sporadic-api-prod.herokuapp.com/users/", {
-          username: credentials.username,
-          password: credentials.password,
-          email: credentials.email,
-        })
-        .then((res) => {
-          history.push({
-            pathname: "/createAccount/confirmation",
-            state: { username: credentials.username },
-          });
+    await postCreateAccount(
+      credentials.username,
+      credentials.password,
+      credentials.email
+    )
+      .then((res) => {
+        history.push({
+          pathname: "/createAccount/confirmation",
+          state: { username: credentials.username },
         })
         .catch((error) => setShowMsg((prevState) => {
           return {...prevState, errorMsg: true};
         }));
-    } catch (error) {
-      console.log(error);
-    }
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -104,8 +100,8 @@ const MainCreateAccount = () => {
                         checkMsg: (credentials.passwordConfirm.length > 0 && (credentials.passwordConfirm !== e.target.value)),
                       }
                     });
-                    console.log(e.target.value);
-                    console.log(e.target.value.length);
+                    // console.log(e.target.value);
+                    // console.log(e.target.value.length);
                     return { ...prevState, password: e.target.value };
                   });
                 }}
