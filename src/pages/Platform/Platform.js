@@ -9,7 +9,7 @@ import LargeCard from "../../components/Card/LargeCard/LargeCard";
 import "./styles.scss";
 
 const Platform = () => {
-  const [platform, setPlatform] = useState();
+  const [platform, setPlatform] = useState({});
   const [quizzes, setQuizzes] = useState([]);
   const [quizCards, setQuizCards] = useState([]);
   const history = useHistory();
@@ -19,7 +19,7 @@ const Platform = () => {
     getCurrentPlatform();
     getQuizzes();
     renderCards();
-  });
+  }, []);
 
   const getCurrentPlatform = async () => {
     const name = params.platform;
@@ -42,9 +42,7 @@ const Platform = () => {
       const response = await getQuizzesFromPlatform(name);
       setQuizzes(response);
     } catch (error) {
-      error.response.status === 400
-        ? history.replace(`/search?=${name}`)
-        : history.replace("/error");
+      console.log(error);
     }
   };
 
@@ -73,9 +71,9 @@ const Platform = () => {
     <div>
       <MainNav />
       <PlatformSubNav
-        heading={platform.title}
+        heading={params.platform}
         bannerSrc="/banner.svg"
-        isSubsribed={true}
+        isSubscribed={true}
       />
       <div className="content d-flex flex-row align-items-start me-5 justify-content-between">
         <div className="d-flex flex-column m-5 align-items-end">
