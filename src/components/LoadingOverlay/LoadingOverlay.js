@@ -2,16 +2,16 @@ import React from "react";
 import { ReactComponent as Spore } from "../../spore.svg";
 import "./style.css";
 
-const LoadingOverlay = ({ isVisible }) => {
-  const SPIN_SPEED = 3;
-
+const LoadingOverlay = ({ isVisible, width, spinSpeed }) => {
   return (
     <>
       {isVisible && (
         <div className="overlay">
           <Spore
             style={{
-              animation: `spin ${SPIN_SPEED}s linear infinite`,
+              animation: `spin ${spinSpeed || 3}s linear infinite`,
+              height: "auto",
+              width: width || "15%",
             }}
           />
         </div>
