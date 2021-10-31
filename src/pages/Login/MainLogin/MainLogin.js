@@ -6,9 +6,12 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import Button from "../../../components/Button/Button";
 
 import "../styles.css";
+import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
 
 const MainLogin = () => {
   const history = useHistory();
+  const [isLoading, setIsLoading] = useState(false);
+
   const { auth, dispatch } = useContext(AuthContext);
   const [credentials, setCredentials] = useState({
     username: "",
@@ -17,11 +20,14 @@ const MainLogin = () => {
 
   const login = async (username, password) => {
     try {
-      const success = await Auth.signIn(username, password);
+      setIsLoading(true);
+      await Auth.signIn(username, password);
       dispatch({ type: "LOGIN", payload: username });
     } catch (error) {
       console.log("error signing in", error);
       window.alert("Invalid Login");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -80,6 +86,7 @@ const MainLogin = () => {
           </Link>
         </div>
       </div>
+      <LoadingOverlay isVisible={isLoading} />
     </div>
   );
 };
