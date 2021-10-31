@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useHistory, Redirect } from "react-router-dom";
 import { Auth } from "aws-amplify";
 
@@ -26,10 +26,13 @@ const MainLogin = () => {
     } catch (error) {
       console.log("error signing in", error);
       window.alert("Invalid Login");
-    } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    return () => setIsLoading(false);
+  }, []);
 
   return auth.authenticated ? (
     <Redirect to="/" />
