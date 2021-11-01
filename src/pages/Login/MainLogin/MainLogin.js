@@ -6,7 +6,7 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import Button from "../../../components/Button/Button";
 
 import "../styles.css";
-import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
+import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay";
 
 const MainLogin = () => {
   const history = useHistory();

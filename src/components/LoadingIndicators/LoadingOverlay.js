@@ -2,6 +2,9 @@ import React from "react";
 import { ReactComponent as Spore } from "../../spore.svg";
 import "./style.css";
 
+/**
+ * Fullscreen loading overlay.
+ */
 const LoadingOverlay = ({ isVisible, width, spinSpeed }) => {
   return (
     <>

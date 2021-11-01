@@ -4,7 +4,7 @@ import { useHistory } from "react-router";
 
 import { postCreateAccount } from "../../../API/API";
 import Button from "../../../components/Button/Button";
-import LoadingOverlay from "../../../components/LoadingOverlay/LoadingOverlay";
+import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay";
 import "../styles.css";
 
 const MainCreateAccount = () => {
