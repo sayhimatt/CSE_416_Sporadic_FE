@@ -6,19 +6,11 @@ import Button from "../../Button/Button";
 
 import "./styles.css";
 
-const PlatformSubNav = ({
-  heading,
-  isSubscribed,
-  subscriptionHandler,
-  bannerSrc,
-  ...props
-}) => {
+const PlatformSubNav = ({ heading, isSubscribed, subscriptionHandler, bannerSrc, ...props }) => {
   const loadButtons = () => {
     let buttons = [];
     const subscription = (
-      <Button onClick={subscriptionHandler}>
-        {isSubscribed ? "Unsubscribe" : "Subscribe"}
-      </Button>
+      <Button onClick={subscriptionHandler}>{isSubscribed ? "Unsubscribe" : "Subscribe"}</Button>
     );
     buttons.push(subscription);
     /* Handle whether mod view button appears */
@@ -28,10 +20,7 @@ const PlatformSubNav = ({
   return (
     <div className="platformSubNav">
       {bannerSrc ? (
-        <div
-          className="banner"
-          style={{ backgroundImage: `url(${bannerSrc})` }}
-        />
+        <div className="banner" style={{ backgroundImage: `url(${bannerSrc})` }} />
       ) : null}
       <SubNav
         heading={

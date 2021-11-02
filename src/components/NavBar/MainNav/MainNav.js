@@ -20,11 +20,7 @@ const NavBar = () => {
       <div className="rightNav">
         <div className="rightNavItems">
           <div className="account">
-            <img
-              className="profilePicture"
-              src="/propic.png"
-              alt="placeholder"
-            />
+            <img className="profilePicture" src="/propic.png" alt="placeholder" />
             <div className="navText">{auth.username}</div>
           </div>
           <div className="subscriptionDropdown">

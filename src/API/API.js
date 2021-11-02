@@ -23,18 +23,15 @@ export const postCreatePlatform = async (platformData) => {
   await axios.post(
     `${ENDPOINT}/platforms/`,
     { title: platformData.title, description: platformData.description },
-    { headers: { authorization: `Bearer ${token}` } }
+    { headers: { authorization: `Bearer ${token}` } },
   );
 };
 
 export const getQuizzesFromPlatform = async (platformName) => {
   const token = await getToken();
-  const response = await axios.get(
-    `${ENDPOINT}/quizzes?platform=${platformName}`,
-    {
-      headers: { authorization: `Bearer ${token}` },
-    }
-  );
+  const response = await axios.get(`${ENDPOINT}/quizzes?platform=${platformName}`, {
+    headers: { authorization: `Bearer ${token}` },
+  });
   return response.data.items;
 };
 

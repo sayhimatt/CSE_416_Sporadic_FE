@@ -73,11 +73,7 @@ const Platform = () => {
   return (
     <div>
       <MainNav />
-      <PlatformSubNav
-        heading={params.platform}
-        bannerSrc="/banner.svg"
-        isSubscribed={true}
-      />
+      <PlatformSubNav heading={params.platform} bannerSrc="/banner.svg" isSubscribed={true} />
       <div className="content d-flex flex-row align-items-start me-5 justify-content-between">
         <div className="d-flex flex-column m-5 align-items-end">
           <div className="sort"></div>
