@@ -1,3 +1,9 @@
+.page-alignment-fixer {
+  padding: 8px 0px;
+  width: 100vw;
+  height: 66px;
+}
+
 .navBar {
   /* Auto Layout */
   display: flex;
