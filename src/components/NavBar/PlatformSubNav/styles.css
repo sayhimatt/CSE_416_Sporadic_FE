@@ -18,17 +18,3 @@
   height: 20vh;
   background-size: cover;
 }
-
-/* Platform */
-
-.platformSubNav {
-  padding-top: 66px;
-}
-
-.platformSubNav .subNav {
-  top: 0px;
-}
-
-.content {
-  margin-top: 30px;
-}
