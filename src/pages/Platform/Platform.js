@@ -64,6 +64,7 @@ const Platform = () => {
               </Link>
             ),
           }}
+          cardLink={name} // Temporary fix prevents crash on redirect, use quiz page when done
         />
       );
     });
