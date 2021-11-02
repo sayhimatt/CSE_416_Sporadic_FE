@@ -12,22 +12,26 @@ const ForgotPasswordConfirmation = () => {
   const [password, setPassword] = useState({
     password: "",
     passwordConfirm: "",
-  })
+  });
   const [showMsg, setShowMsg] = useState({
     ruleMsg: false,
     checkMsg: false,
   });
   const ForgotPasswordConfirmation = async () => {
     try {
-      const success = await Auth.forgotPasswordSubmit(history.location.state.username, confirmation, password.password)
+      const success = await Auth.forgotPasswordSubmit(
+        history.location.state.username,
+        confirmation,
+        password.password,
+      );
       history.push({
         pathname: "/login",
-      })
+      });
     } catch (error) {
       console.log("error sending code", error);
       window.alert("Invalid input");
     }
-  }
+  };
 
   return (
     <div className="page d-flex flex-column align-items-center justify-content-start">
@@ -54,24 +58,26 @@ const ForgotPasswordConfirmation = () => {
                 placeholder="New Password"
                 type="password"
                 onChange={(e) => {
-                  setPassword((prevState) => {                    
+                  setPassword((prevState) => {
                     setShowMsg((prevState) => {
                       return {
                         ...prevState,
-                        ruleMsg: (e.target.value.length > 0 && e.target.value.length < 8),
-                        checkMsg: (password.passwordConfirm.length > 0 && (password.passwordConfirm !== e.target.value)),
-                      }
+                        ruleMsg: e.target.value.length > 0 && e.target.value.length < 8,
+                        checkMsg:
+                          password.passwordConfirm.length > 0 &&
+                          password.passwordConfirm !== e.target.value,
+                      };
                     });
                     return { ...prevState, password: e.target.value };
                   });
                 }}
               ></input>
             </div>
-            {showMsg.ruleMsg ? 
-              <div className="passwordMsg" >
+            {showMsg.ruleMsg ? (
+              <div className="passwordMsg">
                 <p>Password must be at least 8 characters long</p>
-              </div> 
-            : null}
+              </div>
+            ) : null}
             <div className="inputBox">
               <input
                 id="passwordConfirm"
@@ -81,18 +87,21 @@ const ForgotPasswordConfirmation = () => {
                 onChange={(e) => {
                   setPassword((prevState) => {
                     setShowMsg((prevState) => {
-                      return {...prevState, checkMsg: (e.target.value.length > 0 && (password.password !== e.target.value))}
+                      return {
+                        ...prevState,
+                        checkMsg: e.target.value.length > 0 && password.password !== e.target.value,
+                      };
                     });
                     return { ...prevState, passwordConfirm: e.target.value };
                   });
                 }}
               ></input>
             </div>
-            {showMsg.checkMsg ?
-              <div className="passwordMsg" >
+            {showMsg.checkMsg ? (
+              <div className="passwordMsg">
                 <p>Passwords do not match</p>
-              </div>  
-            : null}             
+              </div>
+            ) : null}
           </div>
           <Button type="button" onClick={ForgotPasswordConfirmation}>
             Submit
@@ -105,6 +114,6 @@ const ForgotPasswordConfirmation = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 export default ForgotPasswordConfirmation;

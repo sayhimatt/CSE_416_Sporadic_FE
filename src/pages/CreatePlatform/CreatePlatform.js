@@ -59,11 +59,7 @@ const CreatePlatform = () => {
       <MainNav />
       <SubNav
         heading="Platform Creation"
-        buttons={
-          <Button onClick={() => history.push("/notifications")}>
-            Notifications
-          </Button>
-        }
+        buttons={<Button onClick={() => history.push("/notifications")}>Notifications</Button>}
       />
       <div className="page-content d-flex flex-column justify-content-center align-items-center">
         <div className="create-platform-container d-flex flex-column justify-content-center">
