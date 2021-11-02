@@ -1,14 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
 
 import { postCreateAccount } from "../../../API/API";
 import Button from "../../../components/Button/Button";
+import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay";
 import "../styles.css";
 
 const MainCreateAccount = () => {
   const history = useHistory();
-  const inputRef = useRef();
+  const [isLoading, setIsLoading] = useState(false);
+
   const [credentials, setCredentials] = useState({
     email: "",
     username: "",
@@ -24,36 +26,40 @@ const MainCreateAccount = () => {
 
   const createAccount = async () => {
     setShowMsg((prevState) => {
-      return {...prevState, errorMsg: false};
+      return { ...prevState, errorMsg: false };
     });
+
     if (credentials.password !== credentials.passwordConfirm) {
       setShowMsg((prevState) => {
-        return {...prevState, matchMsg: true}
+        return { ...prevState, matchMsg: true };
       });
       return;
     } else {
       setShowMsg((prevState) => {
-        return {...prevState, matchMsg: false}
+        return { ...prevState, matchMsg: false };
       });
     }
-    await postCreateAccount(
-      credentials.username,
-      credentials.password,
-      credentials.email
-    )
-      .then((res) => {
+
+    setIsLoading(true);
+
+    await postCreateAccount(credentials.username, credentials.password, credentials.email)
+      .then(() => {
         history.push({
           pathname: "/createAccount/confirmation",
           state: { username: credentials.username },
-        })
+        });
       })
       .catch((error) => {
         setShowMsg((prevState) => {
-          return {...prevState, errorMsg: true};
-        },
-        console.log(error));
+          return { ...prevState, errorMsg: true };
+        }, console.log(error));
+        setIsLoading(false);
       });
   };
+
+  useEffect(() => {
+    return () => setIsLoading(false);
+  }, []);
 
   return (
     <div className="page d-flex flex-column align-items-center justify-content-start">
@@ -94,24 +100,26 @@ const MainCreateAccount = () => {
                 placeholder="Password"
                 type="password"
                 onChange={(e) => {
-                  setCredentials((prevState) => {                    
+                  setCredentials((prevState) => {
                     setShowMsg((prevState) => {
                       return {
                         ...prevState,
-                        ruleMsg: (e.target.value.length > 0 && e.target.value.length < 8),
-                        checkMsg: (credentials.passwordConfirm.length > 0 && (credentials.passwordConfirm !== e.target.value)),
-                      }
+                        ruleMsg: e.target.value.length > 0 && e.target.value.length < 8,
+                        checkMsg:
+                          credentials.passwordConfirm.length > 0 &&
+                          credentials.passwordConfirm !== e.target.value,
+                      };
                     });
                     return { ...prevState, password: e.target.value };
                   });
                 }}
               ></input>
             </div>
-            {showMsg.ruleMsg ? 
-              <div className="passwordMsg" >
+            {showMsg.ruleMsg ? (
+              <div className="passwordMsg">
                 <p>Password must be at least 8 characters long</p>
-              </div> 
-            : null}
+              </div>
+            ) : null}
             <div className="inputBox">
               <input
                 id="passwordConfirm"
@@ -121,18 +129,22 @@ const MainCreateAccount = () => {
                 onChange={(e) => {
                   setCredentials((prevState) => {
                     setShowMsg((prevState) => {
-                      return {...prevState, checkMsg: (e.target.value.length > 0 && (credentials.password !== e.target.value))}
+                      return {
+                        ...prevState,
+                        checkMsg:
+                          e.target.value.length > 0 && credentials.password !== e.target.value,
+                      };
                     });
                     return { ...prevState, passwordConfirm: e.target.value };
                   });
                 }}
               ></input>
             </div>
-            {showMsg.checkMsg ?
-              <div className="passwordMsg" >
+            {showMsg.checkMsg && (
+              <div className="passwordMsg">
                 <p>Passwords do not match</p>
-              </div>  
-            : null}             
+              </div>
+            )}
           </div>
           <Button type="button" onClick={createAccount}>
             Create Account
@@ -144,16 +156,17 @@ const MainCreateAccount = () => {
           </Link>
         </div>
       </div>
-      {showMsg.errorMsg ?
-          <div className="errorMsg" >
-            <p>Could not create account</p>
-          </div>  
-        : null}  
-        {showMsg.matchMsg ?
-          <div className="errorMsg" >
-            <p>Passwords do not match</p>
-          </div>  
-        : null}  
+      {showMsg.errorMsg && (
+        <div className="errorMsg">
+          <p>Could not create account</p>
+        </div>
+      )}
+      {showMsg.matchMsg && (
+        <div className="errorMsg">
+          <p>Passwords do not match</p>
+        </div>
+      )}
+      <LoadingOverlay isVisible={isLoading} />
     </div>
   );
 };
