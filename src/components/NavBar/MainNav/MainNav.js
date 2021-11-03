@@ -1,15 +1,25 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import Auth from "@aws-amplify/auth";
+
 import "./styles.css";
+
 import { AuthContext } from "../../../contexts/AuthContext";
-import Feed from "../../../pages/Feed/Feed";
+import DropdownMenu from "../../Dropdown/DropdownMenu/DropdownMenu";
 
 const NavBar = () => {
   const { auth, dispatch } = useContext(AuthContext);
+  const [subscriptionDropdownOpen, setSubscriptionDropdownOpen] = useState(false);
+  const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
+
+  const logout = async () => {
+    await Auth.signOut();
+    dispatch({ type: "LOGOUT" });
+  };
+
   return (
-    <div className="navBar">
-      <div className="logo">
+    <div className="navBar navbar navbar-expand-lg sticky-top">
+      <div className="logo navbar-brand">
         <Link to="/">
           <img src="/logo.svg" alt="placeholder" />
         </Link>
@@ -17,16 +27,42 @@ const NavBar = () => {
       <div className="searchBar">
         <input className="search" placeholder="Search"></input>
       </div>
-      <div className="rightNav">
-        <div className="rightNavItems">
-          <div className="account">
-            <img className="profilePicture" src="/propic.png" alt="placeholder" />
-            <div className="navText">{auth.username}</div>
-          </div>
-          <div className="subscriptionDropdown">
-            <div className="navText">Subscription</div>
-          </div>
-        </div>
+      <div className="navbar-nav ms-auto">
+        <a
+          href="#"
+          className="navItem"
+          onClick={() => {
+            setSubscriptionDropdownOpen(!subscriptionDropdownOpen);
+          }}
+        >
+          <div className="navText">Subscriptions</div>
+          {subscriptionDropdownOpen && (
+            <DropdownMenu>
+              {auth.subscriptions &&
+                auth.subscriptions.map((subscription) => (
+                  <Link to={`/p/${subscription}`}>{subscription}</Link>
+                ))}
+            </DropdownMenu>
+          )}
+        </a>
+        <a
+          href="#"
+          className="navItem"
+          onClick={() => {
+            setAccountDropdownOpen(!accountDropdownOpen);
+          }}
+        >
+          <img className="profilePicture" src="/propic.png" alt="placeholder" />
+          <div className="navText">{auth.username}</div>
+          {accountDropdownOpen && (
+            <DropdownMenu>
+              <Link to="/myAccount">My Account</Link>
+              <Link to="/friends">Friends</Link>
+              <Link to="/nofitifcations">Notifications</Link>
+              <div onClick={logout}>Logout</div>
+            </DropdownMenu>
+          )}
+        </a>
       </div>
     </div>
   );

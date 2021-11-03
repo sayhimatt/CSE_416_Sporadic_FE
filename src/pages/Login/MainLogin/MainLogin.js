@@ -4,6 +4,7 @@ import { Auth } from "aws-amplify";
 
 import { AuthContext } from "../../../contexts/AuthContext";
 import Button from "../../../components/Button/Button";
+import { getUser } from "../../../API/API";
 
 import "../styles.css";
 import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay";
@@ -22,7 +23,11 @@ const MainLogin = () => {
     try {
       setIsLoading(true);
       await Auth.signIn(username, password);
-      dispatch({ type: "LOGIN", payload: username });
+      const user = await getUser(username);
+      dispatch({
+        type: "LOGIN",
+        payload: { username: user.username, subscriptions: user.subscriptions },
+      });
     } catch (error) {
       console.log("error signing in", error);
       window.alert("Invalid Login");
