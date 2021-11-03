@@ -38,9 +38,10 @@ const NavBar = () => {
           <div className="navText">Subscriptions</div>
           {subscriptionDropdownOpen && (
             <DropdownMenu>
-              {auth.subscriptions.map((subscription) => (
-                <Link to={`/p/${subscription}`}>{subscription}</Link>
-              ))}
+              {auth.subscriptions &&
+                auth.subscriptions.map((subscription) => (
+                  <Link to={`/p/${subscription}`}>{subscription}</Link>
+                ))}
             </DropdownMenu>
           )}
         </a>

@@ -7,9 +7,7 @@ import "./styles.css";
 const DropdownMenu = ({ children, size }) => {
   return (
     <div className="custom-dropdown">
-      {children.map((item) => (
-        <DropdownItem size={size}>{item}</DropdownItem>
-      ))}
+      {children && children.map((item) => <DropdownItem size={size}>{item}</DropdownItem>)}
     </div>
   );
 };
