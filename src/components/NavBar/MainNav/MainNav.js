@@ -38,8 +38,9 @@ const NavBar = () => {
           <div className="navText">Subscriptions</div>
           {subscriptionDropdownOpen && (
             <DropdownMenu>
-              <div>Subscription 1</div>
-              <div>Subscription 2</div>
+              {auth.subscriptions.map((subscription) => (
+                <Link to={`/p/${subscription}`}>{subscription}</Link>
+              ))}
             </DropdownMenu>
           )}
         </a>
