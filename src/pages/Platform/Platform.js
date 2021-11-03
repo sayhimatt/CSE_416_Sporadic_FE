@@ -18,7 +18,7 @@ const Platform = () => {
   useEffect(() => {
     getCurrentPlatform();
     getQuizzes();
-  }, []);
+  }, [params]);
 
   useEffect(() => {
     renderCards();

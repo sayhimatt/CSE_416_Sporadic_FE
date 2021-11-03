@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Auth } from "aws-amplify";
 
 import { AuthContext } from "../../contexts/AuthContext";
 import { getFeedQuizzes } from "../../API/API";
@@ -18,11 +17,6 @@ const Feed = ({ children }) => {
   useEffect(() => {
     loadQuizzes();
   }, []);
-
-  const logout = async () => {
-    await Auth.signOut();
-    dispatch({ type: "LOGOUT" });
-  };
 
   const loadQuizzes = async () => {
     await getFeedQuizzes(auth.username)
@@ -57,9 +51,6 @@ const Feed = ({ children }) => {
     <Link to="/Notifications">
       <Button>Notifications</Button>
     </Link>,
-    <Button buttonStyle="btn--special" onClick={logout}>
-      Sign Out
-    </Button>,
   ];
   return (
     <div>

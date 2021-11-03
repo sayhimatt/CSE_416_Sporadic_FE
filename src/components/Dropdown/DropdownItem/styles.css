@@ -1,0 +1,40 @@
+.menu-item {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 7px;
+  transition: background 0.05s;
+  padding: 5px 10px;
+  text-decoration: none;
+  color: black;
+}
+
+.menu-item:hover {
+  color: black;
+}
+
+.menu-item * {
+  color: black;
+  text-decoration: none;
+  width: 100%;
+}
+
+.menu-item a:hover {
+  color: black;
+}
+
+.menu-item:hover {
+  background: rgb(240, 240, 240);
+}
+
+.menu-item--small {
+  font-size: 12px;
+}
+
+.menu-item--medium {
+  font-size: 16px;
+}
+
+.menu-item--large {
+  font-size: 20px;
+}

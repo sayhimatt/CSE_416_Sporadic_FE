@@ -52,6 +52,17 @@ export const postConfirmCode = async (username, confirmCode) => {
   });
 };
 
+/* User routing */
+
+export const getUser = async (username) => {
+  const token = await getToken();
+  const response = await axios.get(`${ENDPOINT}/users/${username}`, {
+    headers: { authorization: `Bearer ${token}` },
+  });
+  console.log(response.data);
+  return response.data;
+};
+
 /* Feed routing */
 export const getFeedQuizzes = async (username) => {
   return;

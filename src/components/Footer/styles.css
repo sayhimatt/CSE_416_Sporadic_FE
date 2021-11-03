@@ -18,13 +18,9 @@
   margin-right: 10px;
 }
 
-.navItem {
+.footer .navItem {
   padding: 10px;
   margin: 0px 2px;
   font-size: 12px;
-}
-
-.link {
   color: white;
-  text-decoration: none;
 }
