@@ -1,6 +1,7 @@
 .custom-dropdown {
   position: absolute;
   border-radius: 7px;
+  min-width: 100px;
   max-width: 150px;
   top: 60px;
   transform: translateX(-10%);
