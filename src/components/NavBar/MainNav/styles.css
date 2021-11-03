@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 8px 0px;
+  padding: 8px 25px;
 
   top: 0;
   position: sticky;
@@ -21,29 +21,20 @@
   align-items: center;
 }
 
-.account {
+.navItem {
   /* Auto Layout */
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 10px;
-
-  /* Inside Auto Layout */
-  flex: none;
-  order: 1;
-  flex-grow: 0;
-  margin: 0px 0px;
+  padding: 0px 10px;
+  font-size: 14px;
+  text-decoration: none;
+  color: black;
 }
 
 .logo.logo {
-  /* Auto Layout */
   margin: 0px;
-  margin-left: 10px;
   padding-bottom: 2px;
-  /* Inside Auto Layout */
-  flex: none;
-  order: 0;
-  flex-grow: 0;
 }
 
 .logo img {
@@ -52,29 +43,7 @@
 
 .profilePicture {
   height: 32px;
-  padding-right: 8px;
-}
-
-.rightNav {
-  /* Auto Layout */
-  justify-content: flex-end;
-  padding: 10px;
-
-  /* Inside Auto Layout */
-  order: 2;
-  flex-grow: 1;
-  margin: 0px 20px;
-
-  font-size: 14px;
-}
-
-.rightNavItems {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  width: 200px;
+  padding-right: 5px;
 }
 
 .searchBar {
