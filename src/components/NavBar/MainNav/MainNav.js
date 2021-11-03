@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Auth from "@aws-amplify/auth";
 
 import "./styles.css";
 
@@ -7,9 +8,14 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import DropdownMenu from "../../Dropdown/DropdownMenu/DropdownMenu";
 
 const NavBar = () => {
-  const { auth } = useContext(AuthContext);
+  const { auth, dispatch } = useContext(AuthContext);
   const [subscriptionDropdownOpen, setSubscriptionDropdownOpen] = useState(false);
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
+
+  const logout = async () => {
+    await Auth.signOut();
+    dispatch({ type: "LOGOUT" });
+  };
 
   return (
     <div className="navBar navbar navbar-expand-lg sticky-top">
@@ -29,7 +35,7 @@ const NavBar = () => {
             setSubscriptionDropdownOpen(!subscriptionDropdownOpen);
           }}
         >
-          <div className="navText">Subscription</div>
+          <div className="navText">Subscriptions</div>
           {subscriptionDropdownOpen && (
             <DropdownMenu>
               <div>Subscription 1</div>
@@ -51,6 +57,7 @@ const NavBar = () => {
               <Link to="/myAccount">My Account</Link>
               <Link to="/friends">Friends</Link>
               <Link to="/nofitifcations">Notifications</Link>
+              <div onClick={logout}>Logout</div>
             </DropdownMenu>
           )}
         </a>
