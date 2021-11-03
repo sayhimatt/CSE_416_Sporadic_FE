@@ -22,9 +22,7 @@ Amplify.configure({
         endpoint: "https://matt-training-server.herokuapp.com",
         custom_header: async () => {
           return {
-            Authorization: `Bearer ${(await Auth.currentSession())
-              .getIdToken()
-              .getJwtToken()}`,
+            Authorization: `Bearer ${(await Auth.currentSession()).getIdToken().getJwtToken()}`,
           };
         },
       },
@@ -35,7 +33,7 @@ ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById("root"),
 );
 
 // If you want to start measuring performance in your app, pass a function

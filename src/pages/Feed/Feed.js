@@ -63,10 +63,7 @@ const Feed = ({ children }) => {
   return (
     <div>
       <MainNav />
-      <SubNav
-        heading={`Welcome Back ${auth.username}!`}
-        buttons={subNavButtons}
-      />
+      <SubNav heading={`Welcome Back ${auth.username}!`} buttons={subNavButtons} />
       <Footer />
     </div>
   );

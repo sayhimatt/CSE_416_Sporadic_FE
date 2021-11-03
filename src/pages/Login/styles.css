@@ -7,7 +7,6 @@
   margin-top: 80px;
 }
 
-
 .page {
   width: 100vw;
   height: 100vh;
@@ -20,7 +19,7 @@
   font-size: 12px;
   text-align: center;
   height: 0;
-  transform: translateY(-10px)
+  transform: translateY(-10px);
 }
 
 .errorMsg {

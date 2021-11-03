@@ -22,24 +22,14 @@ const MainRouter = () => {
         <Switch>
           <Route path="/login" component={Login} />
           <Route exact path="/createAccount" component={CreateAccount} />
-          <Route
-            exact
-            path="/createAccount/confirmation"
-            component={ConfirmEmail}
-          />
+          <Route exact path="/createAccount/confirmation" component={ConfirmEmail} />
           <Route exact path="/forgotPassword" component={ForgotPassword} />
-          <Route exact path="/forgotPassword/confirmation"
-            component={ForgotPasswordConfirmation}
-          />
+          <Route exact path="/forgotPassword/confirmation" component={ForgotPasswordConfirmation} />
           <GuardedRoute exact path="/" component={Feed}></GuardedRoute>
           <GuardedRoute exact path="/About" component={Feed}></GuardedRoute>
           <GuardedRoute exact path="/Contact" component={Feed}></GuardedRoute>
           <GuardedRoute exact path="/p/:platform" component={Platform} />
-          <GuardedRoute
-            exact
-            path="/createPlatform"
-            component={CreatePlatform}
-          />
+          <GuardedRoute exact path="/createPlatform" component={CreatePlatform} />
           <GuardedRoute path="/" component={NotFound} />
         </Switch>
       </Router>
