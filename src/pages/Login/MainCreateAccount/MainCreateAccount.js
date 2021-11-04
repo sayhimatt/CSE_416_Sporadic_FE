@@ -39,6 +39,8 @@ const MainCreateAccount = () => {
       return { ...prevState, matchBox: (credentials.password !== credentials.passwordConfirm) };
     });
 
+    if (showMsg.matchBox || showMsg.lengthBox) return;
+
 
     setIsLoading(true);
 
@@ -162,9 +164,9 @@ const MainCreateAccount = () => {
         text="Could not create account">
       </ErrorMessage>
       <ErrorMessage 
-        visible={showMsg.errorBox} 
+        visible={showMsg.lengthBox} 
         errorStyle="errorBox" 
-        text="Could not create account">
+        text="Password is not long enough">
       </ErrorMessage>
       <ErrorMessage 
         visible={showMsg.matchBox} 
