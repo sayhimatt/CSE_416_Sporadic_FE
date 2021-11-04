@@ -12,6 +12,13 @@ const authReducer = (state, action) => {
       };
     case "LOGOUT":
       return { authenticated: false, username: "" };
+    case "SUBSCRIBE":
+      return { ...state, subscriptions: state.subscriptions.concat([action.payload]) };
+    case "UNSUBSCRIBE":
+      return {
+        ...state,
+        subscriptions: state.subscriptions.filter((platform) => platform !== action.payload),
+      };
     default:
       return state;
   }

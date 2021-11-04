@@ -35,6 +35,26 @@ export const getQuizzesFromPlatform = async (platformName) => {
   return response.data.items;
 };
 
+export const putSubscribe = async (username, platformName) => {
+  const token = await getToken();
+  const response = await axios.put(`${ENDPOINT}/platforms/${platformName}/subscribe`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};
+
+export const putUnsubscribe = async (username, platformName) => {
+  const token = await getToken();
+  const response = await axios.put(`${ENDPOINT}/platforms/${platformName}/subscribe`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};
+
 /* Login Routing */
 
 export const postCreateAccount = async (username, password, email) => {
