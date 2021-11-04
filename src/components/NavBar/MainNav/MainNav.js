@@ -4,7 +4,7 @@ import Auth from "@aws-amplify/auth";
 
 import "./styles.css";
 
-import { AuthContext } from "../../../contexts/AuthContext";
+import { AuthContext } from "../../../contexts/AuthContext/AuthContext";
 import DropdownMenu from "../../Dropdown/DropdownMenu/DropdownMenu";
 
 const NavBar = () => {

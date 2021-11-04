@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { Link, useHistory, Redirect } from "react-router-dom";
 import { Auth } from "aws-amplify";
 
-import { AuthContext } from "../../../contexts/AuthContext";
+import { AuthContext } from "../../../contexts/AuthContext/AuthContext";
 import Button from "../../../components/Button/Button";
 import { getUser } from "../../../API/API";
 

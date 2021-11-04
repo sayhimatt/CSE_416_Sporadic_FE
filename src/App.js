@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import AuthContextProvider from "./contexts/AuthContext";
+import AuthContextProvider from "./contexts/AuthContext/AuthContext";
 import GuardedRoute from "./components/GuardedRoute/GuardedRoute";
 import Feed from "./pages/Feed/Feed";
 import Login from "./pages/Login/MainLogin/MainLogin";
