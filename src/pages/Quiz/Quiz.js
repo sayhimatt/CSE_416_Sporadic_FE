@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 
-import { getPlatform, getQuizzesFromPlatform } from "./../../API/API";
+import { getPlatform, getQuizByTitle } from "./../../API/API";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
-import LargeCard from "../../components/Card/LargeCard/LargeCard";
+import QuestionCard from "../../components/Card/QuestionCard/QuestionCard.js";
 
 import "./styles.scss";
 
-const Platform = () => {
+const Quiz = () => {
   const [platform, setPlatform] = useState({});
   const [questions, setQuestions] = useState([]);
   const history = useHistory();
@@ -16,7 +16,7 @@ const Platform = () => {
 
   useEffect(() => {
     getCurrentPlatform();
-    getQuizzes();
+    getQuestions();
   }, [params]);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const Platform = () => {
       });
   };
 
-  const getQuizzes = async () => {
+  const getQuestions = async () => {
     const platform = params.platform;
     const quiz = params.quiz;
     try {
@@ -50,22 +50,12 @@ const Platform = () => {
   };
 
   const renderCards = () => {
-    const cards = quizzes.map((quiz) => {
-      const name = params.platform;
+    const cards = questions.map((question, index) => {
+      //const name = params.platform;
       return (
-        <LargeCard
-          key={quiz._id}
-          cardInfo={{
-            title: quiz.title,
-            description: quiz.description,
-            subtext: (
-              <Link className="link" to={`/p/${name}`}>
-                {name}
-              </Link>
-            ),
-          }}
-          cardLink={name} // Temporary fix prevents crash on redirect, use quiz page when done
-        />
+        <div key={question._id}>
+          <QuestionCard />
+        </div>
       );
     });
     setQuestions(cards);
@@ -75,8 +65,12 @@ const Platform = () => {
     <div>
       <MainNav />
       <PlatformSubNav heading={params.platform} bannerSrc="/banner.svg" isSubscribed={true} />
-      <div className="content d-flex flex-row align-items-start me-5 justify-content-between">
-        <div className="d-flex flex-column m-5 align-items-end">Paste Questions Here</div>
+      <div className="content d-flex flex-row align-items-start">
+        <div className="d-flex flex-column flex-md-fill">
+          <QuestionCard />
+          <QuestionCard />
+          <QuestionCard />
+        </div>
         <div className="information d-flex flex-column">
           <div className="searchBar searchBar--border">
             <input className="search" placeholder="Search"></input>
@@ -86,7 +80,7 @@ const Platform = () => {
           </div>
           <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
             <div>Your Platform IQ</div>
-            <div className="color-special fw-bold fs-1">100</div>
+            <div className="color-special fw-bold fs-1">0</div>
           </div>
         </div>
       </div>
@@ -94,4 +88,4 @@ const Platform = () => {
   );
 };
 
-export default Platform;
+export default Quiz;
