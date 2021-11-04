@@ -64,8 +64,8 @@ const Quiz = () => {
   return (
     <div>
       <MainNav />
-      <PlatformSubNav heading={params.platform} bannerSrc="/banner.svg" isSubscribed={true} />
-      <div className="content d-flex flex-row align-items-start">
+      <PlatformSubNav heading={params.platform} />
+      <div className="content d-flex m-4 flex-row align-items-start">
         <div className="d-flex flex-column flex-md-fill">
           <QuestionCard />
           <QuestionCard />
