@@ -1,32 +1,26 @@
-.cardContainer .card {
-    background: #d4f1f4;
-    padding: 5px 10px;
-    box-shadow: 1px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
-  }
-  .cardContainer {
-    border-style: solid;
-    margin: 10px;
-    border-color: #189ab4;
-    
-    text-align: center;
-  }
-  .cardContainer .choice {
-    padding: 1em;
-    margin-top: 1em;
-    margin-bottom: 1em;
-    margin-left: 5%;
-    margin-right: 5%;
-    box-shadow: 5px 5px 5px #aaaaaa;
-    border-radius: 10em;
-    border: 2px solid #d4f1f4;
-    display: flex;
-  }
-  .marker {
-    margin-left: auto;
-    float: right;
-  }
-  .question {
-    font-size: xx-large;
-    background-color: #d4f1f4;
-  }
+.cardContainer--question {
+  border-style: solid;
+  margin: 10px;
+  border-color: #189ab4;
+  text-align: center;
+}
+
+.cardContainer .choice {
+  padding: 1em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: 5%;
+  margin-right: 5%;
+  box-shadow: 5px 5px 5px #aaaaaa;
+  border-radius: 10em;
+  border: 2px solid #d4f1f4;
+  display: flex;
+}
+.marker {
+  margin-left: auto;
+  float: right;
+}
+.question {
+  font-size: xx-large;
+  background-color: #d4f1f4;
+}

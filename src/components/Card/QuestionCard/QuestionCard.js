@@ -6,7 +6,7 @@ import SubNav from "../../NavBar/SubNav/SubNav";
 
 const Question = ({ children, Info }) => {
   return (
-    <div className="cardContainer flex-column align-items-center">
+    <div className="cardContainer cardContainer--question flex-column align-items-center">
       <div className="question">Question String</div>
       <div className="choice flex-row">
         <div>Answer 1</div>
