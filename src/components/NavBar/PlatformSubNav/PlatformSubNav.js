@@ -8,7 +8,7 @@ import Button from "../../Button/Button";
 
 import "./styles.css";
 
-const PlatformSubNav = ({ platformName, subscriptionHandler, bannerSrc, ...props }) => {
+const PlatformSubNav = ({ platformName, bannerSrc }) => {
   const { auth, dispatch } = useContext(AuthContext);
   const [subscribed, setSubscribed] = useState(auth.subscriptions.includes(platformName));
 
