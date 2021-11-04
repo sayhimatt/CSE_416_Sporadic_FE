@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
 import { AuthContext } from "../../../contexts/AuthContext";
-import { putSubscribe, putUnsubscribe } from "../../../API/API";
+import { patchSubscribe, patchUnsubscribe } from "../../../API/API";
 import SubNav from "../SubNav/SubNav";
 import Button from "../../Button/Button";
 
@@ -13,7 +13,7 @@ const PlatformSubNav = ({ platformName, bannerSrc }) => {
   const [subscribed, setSubscribed] = useState(auth.subscriptions.includes(platformName));
 
   const subscribe = async () => {
-    await putSubscribe(auth.username, platformName)
+    await patchSubscribe(platformName)
       .then((res) => {
         dispatch({ type: "SUBSCRIBE", payload: platformName });
         setSubscribed(true);
@@ -24,7 +24,7 @@ const PlatformSubNav = ({ platformName, bannerSrc }) => {
   };
 
   const unsubscribe = async () => {
-    await putUnsubscribe(auth.username, platformName)
+    await patchUnsubscribe(platformName)
       .then((res) => {
         dispatch({ type: "UNSUBSCRIBE", payload: platformName });
         setSubscribed(false);

@@ -35,7 +35,7 @@ export const getQuizzesFromPlatform = async (platformName) => {
   return response.data.items;
 };
 
-export const patchSubscribe = async (username, platformName) => {
+export const patchSubscribe = async (platformName) => {
   const token = await getToken();
   const response = await axios.patch(`${ENDPOINT}/platforms/${platformName}/subscribe`, {
     headers: {
@@ -45,7 +45,7 @@ export const patchSubscribe = async (username, platformName) => {
   return response;
 };
 
-export const patchUnsubscribe = async (username, platformName) => {
+export const patchUnsubscribe = async (platformName) => {
   const token = await getToken();
   const response = await axios.patch(`${ENDPOINT}/platforms/${platformName}/unsubscribe`, {
     headers: {
