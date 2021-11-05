@@ -37,10 +37,10 @@ export const getQuizzesFromPlatform = async (platformName) => {
 
 export const getQuizByTitle = async (platform, quizTitle) => {
   const token = await getToken();
-  const response = await axios.get(`${ENDPOINT}/${platform}/${quizTitle}`, {
+  const response = await axios.get(`${ENDPOINT}/quizzes/${platform}/${quizTitle}`, {
     headers: { authorization: `Bearer ${token}` },
   });
-  return response.data.items;
+  return response.data;
 };
 
 /* Login Routing */
