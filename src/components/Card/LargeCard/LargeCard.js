@@ -9,7 +9,7 @@ const TYPES = ["card--user", "card--quiz", "card--platform"];
 
 const LargeCard = ({ children, cardType, cardInfo, cardLink }) => {
   return (
-    <Link className="cardContainer link" to={cardLink}>
+    <Link className="cardContainer cardContainer--large link" to={cardLink}>
       <div className="card d-flex flex-column">
         <div className="topCard d-flex flex-row">
           <div>
