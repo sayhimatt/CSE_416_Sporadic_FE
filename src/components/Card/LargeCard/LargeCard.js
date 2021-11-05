@@ -26,11 +26,11 @@ const LargeCard = ({ children, cardType, cardInfo, cardLink }) => {
           <div className="feedback d-flex flex-row">
             <div className="feedbackItem d-flex flex-row align-items-center">
               <img className="feedbackImage" src="/like.png" alt="like" />
-              <div className="count">1000</div>
+              <div className="count">{cardInfo.upvotes}</div>
             </div>
             <div className="feedbackItem d-flex flex-row align-items-center">
               <img className="feedbackImage" src="/dislike.png" alt="dislike" />
-              <div className="count">1000</div>
+              <div className="count">{cardInfo.downvotes}</div>
             </div>
           </div>
         </div>
