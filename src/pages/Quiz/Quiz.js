@@ -59,10 +59,6 @@ const Quiz = () => {
             question: question.body,
             questionIndex: index,
             answers: question.answers,
-            c1: question.answers[0],
-            c2: question.answers[1],
-            c3: question.answers[2],
-            c4: question.answers[3],
           }}
         />
       );
@@ -73,7 +69,7 @@ const Quiz = () => {
   return (
     <div>
       <MainNav />
-      <PlatformSubNav heading={params.platform} />
+      <PlatformSubNav platformName={"Quiz: " + params.quiz} />
       <div className="content d-flex m-4 flex-row align-items-start">
         <div className="d-flex flex-column flex-md-fill">{questionsCards}</div>
         <div className="information d-flex flex-column">
