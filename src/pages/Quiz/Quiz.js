@@ -52,13 +52,13 @@ const Quiz = () => {
 
   const renderCards = () => {
     const cards = questions.map((question, index) => {
-      console.log("MATTHEW");
-      console.log(questions);
       return (
         <QuestionCard
           key={question._id + index}
           information={{
             question: question.body,
+            questionIndex: index,
+            answers: question.answers,
             c1: question.answers[0],
             c2: question.answers[1],
             c3: question.answers[2],
