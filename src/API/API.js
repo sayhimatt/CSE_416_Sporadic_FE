@@ -53,6 +53,7 @@ export const patchUnsubscribe = async (platformName) => {
     },
   });
   return response;
+};
 
 export const getQuizByTitle = async (platform, quizTitle) => {
   const token = await getToken();
@@ -60,7 +61,6 @@ export const getQuizByTitle = async (platform, quizTitle) => {
     headers: { authorization: `Bearer ${token}` },
   });
   return response.data.items;
-
 };
 
 /* Login Routing */
