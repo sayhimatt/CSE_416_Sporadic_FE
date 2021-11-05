@@ -37,21 +37,29 @@ export const getQuizzesFromPlatform = async (platformName) => {
 
 export const patchSubscribe = async (platformName) => {
   const token = await getToken();
-  const response = await axios.patch(`${ENDPOINT}/platforms/${platformName}/subscribe`, {
-    headers: {
-      authorization: `Bearer ${token}`,
+  const response = await axios.patch(
+    `${ENDPOINT}/platforms/${platformName}/subscribe`,
+    {},
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
     },
-  });
+  );
   return response;
 };
 
 export const patchUnsubscribe = async (platformName) => {
   const token = await getToken();
-  const response = await axios.patch(`${ENDPOINT}/platforms/${platformName}/unsubscribe`, {
-    headers: {
-      authorization: `Bearer ${token}`,
+  const response = await axios.patch(
+    `${ENDPOINT}/platforms/${platformName}/unsubscribe`,
+    {},
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
     },
-  });
+  );
   return response;
 };
 
