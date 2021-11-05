@@ -4,8 +4,10 @@ import { useHistory } from "react-router";
 
 import { postCreateAccount } from "../../../API/API";
 import Button from "../../../components/Button/Button";
+import ErrorMessage from  "../../../components/ErrorMessage/ErrorMessage";
 import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay";
 import "../styles.css";
+import { resolveConfig } from "prettier";
 
 const MainCreateAccount = () => {
   const history = useHistory();
@@ -18,28 +20,31 @@ const MainCreateAccount = () => {
     passwordConfirm: "",
   });
   const [showMsg, setShowMsg] = useState({
-    ruleMsg: false,
-    checkMsg: false,
-    errorMsg: false,
-    matchMsg: false,
+    lengthText: false,
+    matchText: false,
+    lengthBox: false,
+    matchBox: false,
+    errorBox: false,
   });
 
-  const createAccount = async () => {
+  const createAccount = async () => {      
     setShowMsg((prevState) => {
-      return { ...prevState, errorMsg: false };
+      return { ...prevState, errorBox: false };
     });
 
-    if (credentials.password !== credentials.passwordConfirm) {
-      setShowMsg((prevState) => {
-        return { ...prevState, matchMsg: true };
-      });
-      return;
-    } else {
-      setShowMsg((prevState) => {
-        return { ...prevState, matchMsg: false };
-      });
-    }
+    setShowMsg((prevState) => {
+      return { ...prevState, lengthBox: credentials.password.length < 8 };
+    });
 
+    setShowMsg((prevState) => {
+      return { ...prevState, matchBox: credentials.password !== credentials.passwordConfirm };
+    });
+
+    console.log(showMsg.errorBox, showMsg.lengthBox, showMsg.matchBox);
+
+    if ((credentials.password.length < 8) || (credentials.password !== credentials.passwordConfirm)) return;
+    
+    
     setIsLoading(true);
 
     await postCreateAccount(credentials.username, credentials.password, credentials.email)
@@ -51,7 +56,7 @@ const MainCreateAccount = () => {
       })
       .catch((error) => {
         setShowMsg((prevState) => {
-          return { ...prevState, errorMsg: true };
+          return { ...prevState, errorBox: true };
         }, console.log(error));
         setIsLoading(false);
       });
@@ -104,8 +109,8 @@ const MainCreateAccount = () => {
                     setShowMsg((prevState) => {
                       return {
                         ...prevState,
-                        ruleMsg: e.target.value.length > 0 && e.target.value.length < 8,
-                        checkMsg:
+                        lengthText: e.target.value.length > 0 && e.target.value.length < 8,
+                        matchText:
                           credentials.passwordConfirm.length > 0 &&
                           credentials.passwordConfirm !== e.target.value,
                       };
@@ -115,11 +120,10 @@ const MainCreateAccount = () => {
                 }}
               ></input>
             </div>
-            {showMsg.ruleMsg ? (
-              <div className="passwordMsg">
-                <p>Password must be at least 8 characters long</p>
-              </div>
-            ) : null}
+            <ErrorMessage 
+              visible={showMsg.lengthText} 
+              errorStyle="errorText" 
+              text="Password must be at least 8 characters long"/>                      
             <div className="inputBox">
               <input
                 id="passwordConfirm"
@@ -131,7 +135,7 @@ const MainCreateAccount = () => {
                     setShowMsg((prevState) => {
                       return {
                         ...prevState,
-                        checkMsg:
+                        matchText:
                           e.target.value.length > 0 && credentials.password !== e.target.value,
                       };
                     });
@@ -140,11 +144,10 @@ const MainCreateAccount = () => {
                 }}
               ></input>
             </div>
-            {showMsg.checkMsg && (
-              <div className="passwordMsg">
-                <p>Passwords do not match</p>
-              </div>
-            )}
+            <ErrorMessage 
+              visible={showMsg.matchText} 
+              errorStyle="errorText" 
+              text="Passwords do not match"/>            
           </div>
           <Button type="button" onClick={createAccount}>
             Create Account
@@ -156,16 +159,18 @@ const MainCreateAccount = () => {
           </Link>
         </div>
       </div>
-      {showMsg.errorMsg && (
-        <div className="errorMsg">
-          <p>Could not create account</p>
-        </div>
-      )}
-      {showMsg.matchMsg && (
-        <div className="errorMsg">
-          <p>Passwords do not match</p>
-        </div>
-      )}
+      <ErrorMessage 
+        visible={showMsg.errorBox} 
+        errorStyle="errorBox" 
+        text="Could not create account"/>      
+      <ErrorMessage 
+        visible={showMsg.lengthBox} 
+        errorStyle="errorBox" 
+        text="Password is not long enough"/>      
+      <ErrorMessage 
+        visible={showMsg.matchBox} 
+        errorStyle="errorBox" 
+        text="Passwords do not match"/>      
       <LoadingOverlay isVisible={isLoading} />
     </div>
   );

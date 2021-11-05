@@ -58,13 +58,14 @@ const Platform = () => {
           cardInfo={{
             title: quiz.title,
             description: quiz.description,
-            subtext: (
-              <Link className="link" to={`/p/${name}`}>
-                {name}
-              </Link>
-            ),
+            upvotes: quiz.upvotes,
+            downvotes: quiz.downvotes,
+            // Two nested links are not allowed
+            //<Link className="link" to={`/p/${name}`}>
+            //</Link>
+            subtext: name,
           }}
-          cardLink={name} // Temporary fix prevents crash on redirect, use quiz page when done
+          cardLink={`${name}/${quiz.title}`} // Temporary fix prevents crash on redirect, use quiz page when done
         />
       );
     });
@@ -74,8 +75,8 @@ const Platform = () => {
   return (
     <div>
       <MainNav />
-      <PlatformSubNav heading={params.platform} bannerSrc="/banner.svg" isSubscribed={true} />
-      <div className="content d-flex flex-row align-items-start me-5 justify-content-between">
+      <PlatformSubNav platformName={params.platform} bannerSrc="/banner.svg" />
+      <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
         <div className="d-flex flex-column m-5 align-items-end">
           <div className="sort"></div>
           <div className="quizzes d-flex flex-column m-10">{quizCards}</div>
