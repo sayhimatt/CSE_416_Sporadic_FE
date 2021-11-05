@@ -79,8 +79,7 @@ const MainLogin = () => {
           <Button
             type="button"
             onClick={async () => {
-              await login(credentials.username, credentials.password);
-              history.push("/");
+              await login(credentials.username, credentials.password)
             }}
           >
             Log In
