@@ -7,6 +7,7 @@ import Button from "../../../components/Button/Button";
 import ErrorMessage from  "../../../components/ErrorMessage/ErrorMessage";
 import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay";
 import "../styles.css";
+import { resolveConfig } from "prettier";
 
 const MainCreateAccount = () => {
   const history = useHistory();
@@ -19,16 +20,18 @@ const MainCreateAccount = () => {
     passwordConfirm: "",
   });
   const [showMsg, setShowMsg] = useState({
-    ruleText: false,
-    checkText: false,
-    errorBox: false,
-    matchBox: false,
+    lengthText: false,
+    matchText: false,
     lengthBox: false,
+    matchBox: false,
+    errorBox: false,
   });
 
-  const createAccount = async () => {
+  const errorsFound =  ()=> {
+    
     setShowMsg((prevState) => {
       return { ...prevState, errorBox: false };
+      
     });
 
     setShowMsg((prevState) => {
@@ -39,9 +42,41 @@ const MainCreateAccount = () => {
       return { ...prevState, matchBox: (credentials.password !== credentials.passwordConfirm) };
     });
 
-    if (showMsg.matchBox || showMsg.lengthBox) return;
+    console.log(showMsg.errorBox, showMsg.lengthBox, showMsg.matchBox);
 
+    if (showMsg.matchBox || showMsg.lengthBox) return true;
+    else return false;
 
+    /*
+    return new Promise( (resolve, reject) => {
+      if (showMsg.matchBox || showMsg.lengthBox) {
+        reject("error caught");
+      } else  resolve();
+    })
+    */
+    
+  };
+
+  const createAccount = async () => {      
+    setShowMsg((prevState) => {
+      return { ...prevState, errorBox: false };
+    });
+
+    setShowMsg((prevState) => {
+      return { ...prevState, lengthBox: credentials.password.length < 8 };
+    });
+
+    setShowMsg((prevState) => {
+      return { ...prevState, matchBox: credentials.password !== credentials.passwordConfirm };
+    });
+
+    console.log(showMsg.errorBox, showMsg.lengthBox, showMsg.matchBox);
+
+    if ((credentials.password.length < 8) || (credentials.password !== credentials.passwordConfirm)) {
+      setIsLoading(false);
+      return;
+    }
+    
     setIsLoading(true);
 
     await postCreateAccount(credentials.username, credentials.password, credentials.email)
@@ -106,8 +141,8 @@ const MainCreateAccount = () => {
                     setShowMsg((prevState) => {
                       return {
                         ...prevState,
-                        ruleText: e.target.value.length > 0 && e.target.value.length < 8,
-                        checkMsg:
+                        lengthText: e.target.value.length > 0 && e.target.value.length < 8,
+                        matchText:
                           credentials.passwordConfirm.length > 0 &&
                           credentials.passwordConfirm !== e.target.value,
                       };
@@ -118,7 +153,7 @@ const MainCreateAccount = () => {
               ></input>
             </div>
             <ErrorMessage 
-              visible={showMsg.ruleText} 
+              visible={showMsg.lengthText} 
               errorStyle="errorText" 
               text="Password must be at least 8 characters long">
             </ErrorMessage>          
@@ -133,7 +168,7 @@ const MainCreateAccount = () => {
                     setShowMsg((prevState) => {
                       return {
                         ...prevState,
-                        checkMsg:
+                        matchText:
                           e.target.value.length > 0 && credentials.password !== e.target.value,
                       };
                     });
@@ -143,7 +178,7 @@ const MainCreateAccount = () => {
               ></input>
             </div>
             <ErrorMessage 
-              visible={showMsg.checkMsg} 
+              visible={showMsg.matchText} 
               errorStyle="errorText" 
               text="Passwords do not match">
             </ErrorMessage>
