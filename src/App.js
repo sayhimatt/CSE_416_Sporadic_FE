@@ -12,7 +12,7 @@ import ForgotPasswordConfirmation from "./pages/Login/MainForgotPassword/ForgotP
 import Platform from "./pages/Platform/Platform";
 import NotFound from "./pages/NotFound/NotFound";
 import CreatePlatform from "./pages/CreatePlatform/CreatePlatform";
-
+import Quiz from "./pages/Quiz/Quiz";
 import "./App.scss";
 
 const MainRouter = () => {
@@ -29,6 +29,7 @@ const MainRouter = () => {
           <GuardedRoute exact path="/About" component={Feed}></GuardedRoute>
           <GuardedRoute exact path="/Contact" component={Feed}></GuardedRoute>
           <GuardedRoute exact path="/p/:platform" component={Platform} />
+          <GuardedRoute exact path="/p/:platform/:quiz" component={Quiz} />
           <GuardedRoute exact path="/createPlatform" component={CreatePlatform} />
           <GuardedRoute path="/" component={NotFound} />
         </Switch>

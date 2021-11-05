@@ -35,6 +35,42 @@ export const getQuizzesFromPlatform = async (platformName) => {
   return response.data.items;
 };
 
+export const patchSubscribe = async (platformName) => {
+  const token = await getToken();
+  const response = await axios.patch(
+    `${ENDPOINT}/platforms/${platformName}/subscribe`,
+    {},
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  return response;
+};
+
+export const patchUnsubscribe = async (platformName) => {
+  const token = await getToken();
+  const response = await axios.patch(
+    `${ENDPOINT}/platforms/${platformName}/unsubscribe`,
+    {},
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  return response;
+};
+
+export const getQuizByTitle = async (platform, quizTitle) => {
+  const token = await getToken();
+  const response = await axios.get(`${ENDPOINT}/${platform}/${quizTitle}`, {
+    headers: { authorization: `Bearer ${token}` },
+  });
+  return response.data.items;
+};
+
 /* Login Routing */
 
 export const postCreateAccount = async (username, password, email) => {

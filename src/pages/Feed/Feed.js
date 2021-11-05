@@ -8,6 +8,7 @@ import SubNav from "../../components/NavBar/SubNav/SubNav";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import Footer from "../../components/Footer/Footer";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
+import QuestionCard from "../../components/Card/QuestionCard/QuestionCard";
 
 const Feed = ({ children }) => {
   const { auth, dispatch } = useContext(AuthContext);
