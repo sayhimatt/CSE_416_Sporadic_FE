@@ -8,7 +8,7 @@ const authReducer = (state, action) => {
       return {
         authenticated: true,
         username: action.payload.username,
-        subscriptions: action.payload.subscriptions,
+        subscriptions: action.payload.subscriptions || [],
       };
     case "LOGOUT":
       return { authenticated: false, username: "" };
