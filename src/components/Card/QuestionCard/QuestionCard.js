@@ -3,9 +3,7 @@ import { Link } from "react-router-dom";
 
 import "./styles.css";
 import SubNav from "../../NavBar/SubNav/SubNav";
-const renderChoices = ({ information }) => {
 
-}
 const Question = ({ information }) => {
   const choiceCards = information.answers.map((answer, index) => {
     return (

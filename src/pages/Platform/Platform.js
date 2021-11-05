@@ -58,13 +58,14 @@ const Platform = () => {
           cardInfo={{
             title: quiz.title,
             description: quiz.description,
-            subtext: (
-              <Link className="link" to={`/p/${name}`}>
-                {name}
-              </Link>
-            ),
+            upvotes: quiz.upvotes,
+            downvotes: quiz.downvotes,
+            // Two nested links are not allowed
+            //<Link className="link" to={`/p/${name}`}>
+            //</Link>
+            subtext: name,
           }}
-          cardLink={name} // Temporary fix prevents crash on redirect, use quiz page when done
+          cardLink={`${name}/${quiz.title}`} // Temporary fix prevents crash on redirect, use quiz page when done
         />
       );
     });

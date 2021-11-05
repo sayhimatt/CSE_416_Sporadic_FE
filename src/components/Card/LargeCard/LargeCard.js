@@ -8,6 +8,7 @@ import SubNav from "../../NavBar/SubNav/SubNav";
 const TYPES = ["card--user", "card--quiz", "card--platform"];
 
 const LargeCard = ({ children, cardType, cardInfo, cardLink }) => {
+  
   return (
     <Link className="cardContainer cardContainer--large link" to={cardLink}>
       <div className="card d-flex flex-column">
