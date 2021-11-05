@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "../styles.css";
 import "./styles.css";
 import SubNav from "../../NavBar/SubNav/SubNav";
-
+import img from "../../../movie.svg"
 const TYPES = ["card--user", "card--quiz", "card--platform"];
 
 const LargeCard = ({ children, cardType, cardInfo, cardLink }) => {
@@ -14,7 +14,7 @@ const LargeCard = ({ children, cardType, cardInfo, cardLink }) => {
       <div className="card d-flex flex-column">
         <div className="topCard d-flex flex-row">
           <div>
-            <img className="icon" src="/platformIcon.png" alt="icon" />
+            <img className="icon" src={img} alt="what" />
           </div>
           <div className="info flex-grow-1">
             <div className="title">{cardInfo.title}</div>
