@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 import { QuizContext } from "../../contexts/QuizContext/QuizContext";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard";
@@ -8,11 +8,35 @@ import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNa
 
 const CreateQuiz = ({ platform }) => {
   const { quiz, dispatch } = useContext(QuizContext);
+  const { questions, setQuestions } = useState([]);
+  const { cards, setCards } = useState([]);
+
+  useEffect(() => {
+
+  }, [questions])
 
   const setTitle = () => {};
   const setDescription = () => {};
-  const addQuestion = () => {};
+  const addQuestion = () => {
+    
+  };
+
   const publishQuiz = () => {};
+  const renderCards = () => {
+    const cards = questions.map((question, index) => {
+      return (
+        <QuestionCard
+          key={question._id + index}
+          information={{
+            question: question.body,
+            questionIndex: index,
+            answers: question.answers,
+          }}
+        />
+      );
+    });
+    setQuestionCards(cards);
+  };
 
   return (
     <div>
