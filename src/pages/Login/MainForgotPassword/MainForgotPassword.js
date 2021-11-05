@@ -1,16 +1,21 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Auth } from "aws-amplify";
 
 import Button from "../../../components/Button/Button";
+import ErrorMessage from  "../../../components/ErrorMessage/ErrorMessage";
+import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay";
 
 import "../styles.css";
 
 const MainForgotPassword = () => {
   const history = useHistory();
   const [username, setUsername] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
 
   const forgotPassword = async () => {
+    setIsLoading(true);
     try {
       const success = await Auth.forgotPassword(username);
       history.push({
@@ -18,10 +23,15 @@ const MainForgotPassword = () => {
         state: { username: username },
       });
     } catch (error) {
-      console.log("error sending code", error);
-      window.alert("Invalid Username");
+      console.log(error);
+      setShowMsg(true);
+      setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    return () => setIsLoading(false);
+  }, []);
 
   return (
     <div className="page d-flex flex-column align-items-center justify-content-start">
@@ -60,6 +70,11 @@ const MainForgotPassword = () => {
           </Link>
         </div>
       </div>
+      <ErrorMessage 
+        visible={showMsg} 
+        errorStyle="errorBox" 
+        text="Invalid Username"/>     
+      <LoadingOverlay isVisible={isLoading} />
     </div>
   );
 };
