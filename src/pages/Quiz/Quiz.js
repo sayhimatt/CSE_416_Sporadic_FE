@@ -11,6 +11,7 @@ import "./styles.scss";
 const Quiz = () => {
   const [platform, setPlatform] = useState({});
   const [questions, setQuestions] = useState([]);
+  const [questionsCards, setQuestionCards] = useState([]);
   const history = useHistory();
   const params = useParams();
 
@@ -43,7 +44,7 @@ const Quiz = () => {
     const quiz = params.quiz;
     try {
       const response = await getQuizByTitle(platform, quiz);
-      setQuestions(response);
+      setQuestions(response.questions);
     } catch (error) {
       console.log(error);
     }
@@ -51,26 +52,26 @@ const Quiz = () => {
 
   const renderCards = () => {
     const cards = questions.map((question, index) => {
-      //const name = params.platform;
       return (
-        <div key={question._id}>
-          <QuestionCard />
-        </div>
+        <QuestionCard
+          key={question._id + index}
+          information={{
+            question: question.body,
+            questionIndex: index,
+            answers: question.answers,
+          }}
+        />
       );
     });
-    setQuestions(cards);
+    setQuestionCards(cards);
   };
 
   return (
     <div>
       <MainNav />
-      <PlatformSubNav heading={params.platform} />
+      <PlatformSubNav platformName={"Quiz: " + params.quiz} />
       <div className="content d-flex m-4 flex-row align-items-start">
-        <div className="d-flex flex-column flex-md-fill">
-          <QuestionCard />
-          <QuestionCard />
-          <QuestionCard />
-        </div>
+        <div className="d-flex flex-column flex-md-fill">{questionsCards}</div>
         <div className="information d-flex flex-column">
           <div className="searchBar searchBar--border">
             <input className="search" placeholder="Search"></input>
