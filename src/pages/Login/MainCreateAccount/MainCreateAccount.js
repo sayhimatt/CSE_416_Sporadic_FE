@@ -1,14 +1,18 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
 
 import { postCreateAccount } from "../../../API/API";
 import Button from "../../../components/Button/Button";
+import ErrorMessage from  "../../../components/ErrorMessage/ErrorMessage";
+import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay";
 import "../styles.css";
+import { resolveConfig } from "prettier";
 
 const MainCreateAccount = () => {
   const history = useHistory();
-  const inputRef = useRef();
+  const [isLoading, setIsLoading] = useState(false);
+
   const [credentials, setCredentials] = useState({
     email: "",
     username: "",
@@ -16,44 +20,51 @@ const MainCreateAccount = () => {
     passwordConfirm: "",
   });
   const [showMsg, setShowMsg] = useState({
-    ruleMsg: false,
-    checkMsg: false,
-    errorMsg: false,
-    matchMsg: false,
+    lengthText: false,
+    matchText: false,
+    lengthBox: false,
+    matchBox: false,
+    errorBox: false,
   });
 
-  const createAccount = async () => {
+  const createAccount = async () => {      
     setShowMsg((prevState) => {
-      return {...prevState, errorMsg: false};
+      return { ...prevState, errorBox: false };
     });
-    if (credentials.password !== credentials.passwordConfirm) {
-      setShowMsg((prevState) => {
-        return {...prevState, matchMsg: true}
-      });
-      return;
-    } else {
-      setShowMsg((prevState) => {
-        return {...prevState, matchMsg: false}
-      });
-    }
-    await postCreateAccount(
-      credentials.username,
-      credentials.password,
-      credentials.email
-    )
-      .then((res) => {
+
+    setShowMsg((prevState) => {
+      return { ...prevState, lengthBox: credentials.password.length < 8 };
+    });
+
+    setShowMsg((prevState) => {
+      return { ...prevState, matchBox: credentials.password !== credentials.passwordConfirm };
+    });
+
+    console.log(showMsg.errorBox, showMsg.lengthBox, showMsg.matchBox);
+
+    if ((credentials.password.length < 8) || (credentials.password !== credentials.passwordConfirm)) return;
+    
+    
+    setIsLoading(true);
+
+    await postCreateAccount(credentials.username, credentials.password, credentials.email)
+      .then(() => {
         history.push({
           pathname: "/createAccount/confirmation",
           state: { username: credentials.username },
-        })
+        });
       })
       .catch((error) => {
         setShowMsg((prevState) => {
-          return {...prevState, errorMsg: true};
-        },
-        console.log(error));
+          return { ...prevState, errorBox: true };
+        }, console.log(error));
+        setIsLoading(false);
       });
   };
+
+  useEffect(() => {
+    return () => setIsLoading(false);
+  }, []);
 
   return (
     <div className="page d-flex flex-column align-items-center justify-content-start">
@@ -94,24 +105,25 @@ const MainCreateAccount = () => {
                 placeholder="Password"
                 type="password"
                 onChange={(e) => {
-                  setCredentials((prevState) => {                    
+                  setCredentials((prevState) => {
                     setShowMsg((prevState) => {
                       return {
                         ...prevState,
-                        ruleMsg: (e.target.value.length > 0 && e.target.value.length < 8),
-                        checkMsg: (credentials.passwordConfirm.length > 0 && (credentials.passwordConfirm !== e.target.value)),
-                      }
+                        lengthText: e.target.value.length > 0 && e.target.value.length < 8,
+                        matchText:
+                          credentials.passwordConfirm.length > 0 &&
+                          credentials.passwordConfirm !== e.target.value,
+                      };
                     });
                     return { ...prevState, password: e.target.value };
                   });
                 }}
               ></input>
             </div>
-            {showMsg.ruleMsg ? 
-              <div className="passwordMsg" >
-                <p>Password must be at least 8 characters long</p>
-              </div> 
-            : null}
+            <ErrorMessage 
+              visible={showMsg.lengthText} 
+              errorStyle="errorText" 
+              text="Password must be at least 8 characters long"/>                      
             <div className="inputBox">
               <input
                 id="passwordConfirm"
@@ -121,18 +133,21 @@ const MainCreateAccount = () => {
                 onChange={(e) => {
                   setCredentials((prevState) => {
                     setShowMsg((prevState) => {
-                      return {...prevState, checkMsg: (e.target.value.length > 0 && (credentials.password !== e.target.value))}
+                      return {
+                        ...prevState,
+                        matchText:
+                          e.target.value.length > 0 && credentials.password !== e.target.value,
+                      };
                     });
                     return { ...prevState, passwordConfirm: e.target.value };
                   });
                 }}
               ></input>
             </div>
-            {showMsg.checkMsg ?
-              <div className="passwordMsg" >
-                <p>Passwords do not match</p>
-              </div>  
-            : null}             
+            <ErrorMessage 
+              visible={showMsg.matchText} 
+              errorStyle="errorText" 
+              text="Passwords do not match"/>            
           </div>
           <Button type="button" onClick={createAccount}>
             Create Account
@@ -144,16 +159,19 @@ const MainCreateAccount = () => {
           </Link>
         </div>
       </div>
-      {showMsg.errorMsg ?
-          <div className="errorMsg" >
-            <p>Could not create account</p>
-          </div>  
-        : null}  
-        {showMsg.matchMsg ?
-          <div className="errorMsg" >
-            <p>Passwords do not match</p>
-          </div>  
-        : null}  
+      <ErrorMessage 
+        visible={showMsg.errorBox} 
+        errorStyle="errorBox" 
+        text="Could not create account"/>      
+      <ErrorMessage 
+        visible={showMsg.lengthBox} 
+        errorStyle="errorBox" 
+        text="Password is not long enough"/>      
+      <ErrorMessage 
+        visible={showMsg.matchBox} 
+        errorStyle="errorBox" 
+        text="Passwords do not match"/>      
+      <LoadingOverlay isVisible={isLoading} />
     </div>
   );
 };

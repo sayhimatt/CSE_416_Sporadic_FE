@@ -17,5 +17,17 @@ $specialColor: #ff6c6c;
 }
 
 .color-special {
-  color: $specialColor;
+  color: $specialColor !important;
+}
+
+a {
+  color: inherit !important;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.link:hover {
+  color: inherit;
 }

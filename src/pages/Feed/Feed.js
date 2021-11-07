@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Auth } from "aws-amplify";
 
 import { AuthContext } from "../../contexts/AuthContext";
 import { getFeedQuizzes } from "../../API/API";
@@ -9,6 +8,7 @@ import SubNav from "../../components/NavBar/SubNav/SubNav";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import Footer from "../../components/Footer/Footer";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
+import QuestionCard from "../../components/Card/QuestionCard/QuestionCard";
 
 const Feed = ({ children }) => {
   const { auth, dispatch } = useContext(AuthContext);
@@ -17,11 +17,6 @@ const Feed = ({ children }) => {
   useEffect(() => {
     loadQuizzes();
   }, []);
-
-  const logout = async () => {
-    await Auth.signOut();
-    dispatch({ type: "LOGOUT" });
-  };
 
   const loadQuizzes = async () => {
     await getFeedQuizzes(auth.username)
@@ -56,17 +51,11 @@ const Feed = ({ children }) => {
     <Link to="/Notifications">
       <Button>Notifications</Button>
     </Link>,
-    <Button buttonStyle="btn--special" onClick={logout}>
-      Sign Out
-    </Button>,
   ];
   return (
     <div>
       <MainNav />
-      <SubNav
-        heading={`Welcome Back ${auth.username}!`}
-        buttons={subNavButtons}
-      />
+      <SubNav heading={`Welcome Back ${auth.username}!`} buttons={subNavButtons} />
       <Footer />
     </div>
   );

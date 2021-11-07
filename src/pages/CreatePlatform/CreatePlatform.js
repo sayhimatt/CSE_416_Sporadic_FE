@@ -5,6 +5,7 @@ import { postCreatePlatform } from "../../API/API";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Button/Button";
+import ErrorMessage from  "../../components/ErrorMessage/ErrorMessage";
 
 import "./styles.scss";
 
@@ -15,6 +16,8 @@ const CreatePlatform = () => {
     icon: "",
     banner: "",
   });
+  const [showInvalidMsg, setShowInvalidMsg] = useState(false);
+  const [showInUseMsg, setShowInUseMsg] = useState(false);
 
   const history = useHistory();
 
@@ -35,8 +38,8 @@ const CreatePlatform = () => {
   };
 
   const createPlatform = async () => {
+    setShowInUseMsg(false);
     if (invalidInputs()) {
-      alert("Platform title cannot contain spaces");
       return;
     }
     await postCreatePlatform(platformData)
@@ -45,12 +48,13 @@ const CreatePlatform = () => {
       })
       .catch((error) => {
         if (error.response.status === 400) {
-          alert("Platform title already in use");
-        }
+          setShowInUseMsg(true);
+        } else setShowInUseMsg(false);
       });
   };
 
   const invalidInputs = () => {
+    setShowInvalidMsg(platformData.title.includes(" "));
     return platformData.title.includes(" ");
   };
 
@@ -59,13 +63,18 @@ const CreatePlatform = () => {
       <MainNav />
       <SubNav
         heading="Platform Creation"
-        buttons={
-          <Button onClick={() => history.push("/notifications")}>
-            Notifications
-          </Button>
-        }
+        buttons={<Button onClick={() => history.push("/notifications")}>Notifications</Button>}
       />
       <div className="page-content d-flex flex-column justify-content-center align-items-center">
+      <ErrorMessage 
+        visible={showInvalidMsg} 
+        errorStyle="errorBox" 
+        text="Platform Title cannot contain spaces"/>
+      <ErrorMessage 
+        visible={showInUseMsg} 
+        errorStyle="errorBox" 
+        text="Platform Title already in use"/>
+
         <div className="create-platform-container d-flex flex-column justify-content-center">
           <div className="input-item d-flex flex-column align-items-start">
             <div className="input-title">Title</div>
@@ -108,7 +117,7 @@ const CreatePlatform = () => {
         <Button buttonStyle="btn--special" onClick={createPlatform}>
           Create Platform
         </Button>
-      </div>
+      </div>          
     </div>
   );
 };

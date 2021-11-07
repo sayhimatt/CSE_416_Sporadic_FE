@@ -1,20 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
 
 import { postConfirmCode } from "../../API/API";
 import Button from "../../components/Button/Button";
+import ErrorMessage from  "../../components/ErrorMessage/ErrorMessage";
+import LoadingOverlay from "../../components/LoadingIndicators/LoadingOverlay";
+
 import "./styles.css";
 
 const ConfirmEmail = () => {
   const history = useHistory();
   const [confirmation, setConfirmation] = useState("");
-
+  const [showMsg, setShowMsg] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const confirmCode = async () => {
+    setIsLoading(true);
     await postConfirmCode(history.location.state.username, confirmation)
       .then((res) => history.push("/login"))
-      .catch((e) => alert("Invalid code"));
+      .catch((e) => { 
+        setShowMsg(true); 
+        setIsLoading(false);
+      });
   };
+
+  useEffect(() => {
+    return () => setIsLoading(false);
+  }, []);
 
   return (
     <div className="page d-flex flex-column align-items-center justify-content-start">
@@ -48,6 +60,11 @@ const ConfirmEmail = () => {
           </div>
         </div>
       </div>
+      <ErrorMessage 
+        visible={showMsg} 
+        errorStyle="errorBox" 
+        text="Invalid Code"/>     
+      <LoadingOverlay isVisible={isLoading} />
     </div>
   );
 };
