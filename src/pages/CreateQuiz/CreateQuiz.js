@@ -6,6 +6,8 @@ import Button from "../../components/Button/Button";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 
+import "./styles.css";
+
 const CreateQuiz = ({ platform }) => {
   const { quiz, dispatch } = useContext(QuizContext);
   const [questions, setQuestions] = useState([defaultQuestion()]);
@@ -21,6 +23,12 @@ const CreateQuiz = ({ platform }) => {
     setQuestions((prevState) => [...prevState, defaultQuestion()]);
   };
 
+  const deleteQuestion = (e) => {
+    e.preventDefault();
+    const id = parseInt(e.target.id.charAt(e.target.id.length - 1));
+    setQuestions((prevState) => prevState.filter((question, index) => id !== index));
+  };
+
   const publishQuiz = () => {};
   const renderCards = () => {
     if (!questions) {
@@ -28,15 +36,20 @@ const CreateQuiz = ({ platform }) => {
     }
     const cards = questions.map((question, index) => {
       return (
-        <QuestionCard
-          key={index}
-          information={{
-            question: question.body,
-            questionIndex: index,
-            answers: question.answers,
-          }}
-          create={true}
-        />
+        <div className="d-flex flex-row">
+          <QuestionCard
+            key={index}
+            information={{
+              question: question.body,
+              questionIndex: index,
+              answers: question.answers,
+            }}
+            create={true}
+          />
+          <a className="delete-question" href="#" onClick={deleteQuestion}>
+            <img id={`delete-question-${index}`} alt="delete question" src="/question_delete.svg" />
+          </a>
+        </div>
       );
     });
     setCards(cards);

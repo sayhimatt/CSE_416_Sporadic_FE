@@ -7,7 +7,11 @@ const Question = ({ information, create }) => {
     return (
       <div className="choice flex-row">
         <div className="d-flex flex-grow-1">
-          {create ? <textarea className="input" placeholder="Enter Answer"></textarea> : answer}
+          {create ? (
+            <textarea className="input" defaultValue={answer} placeholder="Enter Answer"></textarea>
+          ) : (
+            answer
+          )}
         </div>
         <input
           className="form-check-input marker"
@@ -25,6 +29,7 @@ const Question = ({ information, create }) => {
         {create ? (
           <textarea
             className="input text-center bg-transparent"
+            defaultValue={information.question}
             placeholder="Enter Question"
           ></textarea>
         ) : (
