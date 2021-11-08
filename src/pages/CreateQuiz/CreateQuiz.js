@@ -8,34 +8,38 @@ import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNa
 
 const CreateQuiz = ({ platform }) => {
   const { quiz, dispatch } = useContext(QuizContext);
-  const { questions, setQuestions } = useState([]);
-  const { cards, setCards } = useState([]);
+  const [questions, setQuestions] = useState([defaultQuestion()]);
+  const [cards, setCards] = useState([]);
 
   useEffect(() => {
-
-  }, [questions])
+    renderCards();
+  }, [questions]);
 
   const setTitle = () => {};
   const setDescription = () => {};
   const addQuestion = () => {
-    
+    setQuestions((prevState) => [...prevState, defaultQuestion()]);
   };
 
   const publishQuiz = () => {};
   const renderCards = () => {
+    if (!questions) {
+      return;
+    }
     const cards = questions.map((question, index) => {
       return (
         <QuestionCard
-          key={question._id + index}
+          key={index}
           information={{
             question: question.body,
             questionIndex: index,
             answers: question.answers,
           }}
+          create={true}
         />
       );
     });
-    setQuestionCards(cards);
+    setCards(cards);
   };
 
   return (
@@ -43,10 +47,8 @@ const CreateQuiz = ({ platform }) => {
       <NavBar />
       <PlatformSubNav platformName={platform} />
       <div className="page-content d-flex flex-row justify-content-between m-4">
-        <div className="quiz-cards d-flex flex-column flex-grow-1">
-          <QuestionCard />
-        </div>
-        <div className="d-flex flex-column align-items-center">
+        <div className="quiz-cards d-flex flex-column flex-grow-1">{cards}</div>
+        <div className="d-flex flex-column align-items-center position-sticky">
           <div className="quiz-info d-flex flex-column align-items-center mb-5">
             <div className="input-box">
               <textarea
@@ -73,6 +75,10 @@ const CreateQuiz = ({ platform }) => {
       </div>
     </div>
   );
+};
+
+const defaultQuestion = () => {
+  return { body: "", answers: ["", "", "", ""], correctAnswer: 0 };
 };
 
 export default CreateQuiz;
