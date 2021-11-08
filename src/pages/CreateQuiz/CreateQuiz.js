@@ -128,9 +128,9 @@ const CreateQuiz = () => {
       <PlatformSubNav platformName={params.platform} />
       <div className="page-content d-flex flex-row justify-content-between m-4">
         <div className="quiz-cards d-flex flex-column flex-grow-1">{cards}</div>
-        <div className="d-flex flex-column align-items-center position-sticky">
+        <div id="quiz-controller" className="d-flex flex-column align-items-center">
           <div className="quiz-info d-flex flex-column align-items-center mb-5">
-            <div className="input-box">
+            <div id="quiz-title-input" className="input-box">
               <textarea
                 className="input"
                 placeholder="Quiz Title"
@@ -138,13 +138,20 @@ const CreateQuiz = () => {
                 onChange={setQuizTitle}
               ></textarea>
             </div>
-            <div className="input-box">
+            <div id="quiz-description-input" className="input-box">
               <textarea
                 className="input"
                 placeholder="Description"
                 maxLength={500}
                 onChange={setDescription}
               ></textarea>
+            </div>
+            <div id="timer-input" className="input-box">
+              <input
+                className="input text-center"
+                placeholder="Time Limit (seconds)"
+                maxLength={3}
+              />
             </div>
             <Button onClick={addQuestion}>Add Question</Button>
           </div>

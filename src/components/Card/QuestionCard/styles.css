@@ -3,6 +3,7 @@
   margin: 10px;
   border-color: #189ab4;
   text-align: center;
+  min-width: 50vw;
   max-width: 55vw;
   padding-bottom: 1em;
 }
