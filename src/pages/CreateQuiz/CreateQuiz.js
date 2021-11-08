@@ -17,8 +17,18 @@ const CreateQuiz = ({ platform }) => {
     renderCards();
   }, [questions]);
 
-  const setTitle = () => {};
+  const setQuizTitle = () => {};
+
+  const setQuestionTitle = (e) => {
+    const id = parseInt(e.target.id.charAt(1));
+    setQuestions((prevState) =>
+      prevState.map((question, index) =>
+        index === id ? { ...question, body: e.target.value } : question,
+      ),
+    );
+  };
   const setDescription = () => {};
+
   const addQuestion = () => {
     setQuestions((prevState) => [...prevState, defaultQuestion()]);
   };
@@ -27,6 +37,33 @@ const CreateQuiz = ({ platform }) => {
     e.preventDefault();
     const id = parseInt(e.target.id.charAt(e.target.id.length - 1));
     setQuestions((prevState) => prevState.filter((question, index) => id !== index));
+  };
+
+  const setAnswerText = (e) => {
+    const questionNumber = parseInt(e.target.id.charAt(1));
+    const answerNumber = parseInt(e.target.id.charAt(3));
+    setQuestions((prevState) =>
+      prevState.map((question, index) =>
+        index === questionNumber
+          ? {
+              ...question,
+              answers: question.answers.map((answer, answerIndex) =>
+                answerIndex === answerNumber ? e.target.value : answer,
+              ),
+            }
+          : question,
+      ),
+    );
+  };
+
+  const setCorrectAnswer = (e) => {
+    const questionNumber = parseInt(e.target.value.charAt(1));
+    const answerNumber = parseInt(e.target.value.charAt(3));
+    setQuestions((prevState) =>
+      prevState.map((question, index) =>
+        index === questionNumber ? { ...question, correctAnswer: answerNumber } : question,
+      ),
+    );
   };
 
   const publishQuiz = () => {};
@@ -43,8 +80,12 @@ const CreateQuiz = ({ platform }) => {
               question: question.body,
               questionIndex: index,
               answers: question.answers,
+              choice: question.correctAnswer,
             }}
             create={true}
+            titleHandler={setQuestionTitle}
+            answerTextHandler={setAnswerText}
+            correctAnswerHandler={setCorrectAnswer}
           />
           <a className="delete-question" href="#" onClick={deleteQuestion}>
             <img id={`delete-question-${index}`} alt="delete question" src="/question_delete.svg" />
@@ -68,7 +109,7 @@ const CreateQuiz = ({ platform }) => {
                 className="input"
                 placeholder="Quiz Title"
                 maxLength={30}
-                onChange={setTitle}
+                onChange={setQuizTitle}
               ></textarea>
             </div>
             <div className="input-box">
