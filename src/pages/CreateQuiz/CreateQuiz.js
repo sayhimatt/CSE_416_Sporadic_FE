@@ -79,6 +79,10 @@ const CreateQuiz = () => {
   };
 
   const publishQuiz = () => {
+    if (!checkFields()) {
+      alert("Fields are incomplete");
+      return;
+    }
     const correctAnswers = questions.map((question) => question.correctAnswer);
     const quizQuestions = questions.map((question) => ({
       body: question.body,
@@ -96,6 +100,23 @@ const CreateQuiz = () => {
       .catch((error) => {
         alert("could not publish quiz");
       });
+  };
+
+  const checkFields = () => {
+    return checkQuizTitle() && checkDescription() && checkTimer();
+  };
+
+  const checkQuizTitle = () => {
+    return 1 <= quizInfo.quizTitle.length;
+  };
+
+  const checkDescription = () => {
+    return 1 <= quizInfo.description.length;
+  };
+
+  const checkTimer = () => {
+    const timeLimit = parseInt(quizInfo.timeLimit);
+    return timeLimit && 0 < timeLimit;
   };
 
   const renderCards = () => {
