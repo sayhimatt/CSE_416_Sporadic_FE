@@ -28,6 +28,10 @@ const CreateQuiz = () => {
     setQuizInfo((prevState) => ({ ...prevState, description: e.target.value }));
   };
 
+  const setTimeLimit = (e) => {
+    setQuizInfo((prevState) => ({ ...prevState, timeLimit: e.target.value }));
+  };
+
   const setQuestionTitle = (e) => {
     const id = parseInt(e.target.id.charAt(1));
     setQuestions((prevState) =>
@@ -86,6 +90,7 @@ const CreateQuiz = () => {
       questions: quizQuestions,
       correctAnswers,
     };
+    quiz.timeLimit = parseInt(quiz.timeLimit);
     postCreateQuiz(quiz)
       .then((res) => history.push(`/p/${params.platform}`))
       .catch((error) => {
@@ -151,6 +156,7 @@ const CreateQuiz = () => {
                 className="input text-center"
                 placeholder="Time Limit (seconds)"
                 maxLength={3}
+                onChange={setTimeLimit}
               />
             </div>
             <Button onClick={addQuestion}>Add Question</Button>
