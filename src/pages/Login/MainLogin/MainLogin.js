@@ -4,7 +4,7 @@ import { Auth } from "aws-amplify";
 
 import { AuthContext } from "../../../contexts/AuthContext/AuthContext";
 import Button from "../../../components/Button/Button";
-import ErrorMessage from  "../../../components/ErrorMessage/ErrorMessage";
+import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
 import { getUser } from "../../../API/API";
 
 import "../styles.css";
@@ -41,7 +41,7 @@ const MainLogin = () => {
   }, []);
 
   return auth.authenticated ? (
-     <Redirect to="/" />
+    <Redirect to="/" />
   ) : (
     <div className="page d-flex flex-column align-items-center justify-content-start">
       <div className="logo">
@@ -79,7 +79,7 @@ const MainLogin = () => {
           <Button
             type="button"
             onClick={async () => {
-              await login(credentials.username, credentials.password)
+              await login(credentials.username, credentials.password);
             }}
           >
             Log In
@@ -94,10 +94,7 @@ const MainLogin = () => {
           </Link>
         </div>
       </div>
-      <ErrorMessage 
-        visible={showMsg} 
-        errorStyle="errorBox" 
-        text="Invalid Login"/>     
+      <ErrorMessage visible={showMsg} errorStyle="errorBox" text="Invalid Login" />
       <LoadingOverlay isVisible={isLoading} />
     </div>
   );
