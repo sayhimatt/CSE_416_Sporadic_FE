@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import AuthContextProvider from "./contexts/AuthContext/AuthContext";
-import QuizContextProvider from "./contexts/QuizContext/QuizContext";
 import GuardedRoute from "./components/GuardedRoute/GuardedRoute";
 import Feed from "./pages/Feed/Feed";
 import Login from "./pages/Login/MainLogin/MainLogin";
@@ -32,13 +31,9 @@ const MainRouter = () => {
           <GuardedRoute exact path="/Contact" component={Feed}></GuardedRoute>
           <GuardedRoute exact path="/p/:platform" component={Platform} />
           <GuardedRoute exact path="/createPlatform" component={CreatePlatform} />
+          <GuardedRoute exact path="/p/:platform/createQuiz" component={CreateQuiz} />
+          <GuardedRoute exact path="/p/:platform/:quiz" component={Quiz} />
           <GuardedRoute path="/" component={NotFound} />
-          <QuizContextProvider>
-            <Switch>
-              <GuardedRoute exact path="/p/:platform/createQuiz" component={CreateQuiz} />
-              <GuardedRoute exact path="/p/:platform/:quiz" component={Quiz} />
-            </Switch>
-          </QuizContextProvider>
         </Switch>
       </Router>
     </AuthContextProvider>
