@@ -8,6 +8,7 @@
 }
 
 .cardContainer .choice {
+  max-height: 4em;
   padding: 0.6em 1em;
   margin-top: 0.8em;
   margin-bottom: 0.8em;
@@ -23,6 +24,7 @@
   float: right;
 }
 .question {
+  height: 3em;
   font-size: 1.7em;
   background-color: #d4f1f4;
   padding: 5px 0px;
