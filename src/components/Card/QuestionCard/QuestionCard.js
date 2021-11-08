@@ -15,7 +15,7 @@ const Question = ({
         <div className="d-flex flex-grow-1">
           {create ? (
             <textarea
-              className="input"
+              className="input me-2"
               value={answer}
               placeholder="Enter Answer"
               id={`Q${information.questionIndex}A${index}`}
