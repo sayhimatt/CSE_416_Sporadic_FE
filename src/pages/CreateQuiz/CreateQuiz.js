@@ -181,7 +181,7 @@ const CreateQuiz = () => {
             </div>
             <Button onClick={addQuestion}>Add Question</Button>
           </div>
-          <Button buttonStyle="btn--special" onClick={publishQuiz}>
+          <Button buttonStyle="btn--special" buttonSize="btn--large" onClick={publishQuiz}>
             Publish Quiz
           </Button>
         </div>
