@@ -125,9 +125,8 @@ const CreateQuiz = () => {
     }
     const cards = questions.map((question, index) => {
       return (
-        <div className="d-flex flex-row">
+        <div key={`Q${index}`} className="d-flex flex-row">
           <QuestionCard
-            key={index}
             information={{
               question: question.body,
               questionIndex: index,

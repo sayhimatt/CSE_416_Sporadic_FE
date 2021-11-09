@@ -11,7 +11,7 @@ const Question = ({
 }) => {
   const choiceCards = information.answers.map((answer, index) => {
     return (
-      <div className="choice flex-row">
+      <div key={`Q${information.questionIndex}C${index}`} className="choice flex-row">
         <div className="d-flex flex-grow-1">
           {create ? (
             <textarea
