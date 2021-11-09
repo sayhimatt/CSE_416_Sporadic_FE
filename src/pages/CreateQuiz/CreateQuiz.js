@@ -159,7 +159,7 @@ const CreateQuiz = () => {
               <textarea
                 className="input"
                 placeholder="Quiz Title"
-                maxLength={100}
+                maxLength={75}
                 onChange={setQuizTitle}
               ></textarea>
             </div>

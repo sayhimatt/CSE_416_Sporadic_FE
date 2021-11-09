@@ -20,6 +20,7 @@ const Question = ({
               placeholder="Enter Answer"
               id={`Q${information.questionIndex}A${index}`}
               onChange={answerTextHandler}
+              maxLength={500}
             ></textarea>
           ) : (
             answer
@@ -47,6 +48,7 @@ const Question = ({
             placeholder="Enter Question"
             id={`Q${information.questionIndex}title`}
             onChange={titleHandler}
+            maxLength={500}
           ></textarea>
         ) : (
           information.question
