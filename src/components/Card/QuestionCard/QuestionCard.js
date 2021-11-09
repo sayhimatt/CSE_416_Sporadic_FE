@@ -17,7 +17,7 @@ const Question = ({
             <textarea
               className="input me-2"
               value={answer}
-              placeholder="Enter Answer"
+              placeholder="Answer Choice"
               id={`Q${information.questionIndex}A${index}`}
               onChange={answerTextHandler}
               maxLength={500}
@@ -45,7 +45,7 @@ const Question = ({
           <textarea
             className="input text-center bg-transparent"
             value={information.question}
-            placeholder="Enter Question"
+            placeholder="Question Title"
             id={`Q${information.questionIndex}title`}
             onChange={titleHandler}
             maxLength={500}

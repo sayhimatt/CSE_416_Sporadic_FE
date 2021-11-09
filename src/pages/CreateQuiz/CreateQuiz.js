@@ -6,6 +6,7 @@ import QuestionCard from "../../components/Card/QuestionCard/QuestionCard";
 import Button from "../../components/Button/Button";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
+import LoadingOverlay from "../../components/LoadingIndicators/LoadingOverlay";
 
 import "./styles.css";
 
@@ -13,6 +14,7 @@ const CreateQuiz = () => {
   const [questions, setQuestions] = useState([defaultQuestion()]);
   const [quizInfo, setQuizInfo] = useState(defaultQuiz());
   const [cards, setCards] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const params = useParams();
   const history = useHistory();
 
@@ -95,9 +97,11 @@ const CreateQuiz = () => {
       correctAnswers,
     };
     quiz.timeLimit = parseInt(quiz.timeLimit);
+    setIsLoading(true);
     postCreateQuiz(quiz)
       .then((res) => history.push(`/p/${params.platform}`))
       .catch((error) => {
+        setIsLoading(false);
         alert("could not publish quiz");
       });
   };
@@ -186,6 +190,7 @@ const CreateQuiz = () => {
           </Button>
         </div>
       </div>
+      <LoadingOverlay isVisible={isLoading} />
     </div>
   );
 };
