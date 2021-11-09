@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import { AuthContext } from "../../contexts/AuthContext";
+import { AuthContext } from "../../contexts/AuthContext/AuthContext";
 import { getFeedQuizzes } from "../../API/API";
 import Button from "../../components/Button/Button";
 import SubNav from "../../components/NavBar/SubNav/SubNav";

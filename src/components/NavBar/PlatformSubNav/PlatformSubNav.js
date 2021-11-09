@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
-import { AuthContext } from "../../../contexts/AuthContext";
+import { AuthContext } from "../../../contexts/AuthContext/AuthContext";
 import { patchSubscribe, patchUnsubscribe } from "../../../API/API";
 import SubNav from "../SubNav/SubNav";
 import Button from "../../Button/Button";

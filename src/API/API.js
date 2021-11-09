@@ -103,3 +103,18 @@ export const getUser = async (username) => {
 export const getFeedQuizzes = async (username) => {
   return;
 };
+
+/* Quiz Routing */
+export const postCreateQuiz = async (quiz) => {
+  const token = await getToken();
+  const response = await axios.post(
+    `${ENDPOINT}/quizzes/`,
+    {
+      ...quiz,
+    },
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  return response;
+};
