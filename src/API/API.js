@@ -71,6 +71,18 @@ export const getQuizByTitle = async (platform, quizTitle) => {
   return response.data;
 };
 
+export const postStartQuiz = async (platform, quizTitle) => {
+  const token = await getToken();
+  const response = await axios.post(
+    `${ENDPOINT}/quizzes/${platform}/${quizTitle}/start`,
+    {},
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  return response.data;
+};
+
 /* Login Routing */
 
 export const postCreateAccount = async (username, password, email) => {
