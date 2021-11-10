@@ -65,7 +65,7 @@ const Platform = () => {
             //</Link>
             subtext: name,
           }}
-          cardLink={`${name}/${quiz.title}`} // Temporary fix prevents crash on redirect, use quiz page when done
+          cardLink={`${name}/${quiz.title}`}
         />
       );
     });
