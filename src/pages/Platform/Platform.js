@@ -92,10 +92,11 @@ const Platform = () => {
             description: quiz.description,
             upvotes: quiz.upvotes,
             downvotes: quiz.downvotes,
-            // Two nested links are not allowed
-            //<Link className="link" to={`/p/${name}`}>
-            //</Link>
-            subtext: name,
+            subtext: (
+              <Link className="link" to={`/p/${name}`}>
+                {name}
+              </Link>
+            ),
           }}
           modOptions={modView}
           cardLink={`${name}/${quiz.title}`} // Temporary fix prevents crash on redirect, use quiz page when done
