@@ -12,6 +12,7 @@ const Quiz = () => {
   const [platform, setPlatform] = useState({});
   const [questions, setQuestions] = useState([]);
   const [questionsCards, setQuestionCards] = useState([]);
+  const [quiz, setQuiz] = useState({});
   const history = useHistory();
   const params = useParams();
 
@@ -44,7 +45,9 @@ const Quiz = () => {
     const quiz = params.quiz;
     try {
       const response = await getQuizByTitle(platform, quiz);
+      console.log();
       setQuestions(response.questions);
+      setQuiz(response);
     } catch (error) {
       console.log(error);
     }
@@ -77,11 +80,11 @@ const Quiz = () => {
             <input className="search" placeholder="Search"></input>
           </div>
           <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">
-            {platform.description}
+            {quiz.description}
           </div>
           <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
-            <div>Your Platform IQ</div>
-            <div className="color-special fw-bold fs-1">0</div>
+            <div>Your Timer</div>
+            <div className="color-special fw-bold fs-1">{quiz.timeLimit}</div>
           </div>
         </div>
       </div>
