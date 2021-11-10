@@ -118,3 +118,11 @@ export const postCreateQuiz = async (quiz) => {
   );
   return response;
 };
+
+export const deleteQuiz = async (platform, quiz) => {
+  const token = await getToken();
+  const response = await axios.delete(`${ENDPOINT}/quizzes/${platform}/${quiz}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response;
+};

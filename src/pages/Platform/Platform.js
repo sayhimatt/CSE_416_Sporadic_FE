@@ -7,7 +7,7 @@ import Button from "../../components/Button/Button";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
-import { patchSubscribe, patchUnsubscribe } from "./../../API/API";
+import { patchSubscribe, patchUnsubscribe, deleteQuiz } from "./../../API/API";
 
 import "./styles.scss";
 
@@ -79,6 +79,15 @@ const Platform = () => {
 
   const toggleModView = () => {
     setModView(!modView);
+  };
+
+  const removeQuiz = (e) => {
+    const quiz = e.target.id;
+    deleteQuiz(params.platform, quiz)
+      .then((res) => {
+        getQuizzes();
+      })
+      .catch((error) => alert("Could not delete quiz"));
   };
 
   const renderCards = () => {
