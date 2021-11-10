@@ -1,19 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 
 import { getPlatform, getQuizzesFromPlatform } from "./../../API/API";
+import { AuthContext } from "../../contexts/AuthContext/AuthContext";
+import Button from "../../components/Button/Button";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
+import { patchSubscribe, patchUnsubscribe } from "./../../API/API";
 
 import "./styles.scss";
 
 const Platform = () => {
+  const history = useHistory();
+  const params = useParams();
+  const { auth, dispatch } = useContext(AuthContext);
   const [platform, setPlatform] = useState({});
   const [quizzes, setQuizzes] = useState([]);
   const [quizCards, setQuizCards] = useState([]);
-  const history = useHistory();
-  const params = useParams();
+  const [subscribed, setSubscribed] = useState(auth.subscriptions.includes(params.platform));
 
   useEffect(() => {
     getCurrentPlatform();
@@ -49,6 +54,28 @@ const Platform = () => {
     }
   };
 
+  const subscribe = async () => {
+    await patchSubscribe(params.platform)
+      .then((res) => {
+        dispatch({ type: "SUBSCRIBE", payload: params.platform });
+        setSubscribed(true);
+      })
+      .catch(() => {
+        alert("could not subscribe");
+      });
+  };
+
+  const unsubscribe = async () => {
+    await patchUnsubscribe(params.platform)
+      .then((res) => {
+        dispatch({ type: "UNSUBSCRIBE", payload: params.platform });
+        setSubscribed(false);
+      })
+      .catch(() => {
+        alert("could not unsubscribe");
+      });
+  };
+
   const renderCards = () => {
     const cards = quizzes.map((quiz) => {
       const name = params.platform;
@@ -75,7 +102,11 @@ const Platform = () => {
   return (
     <div>
       <MainNav />
-      <PlatformSubNav platformName={params.platform} bannerSrc="/banner.svg" />
+      <PlatformSubNav platformName={params.platform} bannerSrc="/banner.svg">
+        <Button onClick={subscribed ? unsubscribe : subscribe}>
+          {subscribed ? "Unsubscribe" : "Subscribe"}
+        </Button>
+      </PlatformSubNav>
       <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
         <div className="d-flex flex-column m-5 align-items-end">
           <div className="sort"></div>
