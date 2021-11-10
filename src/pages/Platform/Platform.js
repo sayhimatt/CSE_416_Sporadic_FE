@@ -19,6 +19,7 @@ const Platform = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [quizCards, setQuizCards] = useState([]);
   const [subscribed, setSubscribed] = useState(auth.subscriptions.includes(params.platform));
+  const [modView, setModView] = useState(false);
 
   useEffect(() => {
     getCurrentPlatform();
@@ -27,7 +28,7 @@ const Platform = () => {
 
   useEffect(() => {
     renderCards();
-  }, [quizzes]);
+  }, [quizzes, modView]);
 
   const getCurrentPlatform = async () => {
     const name = params.platform;
@@ -76,6 +77,10 @@ const Platform = () => {
       });
   };
 
+  const toggleModView = () => {
+    setModView(!modView);
+  };
+
   const renderCards = () => {
     const cards = quizzes.map((quiz) => {
       const name = params.platform;
@@ -92,6 +97,7 @@ const Platform = () => {
             //</Link>
             subtext: name,
           }}
+          modOptions={modView}
           cardLink={`${name}/${quiz.title}`} // Temporary fix prevents crash on redirect, use quiz page when done
         />
       );
@@ -103,6 +109,12 @@ const Platform = () => {
     <div>
       <MainNav />
       <PlatformSubNav platformName={params.platform} bannerSrc="/banner.svg">
+        {Object.entries(platform).length !== 0 &&
+          (platform.moderators.includes(auth.username) || platform.owner === auth.username) && (
+            <Button buttonStyle="btn--special" onClick={toggleModView}>
+              {modView ? "User View" : "Mod View"}
+            </Button>
+          )}
         <Button onClick={subscribed ? unsubscribe : subscribe}>
           {subscribed ? "Unsubscribe" : "Subscribe"}
         </Button>
@@ -116,6 +128,16 @@ const Platform = () => {
           <div className="searchBar searchBar--border">
             <input className="search" placeholder="Search"></input>
           </div>
+          {modView && (
+            <Button buttonSize="btn--large">
+              <Link
+                className="link d-flex justify-content-center"
+                to={`/p/${params.platform}/createQuiz`}
+              >
+                Create Quiz
+              </Link>
+            </Button>
+          )}
           <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">
             {platform.description}
           </div>
