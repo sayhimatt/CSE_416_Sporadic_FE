@@ -5,9 +5,8 @@ import "../styles.css";
 import "./styles.css";
 import DropdownMenu from "../../Dropdown/DropdownMenu/DropdownMenu";
 import img from "../../../movie.svg";
-const TYPES = ["card--user", "card--quiz", "card--platform"];
 
-const LargeCard = ({ children, modOptions, cardInfo, cardLink }) => {
+const LargeCard = ({ children, modOptions, cardInfo, cardLink, dropdownHandlers }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const toggleDropdown = () => {
@@ -36,7 +35,9 @@ const LargeCard = ({ children, modOptions, cardInfo, cardLink }) => {
                 {showDropdown && (
                   <DropdownMenu>
                     <div>Pin quiz</div>
-                    <div>Delete quiz</div>
+                    <div id={`delete-quiz-${cardInfo.title}`} onClick={dropdownHandlers.removeQuiz}>
+                      Delete quiz
+                    </div>
                   </DropdownMenu>
                 )}
               </a>

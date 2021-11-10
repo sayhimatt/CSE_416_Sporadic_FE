@@ -10,7 +10,12 @@ const DropdownMenu = ({ children, size, proximity }) => {
 
   return (
     <div className={`custom-dropdown custom-dropdown-${checkProximity}`}>
-      {children && children.map((item) => <DropdownItem size={size}>{item}</DropdownItem>)}
+      {children &&
+        children.map((item, index) => (
+          <DropdownItem key={`item-${index}`} size={size}>
+            {item}
+          </DropdownItem>
+        ))}
     </div>
   );
 };

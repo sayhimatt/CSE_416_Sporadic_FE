@@ -82,7 +82,7 @@ const Platform = () => {
   };
 
   const removeQuiz = (e) => {
-    const quiz = e.target.id;
+    const quiz = e.target.id.split("-")[2];
     deleteQuiz(params.platform, quiz)
       .then((res) => {
         getQuizzes();
@@ -108,6 +108,7 @@ const Platform = () => {
             ),
           }}
           modOptions={modView}
+          dropdownHandlers={{ removeQuiz }}
           cardLink={`${name}/${quiz.title}`} // Temporary fix prevents crash on redirect, use quiz page when done
         />
       );
