@@ -12,7 +12,7 @@ const NavBar = () => {
   const { auth, dispatch } = useContext(AuthContext);
   const [subscriptionDropdownOpen, setSubscriptionDropdownOpen] = useState(false);
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
-  const [profileIcon, setProfileIcon] = useState("");
+  const [profileIcon, setProfileIcon] = useState("/propic.png");
   useEffect(() => {
     getProfileIcon();
   });
