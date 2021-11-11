@@ -2,6 +2,7 @@ import axios from "axios";
 import Auth from "@aws-amplify/auth";
 
 const ENDPOINT = "https://cse-416-sporadic-api-prod.herokuapp.com";
+const AWS_ENDPOINT = "https://sporadic-development-bucket.s3.us-east-1.amazonaws.com";
 
 const getToken = async () => {
   const session = await Auth.currentSession();
@@ -86,6 +87,16 @@ export const postConfirmCode = async (username, confirmCode) => {
   await axios.post(`${ENDPOINT}/users/${username}/confirm`, {
     confirmCode,
   });
+};
+
+export const getUserIcon = async (username) => {
+  console.log(`Hey There ${AWS_ENDPOINT}/${username}/profile.png`);
+  const response = await axios.get(`${AWS_ENDPOINT}/${username}/profile.png`);
+  console.log(response);
+  if (response.status != 200) {
+    return "/propic.png";
+  }
+  return `${AWS_ENDPOINT}/${username}/profile.png`;
 };
 
 /* User routing */
