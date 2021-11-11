@@ -24,6 +24,7 @@ const Platform = () => {
   useEffect(() => {
     getCurrentPlatform();
     getQuizzes();
+    setModView(false);
   }, [params]);
 
   useEffect(() => {
@@ -81,6 +82,14 @@ const Platform = () => {
     setModView(!modView);
   };
 
+  const uploadBanner = () => {
+    //todo
+  };
+
+  const uploadIcon = () => {
+    //todo
+  };
+
   const removeQuiz = (e) => {
     const quiz = e.target.id.split("-")[2];
     deleteQuiz(params.platform, quiz)
@@ -119,7 +128,12 @@ const Platform = () => {
   return (
     <div>
       <MainNav />
-      <PlatformSubNav platformName={params.platform} bannerSrc="/banner.svg">
+      <PlatformSubNav
+        platformName={params.platform}
+        bannerSrc="/banner.svg"
+        modView={modView}
+        fileUploadHandlers={{ uploadBanner, uploadIcon }}
+      >
         {Object.entries(platform).length !== 0 &&
           (platform.moderators.includes(auth.username) || platform.owner === auth.username) && (
             <Button buttonStyle="btn--special" onClick={toggleModView}>
