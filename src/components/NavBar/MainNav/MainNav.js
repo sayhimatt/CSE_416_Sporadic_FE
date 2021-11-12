@@ -6,17 +6,29 @@ import "./styles.css";
 
 import { AuthContext } from "../../../contexts/AuthContext/AuthContext";
 import DropdownMenu from "../../Dropdown/DropdownMenu/DropdownMenu";
+import { getUserIcon } from "../../../API/API";
 
 const NavBar = () => {
   const { auth, dispatch } = useContext(AuthContext);
   const [subscriptionDropdownOpen, setSubscriptionDropdownOpen] = useState(false);
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
+  const [profileIcon, setProfileIcon] = useState("/propic.png");
+  useEffect(() => {
+    getProfileIcon();
+  });
 
+  const getProfileIcon = async () => {
+    try {
+      const url = await getUserIcon(auth.username);
+      setProfileIcon(url);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const logout = async () => {
     await Auth.signOut();
     dispatch({ type: "LOGOUT" });
   };
-
   return (
     <div className="navBar navbar navbar-expand-lg sticky-top">
       <div className="logo navbar-brand">
@@ -52,7 +64,7 @@ const NavBar = () => {
             setAccountDropdownOpen(!accountDropdownOpen);
           }}
         >
-          <img className="profilePicture" src="/propic.png" alt="placeholder" />
+          <img className="profilePicture" src={profileIcon} alt="placeholder" />
           <div className="navText">{auth.username}</div>
           {accountDropdownOpen && (
             <DropdownMenu>
