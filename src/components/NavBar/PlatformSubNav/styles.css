@@ -1,21 +1,22 @@
-/* Images */
+:root {
+  --banner-height: 20vh;
+}
 
 .icon--large {
   height: 15vh;
   overflow-y: visible;
   align-self: end;
-  margin-right: 10px;
+  transition: background 1s;
 }
 
 .icon--small {
   height: 42px;
   align-self: center;
-  margin-right: 0.5vw;
 }
 
 .banner {
   min-width: 100%;
-  height: 20vh;
+  height: var(--banner-height);
   background-size: cover;
   transition: background 1s;
 }
@@ -24,4 +25,19 @@
   background-color: rgba(240, 240, 240, 0.6);
   background-blend-mode: screen;
   transition: background 0.3s;
+}
+
+#banner-upload {
+  position: absolute;
+  width: 100%;
+  height: var(--banner-height);
+  opacity: 0%;
+}
+
+.icon-container {
+  align-self: end;
+  border-radius: 100px;
+  border: 1px solid black;
+  margin-right: 0.5vw;
+  background-color: black;
 }

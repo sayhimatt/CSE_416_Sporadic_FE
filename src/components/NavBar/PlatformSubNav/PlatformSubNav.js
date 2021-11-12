@@ -12,8 +12,16 @@ const PlatformSubNav = ({ children, platformName, bannerSrc, modView, fileUpload
         <div
           className={`banner ${modView ? "selectable" : ""}`}
           style={{ backgroundImage: `url(${bannerSrc})` }}
-          onClick={modView ? fileUploadHandlers.uploadBanner : null}
-        />
+        >
+          {modView && (
+            <input
+              id="banner-upload"
+              className="selectable"
+              type="file"
+              onChange={fileUploadHandlers.uploadBanner}
+            />
+          )}
+        </div>
       )}
       <SubNav
         heading={
@@ -23,17 +31,19 @@ const PlatformSubNav = ({ children, platformName, bannerSrc, modView, fileUpload
         }
         buttons={children}
       >
-        <img
-          className={
-            "d-flex " +
-            (bannerSrc ? "icon--large" : "icon--small") +
-            " " +
-            (modView ? "selectable" : "")
-          }
-          src="/platformIcon.svg"
-          alt="Icon"
-          onClick={modView ? fileUploadHandlers.uploadIcon : null}
-        />
+        <div className="icon-container">
+          <img
+            className={
+              "d-flex " +
+              (bannerSrc ? "icon--large" : "icon--small") +
+              " " +
+              (modView ? "selectable" : "")
+            }
+            src="/platformIcon.svg"
+            alt="Icon"
+            onClick={modView ? fileUploadHandlers.uploadIcon : null}
+          />
+        </div>
       </SubNav>
     </div>
   );
