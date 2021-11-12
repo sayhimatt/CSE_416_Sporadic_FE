@@ -14,6 +14,7 @@ import NotFound from "./pages/NotFound/NotFound";
 import CreatePlatform from "./pages/CreatePlatform/CreatePlatform";
 import Quiz from "./pages/Quiz/Quiz";
 import CreateQuiz from "./pages/CreateQuiz/CreateQuiz";
+import MyAccount from "./pages/MyAccount/MyAccount";
 import "./App.scss";
 
 const MainRouter = () => {
@@ -27,6 +28,7 @@ const MainRouter = () => {
           <Route exact path="/forgotPassword" component={ForgotPassword} />
           <Route exact path="/forgotPassword/confirmation" component={ForgotPasswordConfirmation} />
           <GuardedRoute exact path="/" component={Feed}></GuardedRoute>
+          <GuardedRoute exact path="/myaccount" component={MyAccount}></GuardedRoute>
           <GuardedRoute exact path="/About" component={Feed}></GuardedRoute>
           <GuardedRoute exact path="/Contact" component={Feed}></GuardedRoute>
           <GuardedRoute exact path="/p/:platform" component={Platform} />
