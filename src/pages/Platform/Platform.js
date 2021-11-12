@@ -90,9 +90,7 @@ const Platform = () => {
     //todo
   };
 
-  const removeQuiz = (e) => {
-    e.preventDefault();
-    const quiz = e.target.id.split("-")[2];
+  const removeQuiz = (quiz) => {
     deleteQuiz(params.platform, quiz)
       .then((res) => {
         getQuizzes();

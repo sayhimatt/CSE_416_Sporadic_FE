@@ -35,7 +35,13 @@ const LargeCard = ({ children, modOptions, cardInfo, cardLink, dropdownHandlers 
                 {showDropdown && (
                   <DropdownMenu>
                     <div>Pin quiz</div>
-                    <div id={`delete-quiz-${cardInfo.title}`} onClick={dropdownHandlers.removeQuiz}>
+                    <div
+                      id={`delete-quiz-${cardInfo.title}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        dropdownHandlers.removeQuiz(cardInfo.title);
+                      }}
+                    >
                       Delete quiz
                     </div>
                   </DropdownMenu>
