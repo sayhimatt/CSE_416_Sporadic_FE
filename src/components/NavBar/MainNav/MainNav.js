@@ -49,7 +49,7 @@ const NavBar = () => {
         >
           <div className="navText">Subscriptions</div>
           {subscriptionDropdownOpen && (
-            <DropdownMenu>
+            <DropdownMenu proximity="navbar">
               {auth.subscriptions &&
                 auth.subscriptions.map((subscription) => (
                   <Link to={`/p/${subscription}`}>{subscription}</Link>
@@ -67,7 +67,7 @@ const NavBar = () => {
           <img className="profilePicture" src={profileIcon} alt="placeholder" />
           <div className="navText">{auth.username}</div>
           {accountDropdownOpen && (
-            <DropdownMenu>
+            <DropdownMenu proximity="navbar">
               <Link to="/myAccount">My Account</Link>
               <Link to="/friends">Friends</Link>
               <Link to="/nofitifcations">Notifications</Link>

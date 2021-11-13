@@ -156,9 +156,9 @@ const CreateQuiz = () => {
       <NavBar />
       <PlatformSubNav platformName={params.platform} />
       <div className="page-content d-flex flex-row justify-content-between m-4">
-        <div className="quiz-cards d-flex flex-column flex-grow-1">{cards}</div>
         <div id="quiz-controller" className="d-flex flex-column align-items-center">
           <div className="quiz-info d-flex flex-column align-items-center mb-5">
+            <h2 className="color-secondary">Quiz Creation</h2>
             <div id="quiz-title-input" className="input-box">
               <textarea
                 className="input"
@@ -189,6 +189,7 @@ const CreateQuiz = () => {
             Publish Quiz
           </Button>
         </div>
+        <div className="quiz-cards d-flex flex-column flex-grow-1 me-4">{cards}</div>
       </div>
       <LoadingOverlay isVisible={isLoading} />
     </div>

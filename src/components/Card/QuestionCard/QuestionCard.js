@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./styles.css";
+import "./styles.scss";
 
 const Question = ({
   information,
@@ -26,14 +26,16 @@ const Question = ({
             answer
           )}
         </div>
-        <input
-          className="form-check-input marker"
-          type="radio"
-          value={"Q" + information.questionIndex + "C" + index}
-          checked={create ? information.choice === index : null}
-          name={"answer" + information.questionIndex}
-          onChange={correctAnswerHandler}
-        ></input>
+        <label className="custom-radio-btn align-self-center">
+          <input
+            type="radio"
+            value={"Q" + information.questionIndex + "C" + index}
+            checked={create ? information.choice === index : null}
+            name={"answer" + information.questionIndex}
+            onChange={correctAnswerHandler}
+          />
+          <span class="checkmark" />
+        </label>
       </div>
     );
   });
