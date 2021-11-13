@@ -28,7 +28,7 @@ const MainRouter = () => {
           <Route exact path="/forgotPassword" component={ForgotPassword} />
           <Route exact path="/forgotPassword/confirmation" component={ForgotPasswordConfirmation} />
           <GuardedRoute exact path="/" component={Feed}></GuardedRoute>
-          <GuardedRoute exact path="/myaccount" component={MyAccount}></GuardedRoute>
+          <GuardedRoute exact path="/myAccount" component={MyAccount}></GuardedRoute>
           <GuardedRoute exact path="/About" component={Feed}></GuardedRoute>
           <GuardedRoute exact path="/Contact" component={Feed}></GuardedRoute>
           <GuardedRoute exact path="/p/:platform" component={Platform} />
