@@ -7,6 +7,8 @@ import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNa
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard.js";
 import Timer from "../../components/Timer/Timer";
 import useInterval from "../../components/Timer/Interval";
+import award from "../../award.svg";
+import Button from "../../components/Button/Button";
 import "./styles.scss";
 
 const Quiz = () => {
@@ -102,6 +104,14 @@ const Quiz = () => {
               timerMinutes={String(Math.trunc(timeLeft / 60)).padStart(2, "0")}
             />
           </div>
+          <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
+            <div className="color-secondary fw-bold fs-1">Star Trophy</div>
+            <img src={award} alt="Icon" />
+            <div className="color-secondary fw-bold fs-1">
+              Score Required: <br /> 100%
+            </div>
+          </div>
+          <Button onClick={quizOver}>Submit</Button>
         </div>
       </div>
     </div>

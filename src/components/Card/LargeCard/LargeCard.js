@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "../styles.css";
 import "./styles.css";
 import SubNav from "../../NavBar/SubNav/SubNav";
-import img from "../../../movie.svg"
+import img from "../../../movie.svg";
 const TYPES = ["card--user", "card--quiz", "card--platform"];
 
 const LargeCard = ({ children, cardType, cardInfo, cardLink }) => {

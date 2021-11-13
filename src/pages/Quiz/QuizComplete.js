@@ -4,6 +4,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { getPlatform, getQuizByTitle } from "./../../API/API";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
+import award from "../../award.svg";
 import "./styles.scss";
 
 const QuizComplete = () => {
@@ -46,18 +47,21 @@ const QuizComplete = () => {
     <div>
       <MainNav />
       <PlatformSubNav platformName={"Quiz: " + params.quiz} />
-      <div className="content d-flex m-4 flex-row align-items-start">
-        <div className="d-flex flex-column flex-md-fill">Your Score is: 100/100</div>
+      <div className="content d-flex m-4 flex-row align-items-center">
+        <div className="d-flex flex-column flex-md-fill color-secondary fw-bold fs-3 center">
+          Your Score is: 100/100
+        </div>
         <div className="information d-flex flex-column">
           <div className="searchBar searchBar--border">
             <input className="search" placeholder="Search"></input>
           </div>
-          <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">
+          <div className="platform-text-block d-flex align-items-center justify-content-center mt-4 color-secondary fw-bold fs-3">
             {quiz.description}
           </div>
           <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
-            <div className="color-special fw-bold fs-1"> Congratulations! </div>
+            <div className="color-secondary fw-bold fs-3"> Congratulations! </div>
           </div>
+          <img src={award} alt="Icon" />
         </div>
       </div>
     </div>
