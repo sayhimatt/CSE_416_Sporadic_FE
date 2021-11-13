@@ -79,6 +79,7 @@ const Quiz = () => {
     setQuestionCards(cards);
   };
   const quizOver = () => {
+    history.push("/p/movies/sporadic/complete");
     alert("Quiz is over now navigating to end of quiz page!");
   };
   return (
