@@ -89,7 +89,7 @@ const Quiz = () => {
       <MainNav />
       <PlatformSubNav platformName={"Quiz: " + params.quiz} />
       <div className="content d-flex m-4 flex-row align-items-start">
-        <div className="d-flex flex-column flex-md-fill">{questionsCards}</div>
+        <div className="d-flex flex-column flex-md-fill fs-1">{questionsCards}</div>
         <div className="information d-flex flex-column">
           <div className="searchBar searchBar--border">
             <input className="search" placeholder="Search"></input>
