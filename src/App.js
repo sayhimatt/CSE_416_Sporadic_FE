@@ -33,6 +33,7 @@ const MainRouter = () => {
           <GuardedRoute exact path="/createPlatform" component={CreatePlatform} />
           <GuardedRoute exact path="/p/:platform/createQuiz" component={CreateQuiz} />
           <GuardedRoute exact path="/p/:platform/:quiz" component={Quiz} />
+          <GuardedRoute exact path="/p/:platform/:quiz/complete" component={QuizComplete} />
           <GuardedRoute path="/" component={NotFound} />
         </Switch>
       </Router>
