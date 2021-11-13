@@ -36,8 +36,9 @@ const PlatformSubNav = ({ platformName, bannerSrc }) => {
 
   const loadButtons = () => {
     let buttons = [];
+    let keyMe = 0;
     const subscription = (
-      <Button onClick={subscribed ? unsubscribe : subscribe}>
+      <Button key={String(keyMe++) + "button"} onClick={subscribed ? unsubscribe : subscribe}>
         {subscribed ? "Unsubscribe" : "Subscribe"}
       </Button>
     );

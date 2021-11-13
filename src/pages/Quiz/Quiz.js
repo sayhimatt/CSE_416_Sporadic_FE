@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
-
-import { getPlatform, getQuizByTitle } from "./../../API/API";
+import { useParams, useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
+import { getPlatform, startQuizByTitle } from "./../../API/API";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard.js";
-
+import Timer from "../../components/Timer/Timer";
+import useInterval from "../../components/Timer/Interval";
 import "./styles.scss";
 
 const Quiz = () => {
@@ -13,9 +14,10 @@ const Quiz = () => {
   const [questions, setQuestions] = useState([]);
   const [questionsCards, setQuestionCards] = useState([]);
   const [quiz, setQuiz] = useState({});
+  const [timeLeft, setTimeLeft] = useState(0);
   const history = useHistory();
   const params = useParams();
-
+  let delay = 1000;
   useEffect(() => {
     getCurrentPlatform();
     getQuestions();
@@ -24,7 +26,15 @@ const Quiz = () => {
   useEffect(() => {
     renderCards();
   }, [questions]);
-
+  useInterval(() => {
+    if (timeLeft == 0) {
+      quizOver();
+      delay = 0;
+      return;
+    } else {
+      setTimeLeft(timeLeft - 1);
+    }
+  }, delay);
   const getCurrentPlatform = async () => {
     const name = params.platform;
     await getPlatform(name)
@@ -44,10 +54,10 @@ const Quiz = () => {
     const platform = params.platform;
     const quiz = params.quiz;
     try {
-      const response = await getQuizByTitle(platform, quiz);
-      console.log();
+      const response = await startQuizByTitle(platform, quiz);
       setQuestions(response.questions);
       setQuiz(response);
+      setTimeLeft(response.timeLimit);
     } catch (error) {
       console.log(error);
     }
@@ -68,7 +78,9 @@ const Quiz = () => {
     });
     setQuestionCards(cards);
   };
-
+  const quizOver = () => {
+    alert("Quiz is over now navigating to end of quiz page!");
+  };
   return (
     <div>
       <MainNav />
@@ -83,13 +95,15 @@ const Quiz = () => {
             {quiz.description}
           </div>
           <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
-            <div>Your Timer</div>
-            <div className="color-special fw-bold fs-1">{quiz.timeLimit}</div>
+            <div className="color-special fw-bold fs-1">Time Left: </div>
+            <Timer
+              timerSeconds={String(Math.trunc(timeLeft % 60)).padStart(2, "0")}
+              timerMinutes={String(Math.trunc(timeLeft / 60)).padStart(2, "0")}
+            />
           </div>
         </div>
       </div>
     </div>
   );
 };
-
 export default Quiz;

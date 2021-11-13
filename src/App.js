@@ -14,6 +14,7 @@ import NotFound from "./pages/NotFound/NotFound";
 import CreatePlatform from "./pages/CreatePlatform/CreatePlatform";
 import Quiz from "./pages/Quiz/Quiz";
 import CreateQuiz from "./pages/CreateQuiz/CreateQuiz";
+import QuizComplete from "./pages/Quiz/QuizComplete";
 import "./App.scss";
 
 const MainRouter = () => {
