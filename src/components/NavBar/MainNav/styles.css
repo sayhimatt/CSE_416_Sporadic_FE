@@ -43,6 +43,7 @@
 
 .profilePicture {
   height: 32px;
+  border-radius: 50%;
   padding-right: 5px;
 }
 
