@@ -72,6 +72,18 @@ export const getQuizByTitle = async (platform, quizTitle) => {
   return response.data;
 };
 
+export const startQuizByTitle = async (platform, quizTitle) => {
+  const token = await getToken();
+  const response = await axios.post(
+    `${ENDPOINT}/quizzes/${platform}/${quizTitle}/start`,
+    {},
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  return response.data;
+};
+
 /* Login Routing */
 
 export const postCreateAccount = async (username, password, email) => {
@@ -90,9 +102,7 @@ export const postConfirmCode = async (username, confirmCode) => {
 };
 
 export const getUserIcon = async (username) => {
-  console.log(`Hey There ${AWS_ENDPOINT}/${username}/profile.png`);
   const response = await axios.get(`${AWS_ENDPOINT}/${username}/profile.png`);
-  console.log(response);
   if (response.status != 200) {
     return "/propic.png";
   }
