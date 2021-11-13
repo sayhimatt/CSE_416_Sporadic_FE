@@ -21,7 +21,7 @@ const LargeCard = ({ children, modOptions, cardInfo, cardLink, dropdownHandlers 
             <img className="icon" src={img} alt="what" />
           </div>
           <div className="info flex-grow-1">
-            <div class="d-flex">
+            <div className="d-flex">
               <Link className="link title" to={cardLink}>
                 {cardInfo.title}
               </Link>
