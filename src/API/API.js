@@ -103,7 +103,7 @@ export const postConfirmCode = async (username, confirmCode) => {
 
 export const getUserIcon = async (username) => {
   console.log(`Hey There ${AWS_ENDPOINT}/${username}/profile.png`);
-  const response = await axios.get(`${AWS_ENDPOINT}/${username}/profile.png`);
+  const response = await axios.get(`${AWS_ENDPOINT}/users/${username}/profile.png`);
   console.log(response);
   if (response.status != 200) {
     return "/propic.png";
