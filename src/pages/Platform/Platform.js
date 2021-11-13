@@ -1,28 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 
 import { getPlatform, getQuizzesFromPlatform } from "./../../API/API";
+import { AuthContext } from "../../contexts/AuthContext/AuthContext";
+import Button from "../../components/Button/Button";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
+import { patchSubscribe, patchUnsubscribe, deleteQuiz } from "./../../API/API";
 
 import "./styles.scss";
 
 const Platform = () => {
+  const history = useHistory();
+  const params = useParams();
+  const { auth, dispatch } = useContext(AuthContext);
   const [platform, setPlatform] = useState({});
   const [quizzes, setQuizzes] = useState([]);
   const [quizCards, setQuizCards] = useState([]);
-  const history = useHistory();
-  const params = useParams();
+  const [subscribed, setSubscribed] = useState(auth.subscriptions.includes(params.platform));
+  const [modView, setModView] = useState(false);
 
   useEffect(() => {
     getCurrentPlatform();
     getQuizzes();
+    setModView(false);
   }, [params]);
 
   useEffect(() => {
     renderCards();
-  }, [quizzes]);
+  }, [quizzes, modView]);
 
   const getCurrentPlatform = async () => {
     const name = params.platform;
@@ -49,6 +56,48 @@ const Platform = () => {
     }
   };
 
+  const subscribe = async () => {
+    await patchSubscribe(params.platform)
+      .then((res) => {
+        dispatch({ type: "SUBSCRIBE", payload: params.platform });
+        setSubscribed(true);
+      })
+      .catch(() => {
+        alert("could not subscribe");
+      });
+  };
+
+  const unsubscribe = async () => {
+    await patchUnsubscribe(params.platform)
+      .then((res) => {
+        dispatch({ type: "UNSUBSCRIBE", payload: params.platform });
+        setSubscribed(false);
+      })
+      .catch(() => {
+        alert("could not unsubscribe");
+      });
+  };
+
+  const toggleModView = () => {
+    setModView(!modView);
+  };
+
+  const uploadBanner = () => {
+    //todo
+  };
+
+  const uploadIcon = () => {
+    //todo
+  };
+
+  const removeQuiz = (quiz) => {
+    deleteQuiz(params.platform, quiz)
+      .then((res) => {
+        getQuizzes();
+      })
+      .catch((error) => alert("Could not delete quiz"));
+  };
+
   const renderCards = () => {
     const cards = quizzes.map((quiz) => {
       const name = params.platform;
@@ -60,12 +109,15 @@ const Platform = () => {
             description: quiz.description,
             upvotes: quiz.upvotes,
             downvotes: quiz.downvotes,
-            // Two nested links are not allowed
-            //<Link className="link" to={`/p/${name}`}>
-            //</Link>
-            subtext: name,
+            subtext: (
+              <Link className="link" to={`/p/${name}`}>
+                {name}
+              </Link>
+            ),
           }}
-          cardLink={`${name}/${quiz.title}`}
+          modOptions={modView}
+          dropdownHandlers={{ removeQuiz }}
+          cardLink={`${name}/${quiz.title}`} // Temporary fix prevents crash on redirect, use quiz page when done
         />
       );
     });
@@ -75,7 +127,22 @@ const Platform = () => {
   return (
     <div>
       <MainNav />
-      <PlatformSubNav platformName={params.platform} bannerSrc="/banner.svg" />
+      <PlatformSubNav
+        platformName={params.platform}
+        bannerSrc="/banner.svg"
+        modView={modView}
+        fileUploadHandlers={{ uploadBanner, uploadIcon }}
+      >
+        {Object.entries(platform).length !== 0 &&
+          (platform.moderators.includes(auth.username) || platform.owner === auth.username) && (
+            <Button buttonStyle="btn--special" onClick={toggleModView}>
+              {modView ? "User View" : "Mod View"}
+            </Button>
+          )}
+        <Button onClick={subscribed ? unsubscribe : subscribe}>
+          {subscribed ? "Unsubscribe" : "Subscribe"}
+        </Button>
+      </PlatformSubNav>
       <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
         <div className="d-flex flex-column m-5 align-items-end">
           <div className="sort"></div>
@@ -85,6 +152,16 @@ const Platform = () => {
           <div className="searchBar searchBar--border">
             <input className="search" placeholder="Search"></input>
           </div>
+          {modView && (
+            <Button buttonSize="btn--large">
+              <Link
+                className="link d-flex justify-content-center"
+                to={`/p/${params.platform}/createQuiz`}
+              >
+                Create Quiz
+              </Link>
+            </Button>
+          )}
           <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">
             {platform.description}
           </div>

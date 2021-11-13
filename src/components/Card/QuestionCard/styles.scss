@@ -1,0 +1,67 @@
+@import "../../../App.scss";
+
+.cardContainer--question {
+  border-style: solid;
+  border-radius: 20px;
+  margin: 10px;
+  border-color: #189ab4;
+  text-align: center;
+  min-width: 50vw;
+  max-width: 55vw;
+  padding-bottom: 1em;
+}
+
+.cardContainer .choice {
+  max-height: 4em;
+  padding: 0.6em 1em;
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+  margin-left: 5%;
+  margin-right: 5%;
+  box-shadow: 5px 5px 5px #aaaaaa;
+  border-radius: 1.1em;
+  border: 2px solid $primaryColor;
+  display: flex;
+}
+.marker {
+  margin-left: auto;
+  float: right;
+}
+.question {
+  height: 3em;
+  font-size: 1.7em;
+  background-color: $primaryColor;
+  padding: 5px 20px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+/* Custom Radio Button */
+
+.custom-radio-btn input {
+  display: none;
+}
+
+.custom-radio-btn {
+  width: 1.4em;
+  height: 1.4em;
+  border: 1px solid $secondaryColor;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-radio-btn .checkmark {
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  border-radius: 50%;
+  background-color: $secondaryColor;
+  display: inline-block;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.custom-radio-btn input:checked + .checkmark {
+  opacity: 1;
+}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
-import { Redirect } from "react-router-dom";
-import { getPlatform, startQuizByTitle } from "./../../API/API";
+import { Link, useParams, useHistory } from "react-router-dom";
+
+import { getPlatform, postStartQuiz } from "./../../API/API";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard.js";
@@ -56,7 +56,7 @@ const Quiz = () => {
     const platform = params.platform;
     const quiz = params.quiz;
     try {
-      const response = await startQuizByTitle(platform, quiz);
+      const response = await postStartQuiz(platform, quiz);
       setQuestions(response.questions);
       setQuiz(response);
       setTimeLeft(response.timeLimit);
