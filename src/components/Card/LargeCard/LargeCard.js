@@ -1,24 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import "../styles.css";
 import "./styles.css";
-import SubNav from "../../NavBar/SubNav/SubNav";
-import img from "../../../movie.svg"
-const TYPES = ["card--user", "card--quiz", "card--platform"];
+import DropdownMenu from "../../Dropdown/DropdownMenu/DropdownMenu";
+import img from "../../../movie.svg";
 
-const LargeCard = ({ children, cardType, cardInfo, cardLink }) => {
-  
+const LargeCard = ({ children, modOptions, cardInfo, cardLink, dropdownHandlers }) => {
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
   return (
-    <Link className="cardContainer cardContainer--large link" to={cardLink}>
+    <div className="cardContainer cardContainer--large link">
       <div className="card d-flex flex-column">
         <div className="topCard d-flex flex-row">
           <div>
             <img className="icon" src={img} alt="what" />
           </div>
           <div className="info flex-grow-1">
-            <div className="title">{cardInfo.title}</div>
+            <div class="d-flex">
+              <Link className="link title" to={cardLink}>
+                {cardInfo.title}
+              </Link>
+            </div>
             <div className="description">{cardInfo.description}</div>
+          </div>
+          <div className="d-flex align-items-start">
+            {modOptions && (
+              <a className="mod-options" onClick={toggleDropdown}>
+                <img alt="dropdown" src="/three_dot_menu.svg" />
+                {showDropdown && (
+                  <DropdownMenu>
+                    <div>Pin quiz</div>
+                    <div
+                      id={`delete-quiz-${cardInfo.title}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        dropdownHandlers.removeQuiz(cardInfo.title);
+                      }}
+                    >
+                      Delete quiz
+                    </div>
+                  </DropdownMenu>
+                )}
+              </a>
+            )}
           </div>
         </div>
         <div className="bottomCard d-flex flex-row justify-content-between align-items-end">
@@ -35,7 +64,7 @@ const LargeCard = ({ children, cardType, cardInfo, cardLink }) => {
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 
