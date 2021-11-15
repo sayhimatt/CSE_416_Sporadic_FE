@@ -2,6 +2,7 @@ import axios from "axios";
 import Auth from "@aws-amplify/auth";
 
 const ENDPOINT = "https://cse-416-sporadic-api-prod.herokuapp.com";
+const AWS_ENDPOINT = "https://sporadic-development-bucket.s3.us-east-1.amazonaws.com";
 
 const getToken = async () => {
   const session = await Auth.currentSession();
@@ -71,6 +72,18 @@ export const getQuizByTitle = async (platform, quizTitle) => {
   return response.data;
 };
 
+export const postStartQuiz = async (platform, quizTitle) => {
+  const token = await getToken();
+  const response = await axios.post(
+    `${ENDPOINT}/quizzes/${platform}/${quizTitle}/start`,
+    {},
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  return response.data;
+};
+
 /* Login Routing */
 
 export const postCreateAccount = async (username, password, email) => {
@@ -88,6 +101,15 @@ export const postConfirmCode = async (username, confirmCode) => {
   });
 };
 
+export const getUserIcon = async (username) => {
+  const response = await axios.get(`${AWS_ENDPOINT}/users/${username}/avatar.png`);
+  console.log(response);
+  if (response.status != 200) {
+    return "/propic.png";
+  }
+  return `${AWS_ENDPOINT}/users/${username}/avatar.png`;
+};
+
 /* User routing */
 
 export const getUser = async (username) => {
@@ -102,4 +124,27 @@ export const getUser = async (username) => {
 /* Feed routing */
 export const getFeedQuizzes = async (username) => {
   return;
+};
+
+/* Quiz Routing */
+export const postCreateQuiz = async (quiz) => {
+  const token = await getToken();
+  const response = await axios.post(
+    `${ENDPOINT}/quizzes/`,
+    {
+      ...quiz,
+    },
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  return response;
+};
+
+export const deleteQuiz = async (platform, quiz) => {
+  const token = await getToken();
+  const response = await axios.delete(`${ENDPOINT}/quizzes/${platform}/${quiz}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response;
 };

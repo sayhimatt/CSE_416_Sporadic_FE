@@ -1,0 +1,44 @@
+@import "../../App.scss";
+
+.account-section {
+  margin: 1.5em 0px;
+  display: flex;
+  flex-direction: column;
+  width: 60vw;
+}
+
+.account-section .avatar {
+  width: 128px;
+  border: 2px solid $secondaryColor;
+  border-radius: 50%;
+  margin-bottom: 1em;
+}
+
+.account-info-heading {
+  color: grey;
+}
+
+.account-award {
+  width: 100px;
+}
+
+#account-awards-shelf {
+  border: 2px solid $secondaryColor;
+  border-radius: 20px;
+  height: 13em;
+  width: 100%;
+  margin-bottom: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+#account-about-input {
+  height: 8em;
+}
+
+#manage-awards-button-container {
+  display: flex;
+  flex-direction: column;
+  width: 15em;
+}

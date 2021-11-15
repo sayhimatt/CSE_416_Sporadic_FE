@@ -1,0 +1,39 @@
+#quiz-controller {
+  position: sticky;
+  top: 15vh;
+  width: 50vw;
+  height: 70%;
+  margin: 10px 3em;
+  border: 1px solid #189ab4;
+  border-radius: 10px;
+  padding: 30px 10px;
+  background: #d4f1f4;
+}
+
+#quiz-controller #timer-input {
+  width: 30%;
+  margin-bottom: 2em;
+}
+
+.quiz-info {
+  width: 100%;
+}
+
+#quiz-controller .input-box {
+  margin: 10px 0px;
+  width: 70%;
+}
+
+#quiz-title-input {
+  height: 2.5em;
+}
+
+#quiz-description-input {
+  height: 10em;
+}
+
+.delete-question {
+  margin-top: 10px;
+  width: 28px;
+  height: 28px;
+}
