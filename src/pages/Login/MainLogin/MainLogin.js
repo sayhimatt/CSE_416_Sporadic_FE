@@ -5,7 +5,7 @@ import { Auth } from "aws-amplify";
 import { AuthContext } from "../../../contexts/AuthContext/AuthContext";
 import Button from "../../../components/Button/Button";
 import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
-import { getUser } from "../../../API/API";
+import { getUser, getUserIcon } from "../../../API/API";
 
 import "../styles.css";
 import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay";
@@ -20,14 +20,23 @@ const MainLogin = () => {
     password: "",
   });
 
+  useEffect(() => {
+    return () => setIsLoading(false);
+  }, []);
+
   const login = async (username, password) => {
     try {
       setIsLoading(true);
       await Auth.signIn(username, password);
       const user = await getUser(username);
+      const profilePicture = await getUserIcon(username);
       dispatch({
         type: "LOGIN",
-        payload: { username: user.username, subscriptions: user.subscriptions },
+        payload: {
+          username: user.username,
+          subscriptions: user.subscriptions,
+          profilePicture: profilePicture,
+        },
       });
     } catch (error) {
       setShowMsg(true);
@@ -35,10 +44,6 @@ const MainLogin = () => {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    return () => setIsLoading(false);
-  }, []);
 
   return auth.authenticated ? (
     <Redirect to="/" />

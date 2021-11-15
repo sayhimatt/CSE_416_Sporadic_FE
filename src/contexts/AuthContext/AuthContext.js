@@ -9,6 +9,7 @@ const authReducer = (state, action) => {
         authenticated: true,
         username: action.payload.username,
         subscriptions: action.payload.subscriptions || [],
+        profilePicture: action.payload.profilePicture || "/propic.png",
       };
     case "LOGOUT":
       return { authenticated: false, username: "" };
