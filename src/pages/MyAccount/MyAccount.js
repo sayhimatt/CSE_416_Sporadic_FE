@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { AuthContext } from "../../contexts/AuthContext/AuthContext";
+import { UserContext } from "../../contexts/UserContext/UserContext";
 import { getUser } from "../../API/API";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
@@ -10,13 +10,13 @@ import Button from "../../components/Button/Button";
 import "./styles.scss";
 
 const MyAccount = () => {
-  const { auth, dispatch } = useContext(AuthContext);
-  const [user, setUser] = useState({});
+  const { user, dispatch } = useContext(UserContext);
+  const [userState, setuserState] = useState({});
   const [about, setAbout] = useState("");
 
   useEffect(() => {
-    getUser(auth.username)
-      .then((user) => setUser(user))
+    getUser(user.username)
+      .then((user) => setuserState(user))
       .catch((e) => console.log("Could not retrieve user"));
     return () => {
       updateAbout(); // On onmount
@@ -49,21 +49,23 @@ const MyAccount = () => {
           </Link>,
         ]}
       />
-      {Object.entries(user).length != 0 && (
+      {Object.entries(userState).length != 0 && (
         <div className="page-content ms-5 me-5">
           <div className="d-flex flex-column">
             <div className="account-section">
               <h2>STATS</h2>
               <div className="d-flex w-75 justify-content-between">
                 <h3>
-                  <b className="color-secondary">{(user.awards && user.awards.length) || 0}</b>{" "}
+                  <b className="color-secondary">
+                    {(userState.awards && userState.awards.length) || 0}
+                  </b>{" "}
                   Awards
                 </h3>
                 <h3>
-                  <b className="color-secondary">{user.friends.length}</b> Friends
+                  <b className="color-secondary">{userState.friends.length}</b> Friends
                 </h3>
                 <h3>
-                  <b className="color-secondary">{user.subscriptions.length}</b> Subscriptions
+                  <b className="color-secondary">{userState.subscriptions.length}</b> Subscriptions
                 </h3>
               </div>
             </div>
@@ -79,7 +81,7 @@ const MyAccount = () => {
             </div>
             <div className="account-section">
               <h2>AVATAR</h2>
-              <img className="avatar" alt="avatar" src={auth.profilePicture} />
+              <img className="avatar" alt="avatar" src={user.profilePicture} />
               <div>
                 <Button>Change Avatar</Button>
               </div>
@@ -87,8 +89,8 @@ const MyAccount = () => {
             <div className="account-section">
               <h2>AWARDS</h2>
               <div id="account-awards-shelf">
-                {user.awards &&
-                  user.awards
+                {userState.awards &&
+                  userState.awards
                     .filter((award) => award.isShowcased)
                     .map((award, index) => (
                       <div key={`award-${index}`} className="account-award">
@@ -104,11 +106,11 @@ const MyAccount = () => {
               <h2>ACCOUNT</h2>
               <div className="account-info">
                 <div className="account-info-heading">Email</div>
-                <p>{user.email}</p>
+                <p>{userState.email}</p>
               </div>
               <div className="account-info">
                 <div className="account-info-heading">Username</div>
-                <p>{user.username}</p>
+                <p>{userState.username}</p>
               </div>
               <div className="account-info">
                 <div className="account-info-heading mb-2">Password</div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import AuthContextProvider from "./contexts/AuthContext/AuthContext";
+import UserContextProvider from "./contexts/UserContext/UserContext";
 import GuardedRoute from "./components/GuardedRoute/GuardedRoute";
 import Feed from "./pages/Feed/Feed";
 import Login from "./pages/Login/MainLogin/MainLogin";
@@ -29,7 +29,7 @@ const App = () => {
   }, []);
 
   return (
-    <AuthContextProvider>
+    <UserContextProvider>
       <Router>
         <Switch>
           <Route path="/login" component={Login} />
@@ -65,7 +65,7 @@ const App = () => {
           <GuardedRoute path="/" component={NotFound} authenticated={auth} />
         </Switch>
       </Router>
-    </AuthContextProvider>
+    </UserContextProvider>
   );
 };
 

@@ -4,12 +4,11 @@ import Auth from "@aws-amplify/auth";
 
 import "./styles.css";
 
-import { AuthContext } from "../../../contexts/AuthContext/AuthContext";
+import { UserContext } from "../../../contexts/UserContext/UserContext";
 import DropdownMenu from "../../Dropdown/DropdownMenu/DropdownMenu";
-import { getUserIcon } from "../../../API/API";
 
 const NavBar = () => {
-  const { auth, dispatch } = useContext(AuthContext);
+  const { user, dispatch } = useContext(UserContext);
   const [subscriptionDropdownOpen, setSubscriptionDropdownOpen] = useState(false);
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
 
@@ -40,8 +39,8 @@ const NavBar = () => {
           <div className="navText">Subscriptions</div>
           {subscriptionDropdownOpen && (
             <DropdownMenu proximity="navbar">
-              {auth.subscriptions &&
-                auth.subscriptions.map((subscription) => (
+              {user.subscriptions &&
+                user.subscriptions.map((subscription) => (
                   <Link to={`/p/${subscription}`}>{subscription}</Link>
                 ))}
             </DropdownMenu>
@@ -54,8 +53,8 @@ const NavBar = () => {
             setAccountDropdownOpen(!accountDropdownOpen);
           }}
         >
-          <img className="profilePicture" src={auth.profilePicture} alt="placeholder" />
-          <div className="navText">{auth.username}</div>
+          <img className="profilePicture" src={user.profilePicture} alt="placeholder" />
+          <div className="navText">{user.username}</div>
           {accountDropdownOpen && (
             <DropdownMenu proximity="navbar">
               <Link to="/myAccount">My Account</Link>

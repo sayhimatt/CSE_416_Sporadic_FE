@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { Link, useHistory, Redirect } from "react-router-dom";
 import { Auth } from "aws-amplify";
 
-import { AuthContext } from "../../../contexts/AuthContext/AuthContext";
+import { UserContext } from "../../../contexts/UserContext/UserContext";
 import Button from "../../../components/Button/Button";
 import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
 import { getUser, getUserIcon } from "../../../API/API";
@@ -14,7 +14,7 @@ const MainLogin = () => {
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
   const [showMsg, setShowMsg] = useState(false);
-  const { auth, dispatch } = useContext(AuthContext);
+  const { user, dispatch } = useContext(UserContext);
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
@@ -45,7 +45,7 @@ const MainLogin = () => {
     }
   };
 
-  return auth.authenticated ? (
+  return Object.keys(user).length > 0 ? (
     <Redirect to="/" />
   ) : (
     <div className="page d-flex flex-column align-items-center justify-content-start">

@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import { AuthContext } from "../../contexts/AuthContext/AuthContext";
+import { UserContext } from "../../contexts/UserContext/UserContext";
 import { getFeedQuizzes } from "../../API/API";
 import Button from "../../components/Button/Button";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
@@ -11,7 +11,7 @@ import LargeCard from "../../components/Card/LargeCard/LargeCard";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard";
 
 const Feed = ({ children }) => {
-  const { auth, dispatch } = useContext(AuthContext);
+  const { user, dispatch } = useContext(UserContext);
   const [quizCards, setQuizCards] = useState([]);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const Feed = ({ children }) => {
   }, []);
 
   const loadQuizzes = async () => {
-    await getFeedQuizzes(auth.username)
+    await getFeedQuizzes(user.username)
       .then((quizzes) => {
         const cards = mapQuizzesToCards(quizzes);
         setQuizCards(cards);
@@ -55,7 +55,7 @@ const Feed = ({ children }) => {
   return (
     <div>
       <MainNav />
-      <SubNav heading={`Welcome Back ${auth.username}!`} buttons={subNavButtons} />
+      <SubNav heading={`Welcome Back ${user.username}!`} buttons={subNavButtons} />
       <Footer />
     </div>
   );
