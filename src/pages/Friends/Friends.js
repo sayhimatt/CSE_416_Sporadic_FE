@@ -40,11 +40,11 @@ const Friends = () => {
       <SubNav
         heading="Manage Friends"
         buttons={[
-          <Link to="/notfications">
-            <Button>Notifications</Button>
-          </Link>,
           <Link to="/createPlatform">
             <Button>Create a Platform</Button>
+          </Link>,
+          <Link to="/notfications">
+            <Button>Notifications</Button>
           </Link>,
         ]}
       />
@@ -57,7 +57,9 @@ const Friends = () => {
               onChange={(e) => setSearch(e.target.value)}
             ></input>
           </div>
-          <Button onClick={addFriend}>Add Friend</Button>
+          <Button buttonStyle="btn--secondary" onClick={addFriend}>
+            Add Friend
+          </Button>
         </div>
         <div className="small-card-list w-50">
           {friends &&
