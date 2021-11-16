@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { AuthContext } from "../../contexts/AuthContext/AuthContext";
-import { getUser, getUserIcon } from "../../API/API";
+import { getUser } from "../../API/API";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Button/Button";
@@ -11,12 +11,10 @@ import "./styles.scss";
 
 const MyAccount = () => {
   const { auth, dispatch } = useContext(AuthContext);
-  const [profileIcon, setProfileIcon] = useState("/propic.png");
   const [user, setUser] = useState({});
   const [about, setAbout] = useState("");
 
   useEffect(() => {
-    getProfileIcon();
     getUser(auth.username)
       .then((user) => setUser(user))
       .catch((e) => console.log("Could not retrieve user"));
@@ -35,14 +33,6 @@ const MyAccount = () => {
 
   const changePassword = () => {
     // implement change password functionality
-  };
-  const getProfileIcon = async () => {
-    try {
-      const url = await getUserIcon(auth.username);
-      setProfileIcon(url);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (
@@ -89,7 +79,7 @@ const MyAccount = () => {
             </div>
             <div className="account-section">
               <h2>AVATAR</h2>
-              <img className="avatar" alt="avatar" src={profileIcon} />
+              <img className="avatar" alt="avatar" src={auth.profilePicture} />
               <div>
                 <Button>Change Avatar</Button>
               </div>
