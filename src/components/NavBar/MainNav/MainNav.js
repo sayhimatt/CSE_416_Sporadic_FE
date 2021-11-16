@@ -16,7 +16,9 @@ const NavBar = () => {
   const logout = async () => {
     await Auth.signOut();
     dispatch({ type: "LOGOUT" });
+    window.location.reload();
   };
+
   return (
     <div className="navBar navbar navbar-expand-lg sticky-top">
       <div className="logo navbar-brand">

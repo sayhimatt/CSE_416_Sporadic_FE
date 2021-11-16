@@ -3,13 +3,11 @@ import { Route, Redirect } from "react-router-dom";
 
 import { AuthContext } from "../../contexts/AuthContext/AuthContext";
 
-const GuardedRoute = ({ component: Component, ...rest }) => {
-  const { auth } = useContext(AuthContext);
-
+const GuardedRoute = ({ component: Component, authenticated, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={(props) => (auth.authenticated ? <Component {...props} /> : <Redirect to="/login" />)}
+      render={(props) => (authenticated ? <Component {...props} /> : <Redirect to="/login" />)}
     />
   );
 };
