@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles.css";
 
-const STYLES = ["btn--primary", "btn--special"];
+const STYLES = ["btn--primary", "btn--secondary", "btn--special"];
 
 const SIZES = ["btn--small", "btn--medium", "btn--large"];
 

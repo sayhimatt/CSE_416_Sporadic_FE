@@ -102,12 +102,12 @@ export const postConfirmCode = async (username, confirmCode) => {
 };
 
 export const getUserIcon = async (username) => {
-  const response = await axios.get(`${AWS_ENDPOINT}/users/${username}/avatar.png`);
-  console.log(response);
-  if (response.status != 200) {
+  try {
+    const response = await axios.get(`${AWS_ENDPOINT}/users/${username}/avatar.png`);
+    return `${AWS_ENDPOINT}/users/${username}/avatar.png`;
+  } catch {
     return "/propic.png";
   }
-  return `${AWS_ENDPOINT}/users/${username}/avatar.png`;
 };
 
 /* User routing */
@@ -117,8 +117,20 @@ export const getUser = async (username) => {
   const response = await axios.get(`${ENDPOINT}/users/${username}`, {
     headers: { authorization: `Bearer ${token}` },
   });
-  console.log(response.data);
   return response.data;
+};
+
+export const manageFriend = async (username, action) => {
+  const token = await getToken();
+  const response = await axios.put(
+    `${ENDPOINT}/users/updateRelationship`,
+    {
+      targetUsername: username,
+      action: action,
+    },
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
 };
 
 /* Feed routing */

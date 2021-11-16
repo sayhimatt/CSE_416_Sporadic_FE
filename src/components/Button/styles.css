@@ -1,5 +1,6 @@
 :root {
   --primary: #189ab4;
+  --secondary: #d4f1f4;
   --special: #ff6c6c;
 }
 
@@ -20,6 +21,11 @@
 
 .btn--special {
   background-color: var(--special);
+}
+
+.btn--secondary {
+  background-color: var(--secondary);
+  color: black;
 }
 
 /* Button Sizes */

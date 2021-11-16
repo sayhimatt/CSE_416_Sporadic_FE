@@ -16,6 +16,7 @@ import Quiz from "./pages/Quiz/Quiz";
 import CreateQuiz from "./pages/CreateQuiz/CreateQuiz";
 import MyAccount from "./pages/MyAccount/MyAccount";
 import QuizComplete from "./pages/Quiz/QuizComplete";
+import Friends from "./pages/Friends/Friends";
 import "./App.scss";
 
 const MainRouter = () => {
@@ -32,6 +33,7 @@ const MainRouter = () => {
           <GuardedRoute exact path="/myAccount" component={MyAccount}></GuardedRoute>
           <GuardedRoute exact path="/About" component={Feed}></GuardedRoute>
           <GuardedRoute exact path="/Contact" component={Feed}></GuardedRoute>
+          <GuardedRoute exact path="/friends" component={Friends} />
           <GuardedRoute exact path="/p/:platform" component={Platform} />
           <GuardedRoute exact path="/createPlatform" component={CreatePlatform} />
           <GuardedRoute exact path="/p/:platform/createQuiz" component={CreateQuiz} />
