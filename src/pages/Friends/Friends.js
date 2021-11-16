@@ -23,6 +23,10 @@ const Friends = () => {
 
   const addFriend = () => {
     const username = search;
+    if (friends.includes(username)) {
+      alert(`You are already friends with ${username}`);
+      return;
+    }
     manageFriend(username, "add")
       .then((res) => setFriends((prevState) => [...prevState, username]))
       .catch((e) => alert("User does not exist"));
