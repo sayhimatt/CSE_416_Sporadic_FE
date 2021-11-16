@@ -121,6 +121,19 @@ export const getUser = async (username) => {
   return response.data;
 };
 
+export const manageFriend = async (username, action) => {
+  const token = await getToken();
+  const response = await axios.put(
+    `${ENDPOINT}/users/updateRelationship`,
+    {
+      targetUsername: username,
+      action: action,
+    },
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
+};
+
 /* Feed routing */
 export const getFeedQuizzes = async (username) => {
   return;

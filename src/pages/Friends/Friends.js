@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Button/Button";
-import { getUser } from "../../API/API";
+import SmallCard from "../../components/Card/SmallCard/SmallCard";
+import { getUser, manageFriend } from "../../API/API";
 import { AuthContext } from "../../contexts/AuthContext/AuthContext";
 
 import "./styles.scss";
@@ -18,10 +19,19 @@ const Friends = () => {
     getUser(auth.username)
       .then((res) => setFriends(res.friends))
       .catch((e) => console.log("Could not get user"));
-  }, []);
+  }, [friends]);
 
   const addFriend = () => {
-    //todo
+    const username = search;
+    manageFriend(username, "add")
+      .then((res) => setFriends((prevState) => [...prevState, username]))
+      .catch((e) => alert("User does not exist"));
+  };
+
+  const removeFriend = (username) => {
+    manageFriend(username, "remove")
+      .then((res) => setFriends([]))
+      .catch((e) => alert("Could not remove friend"));
   };
 
   return (
@@ -38,8 +48,8 @@ const Friends = () => {
           </Link>,
         ]}
       />
-      <div className="page-content d-flex justify-content-center">
-        <div className="d-flex flex-row">
+      <div className="page-content d-flex flex-column align-items-center">
+        <div className="d-flex flex-row mb-3 mt-3">
           <div className="searchBar searchBar--border d-flex align-items-center">
             <input
               className="search"
@@ -49,7 +59,15 @@ const Friends = () => {
           </div>
           <Button onClick={addFriend}>Add Friend</Button>
         </div>
-        <div className="small-card-list"></div>
+        <div className="small-card-list w-50">
+          {friends &&
+            friends.map((friend) => (
+              <SmallCard
+                username={friend}
+                rightCard={<Button onClick={(e) => removeFriend(friend)}>Remove Friend</Button>}
+              ></SmallCard>
+            ))}
+        </div>
       </div>
     </div>
   );
