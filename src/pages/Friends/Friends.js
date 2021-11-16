@@ -19,7 +19,7 @@ const Friends = () => {
     getUser(auth.username)
       .then((res) => setFriends(res.friends))
       .catch((e) => console.log("Could not get user"));
-  }, [friends]);
+  }, []);
 
   const addFriend = () => {
     const username = search;
@@ -30,7 +30,7 @@ const Friends = () => {
 
   const removeFriend = (username) => {
     manageFriend(username, "remove")
-      .then((res) => setFriends([]))
+      .then((res) => setFriends((prevState) => prevState.filter((user) => user !== username)))
       .catch((e) => alert("Could not remove friend"));
   };
 
@@ -63,6 +63,7 @@ const Friends = () => {
           {friends &&
             friends.map((friend) => (
               <SmallCard
+                key={friend}
                 username={friend}
                 rightCard={<Button onClick={(e) => removeFriend(friend)}>Remove Friend</Button>}
               ></SmallCard>
