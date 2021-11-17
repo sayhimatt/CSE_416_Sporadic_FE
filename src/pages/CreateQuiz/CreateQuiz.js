@@ -13,14 +13,9 @@ import "./styles.css";
 const CreateQuiz = () => {
   const [questions, setQuestions] = useState([defaultQuestion()]);
   const [quizInfo, setQuizInfo] = useState(defaultQuiz());
-  const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const params = useParams();
   const history = useHistory();
-
-  useEffect(() => {
-    renderCards();
-  }, [questions]);
 
   const setQuizTitle = (newTitle) => {
     setQuizInfo((prevState) => ({ ...prevState, quizTitle: newTitle }));
@@ -117,10 +112,7 @@ const CreateQuiz = () => {
   };
 
   const renderCards = () => {
-    if (!questions) {
-      return;
-    }
-    const cards = questions.map((question, index) => {
+    return questions.map((question, index) => {
       return (
         <div key={`Q${index}`} className="d-flex flex-row">
           <QuestionCard
@@ -148,7 +140,6 @@ const CreateQuiz = () => {
         </div>
       );
     });
-    setCards(cards);
   };
 
   return (
@@ -189,7 +180,9 @@ const CreateQuiz = () => {
             Publish Quiz
           </Button>
         </div>
-        <div className="quiz-cards d-flex flex-column flex-grow-1 me-4">{cards}</div>
+        <div className="quiz-cards d-flex flex-column flex-grow-1 me-4">
+          {questions && renderCards()}
+        </div>
       </div>
       <LoadingOverlay isVisible={isLoading} />
     </div>
