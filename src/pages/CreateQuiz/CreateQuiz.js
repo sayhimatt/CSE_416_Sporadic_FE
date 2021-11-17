@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router";
+import Alert from "react-bootstrap/Alert";
 
 import { postCreateQuiz } from "../../API/API";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard";
@@ -14,6 +15,7 @@ const CreateQuiz = () => {
   const [questions, setQuestions] = useState([defaultQuestion()]);
   const [quizInfo, setQuizInfo] = useState(defaultQuiz());
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({ show: false, messages: [] });
   const params = useParams();
   const history = useHistory();
 
@@ -42,6 +44,13 @@ const CreateQuiz = () => {
   };
 
   const deleteQuestion = (questionNumber) => {
+    if (questions.length === 1) {
+      setErrors({
+        show: true,
+        messages: ["Your quiz must have at least one question"],
+      });
+      return;
+    }
     setQuestions((prevState) => prevState.filter((question, index) => questionNumber !== index));
   };
 
@@ -70,7 +79,6 @@ const CreateQuiz = () => {
 
   const publishQuiz = () => {
     if (!checkFields()) {
-      alert("Fields are incomplete");
       return;
     }
     const correctAnswers = questions.map((question) => question.correctAnswer);
@@ -95,20 +103,76 @@ const CreateQuiz = () => {
   };
 
   const checkFields = () => {
-    return checkQuizTitle() && checkDescription() && checkTimer();
+    setErrors({ show: false, messages: [] });
+    const validQuizTitle = checkQuizTitle();
+    const validDescription = checkDescription();
+    const validTimer = checkTimer();
+    const validQuestions = checkQuestions();
+    const validAnswers = checkAnswers();
+    if (!validQuizTitle || !validDescription || !validTimer || !validQuestions || !validAnswers) {
+      setErrors((prevState) => ({ ...prevState, show: true }));
+      return false;
+    }
+    return true;
   };
 
   const checkQuizTitle = () => {
-    return 1 <= quizInfo.quizTitle.length;
+    if (quizInfo.quizTitle.length === 0) {
+      setErrors((prevState) => ({
+        ...prevState,
+        messages: prevState.messages.concat(["Quiz title cannot be empty"]),
+      }));
+      return false;
+    }
+    return true;
   };
 
   const checkDescription = () => {
-    return 1 <= quizInfo.description.length;
+    if (quizInfo.description.length === 0) {
+      setErrors((prevState) => ({
+        ...prevState,
+        messages: prevState.messages.concat(["Description cannot be empty"]),
+      }));
+      return false;
+    }
+    return true;
   };
 
   const checkTimer = () => {
-    const timeLimit = parseInt(quizInfo.timeLimit);
-    return timeLimit && 0 < timeLimit;
+    if (!parseInt(quizInfo.timeLimit) || quizInfo.timeLimit < 60 || quizInfo.timeLimit > 600) {
+      setErrors((prevState) => ({
+        ...prevState,
+        messages: prevState.messages.concat(["Quiz time must a number between 60 and 600"]),
+      }));
+      return false;
+    }
+    return true;
+  };
+
+  const checkQuestions = () => {
+    for (let i = 0; i < questions.length; i++) {
+      if (questions[i].body === "") {
+        setErrors((prevState) => ({
+          ...prevState,
+          messages: prevState.messages.concat(["All questions must have a title"]),
+        }));
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const checkAnswers = () => {
+    for (let i = 0; i < questions.length; i++) {
+      if (questions[i].answers.includes("")) {
+        setErrors((prevState) => ({
+          ...prevState,
+          messages: prevState.messages.concat(["Answer choices cannot be left empty"]),
+        }));
+        return false;
+      }
+      return true;
+    }
   };
 
   const renderCards = () => {
@@ -142,10 +206,29 @@ const CreateQuiz = () => {
     });
   };
 
+  const renderErrors = () => {
+    if (errors.messages.length === 0) {
+      return;
+    }
+    return (
+      <Alert
+        variant="danger"
+        show={errors.show}
+        onClose={() => setErrors({ show: false, messages: [] })}
+        dismissible
+      >
+        {errors.messages.map((message, index) => (
+          <div key={`error-${index}`}>{message}</div>
+        ))}
+      </Alert>
+    );
+  };
+
   return (
     <div>
       <NavBar />
       <PlatformSubNav platformName={params.platform} />
+      {renderErrors()}
       <div className="page-content d-flex flex-row justify-content-between m-4">
         <div id="quiz-controller" className="d-flex flex-column align-items-center">
           <div className="quiz-info d-flex flex-column align-items-center mb-5">
@@ -194,7 +277,7 @@ const defaultQuestion = () => {
 };
 
 const defaultQuiz = () => {
-  return { quizTitle: "", timeLimit: 60, description: "" };
+  return { quizTitle: "", timeLimit: "", description: "" };
 };
 
 export default CreateQuiz;
