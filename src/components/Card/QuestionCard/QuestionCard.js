@@ -45,7 +45,7 @@ const Question = ({
               )
             }
           />
-          <span class="checkmark" />
+          <span className="checkmark" />
         </label>
       </div>
     );
