@@ -98,7 +98,7 @@ const CreateQuiz = () => {
       .then((res) => history.push(`/p/${params.platform}`))
       .catch((error) => {
         setIsLoading(false);
-        alert("could not publish quiz");
+        setErrors({ show: true, messages: ["Quiz name already taken"] });
       });
   };
 
@@ -228,40 +228,53 @@ const CreateQuiz = () => {
     <div>
       <NavBar />
       <PlatformSubNav platformName={params.platform} />
-      {renderErrors()}
+      <div className="quiz-alerts">{renderErrors()}</div>
       <div className="page-content d-flex flex-row justify-content-between m-4">
         <div id="quiz-controller" className="d-flex flex-column align-items-center">
-          <div className="quiz-info d-flex flex-column align-items-center mb-5">
+          <div className="quiz-info">
             <h2 className="color-secondary">Quiz Creation</h2>
-            <div id="quiz-title-input" className="input-box">
-              <textarea
-                className="input"
-                placeholder="Quiz Title"
-                maxLength={75}
-                onChange={(e) => setQuizTitle(e.target.value)}
-              ></textarea>
+            <div className="quiz-info-section">
+              <label>Title</label>
+              <div id="quiz-title-input" className="input-box">
+                <textarea
+                  className="input"
+                  placeholder="Quiz Title"
+                  maxLength={75}
+                  onChange={(e) => setQuizTitle(e.target.value)}
+                />
+              </div>
             </div>
-            <div id="quiz-description-input" className="input-box">
-              <textarea
-                className="input"
-                placeholder="Description"
-                maxLength={500}
-                onChange={(e) => setDescription(e.target.value)}
-              ></textarea>
+            <div className="quiz-info-section">
+              <label>About</label>
+              <div id="quiz-description-input" className="input-box">
+                <textarea
+                  className="input"
+                  placeholder="Description"
+                  maxLength={500}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
             </div>
-            <div id="timer-input" className="input-box">
-              <input
-                className="input text-center"
-                placeholder="Time Limit (seconds)"
-                maxLength={3}
-                onChange={(e) => setTimeLimit(e.target.value)}
-              />
+            <div className="quiz-info-section">
+              <label>Time Limit (in seconds)</label>
+              <div id="timer-input" className="input-box">
+                <input
+                  className="input text-center"
+                  placeholder="Time Limit"
+                  maxLength={3}
+                  onChange={(e) => setTimeLimit(e.target.value)}
+                />
+              </div>
             </div>
-            <Button onClick={addQuestion}>Add Question</Button>
+            <div className="mt-4">
+              <Button onClick={addQuestion}>Add Question</Button>
+            </div>
           </div>
-          <Button buttonStyle="btn--special" buttonSize="btn--large" onClick={publishQuiz}>
-            Publish Quiz
-          </Button>
+          <div className="d-flex flex-column w-50">
+            <Button buttonStyle="btn--special" buttonSize="btn--large" onClick={publishQuiz}>
+              Publish Quiz
+            </Button>
+          </div>
         </div>
         <div className="quiz-cards d-flex flex-column flex-grow-1 me-4">
           {questions && renderCards()}
