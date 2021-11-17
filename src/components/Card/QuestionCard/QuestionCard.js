@@ -19,7 +19,13 @@ const Question = ({
               value={answer}
               placeholder="Answer Choice"
               id={`Q${information.questionIndex}A${index}`}
-              onChange={answerTextHandler}
+              onChange={(e) =>
+                answerTextHandler(
+                  parseInt(e.target.id.charAt(1)),
+                  parseInt(e.target.id.charAt(3)),
+                  e.target.value,
+                )
+              }
               maxLength={500}
             ></textarea>
           ) : (
@@ -32,7 +38,12 @@ const Question = ({
             value={"Q" + information.questionIndex + "C" + index}
             checked={create ? information.choice === index : null}
             name={"answer" + information.questionIndex}
-            onChange={correctAnswerHandler}
+            onChange={(e) =>
+              correctAnswerHandler(
+                parseInt(e.target.value.charAt(1)),
+                parseInt(e.target.value.charAt(3)),
+              )
+            }
           />
           <span class="checkmark" />
         </label>
@@ -49,7 +60,7 @@ const Question = ({
             value={information.question}
             placeholder="Question Title"
             id={`Q${information.questionIndex}title`}
-            onChange={titleHandler}
+            onChange={(e) => titleHandler(parseInt(e.target.id.charAt(1)), e.target.value)}
             maxLength={500}
           ></textarea>
         ) : (

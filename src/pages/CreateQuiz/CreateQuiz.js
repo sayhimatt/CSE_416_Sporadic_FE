@@ -22,23 +22,22 @@ const CreateQuiz = () => {
     renderCards();
   }, [questions]);
 
-  const setQuizTitle = (e) => {
-    setQuizInfo((prevState) => ({ ...prevState, quizTitle: e.target.value }));
+  const setQuizTitle = (newTitle) => {
+    setQuizInfo((prevState) => ({ ...prevState, quizTitle: newTitle }));
   };
 
-  const setDescription = (e) => {
-    setQuizInfo((prevState) => ({ ...prevState, description: e.target.value }));
+  const setDescription = (newDescription) => {
+    setQuizInfo((prevState) => ({ ...prevState, description: newDescription }));
   };
 
-  const setTimeLimit = (e) => {
-    setQuizInfo((prevState) => ({ ...prevState, timeLimit: e.target.value }));
+  const setTimeLimit = (newTimeLimit) => {
+    setQuizInfo((prevState) => ({ ...prevState, timeLimit: newTimeLimit }));
   };
 
-  const setQuestionTitle = (e) => {
-    const id = parseInt(e.target.id.charAt(1));
+  const setQuestionTitle = (questionNumber, title) => {
     setQuestions((prevState) =>
       prevState.map((question, index) =>
-        index === id ? { ...question, body: e.target.value } : question,
+        index === questionNumber ? { ...question, body: title } : question,
       ),
     );
   };
@@ -47,22 +46,18 @@ const CreateQuiz = () => {
     setQuestions((prevState) => [...prevState, defaultQuestion()]);
   };
 
-  const deleteQuestion = (e) => {
-    e.preventDefault();
-    const id = parseInt(e.target.id.charAt(e.target.id.length - 1));
-    setQuestions((prevState) => prevState.filter((question, index) => id !== index));
+  const deleteQuestion = (questionNumber) => {
+    setQuestions((prevState) => prevState.filter((question, index) => questionNumber !== index));
   };
 
-  const setAnswerText = (e) => {
-    const questionNumber = parseInt(e.target.id.charAt(1));
-    const answerNumber = parseInt(e.target.id.charAt(3));
+  const setAnswerText = (questionNumber, answerNumber, text) => {
     setQuestions((prevState) =>
       prevState.map((question, index) =>
         index === questionNumber
           ? {
               ...question,
               answers: question.answers.map((answer, answerIndex) =>
-                answerIndex === answerNumber ? e.target.value : answer,
+                answerIndex === answerNumber ? text : answer,
               ),
             }
           : question,
@@ -70,9 +65,7 @@ const CreateQuiz = () => {
     );
   };
 
-  const setCorrectAnswer = (e) => {
-    const questionNumber = parseInt(e.target.value.charAt(1));
-    const answerNumber = parseInt(e.target.value.charAt(3));
+  const setCorrectAnswer = (questionNumber, answerNumber) => {
     setQuestions((prevState) =>
       prevState.map((question, index) =>
         index === questionNumber ? { ...question, correctAnswer: answerNumber } : question,
@@ -142,7 +135,14 @@ const CreateQuiz = () => {
             answerTextHandler={setAnswerText}
             correctAnswerHandler={setCorrectAnswer}
           />
-          <a className="delete-question" href="#" onClick={deleteQuestion}>
+          <a
+            className="delete-question"
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              deleteQuestion(parseInt(e.target.id.charAt(e.target.id.length - 1)));
+            }}
+          >
             <img id={`delete-question-${index}`} alt="delete question" src="/question_delete.svg" />
           </a>
         </div>
@@ -164,7 +164,7 @@ const CreateQuiz = () => {
                 className="input"
                 placeholder="Quiz Title"
                 maxLength={75}
-                onChange={setQuizTitle}
+                onChange={(e) => setQuizTitle(e.target.value)}
               ></textarea>
             </div>
             <div id="quiz-description-input" className="input-box">
@@ -172,7 +172,7 @@ const CreateQuiz = () => {
                 className="input"
                 placeholder="Description"
                 maxLength={500}
-                onChange={setDescription}
+                onChange={(e) => setDescription(e.target.value)}
               ></textarea>
             </div>
             <div id="timer-input" className="input-box">
@@ -180,7 +180,7 @@ const CreateQuiz = () => {
                 className="input text-center"
                 placeholder="Time Limit (seconds)"
                 maxLength={3}
-                onChange={setTimeLimit}
+                onChange={(e) => setTimeLimit(e.target.value)}
               />
             </div>
             <Button onClick={addQuestion}>Add Question</Button>
