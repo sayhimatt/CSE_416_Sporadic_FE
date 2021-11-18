@@ -28,34 +28,28 @@ const MainCreateAccount = () => {
     errorBox: false,
   });
 
-  const checkPasswordField = (input) => {
-    setShowMsg( (prevState) => {
-      return {
-        ...prevState,
-        lengthText:  input.length > 0 && input.length < 8,
-        matchText:
-          credentials.passwordConfirm.length > 0 &&
-            credentials.passwordConfirm !== input,
-      };
-    });
+  const lengthTextContainer = document.querySelector('#lengthTextDiv');
 
-    
+  const matchTextContainer = document.querySelector('#matchTextDiv');
+
+  const checkPasswordInput = (input) => {    
+    if (input.length > 0 && input.length < 8)
+      ReactDOM.render( <ErrorText text="Password must be at least 8 characters long"/>, lengthTextContainer );
+    else 
+      ReactDOM.unmountComponentAtNode(lengthTextContainer);
+
+    if (credentials.passwordConfirm.length > 0 && credentials.passwordConfirm !== input)
+      ReactDOM.render( <ErrorText text="Passwords do not match"/>, matchTextContainer);
+    else 
+      ReactDOM.unmountComponentAtNode(matchTextContainer);
   }
 
-//  checkPasswordField(e.target.value);
-
-  const checkConfirmField = (input) => {
-    setShowMsg((prevState) => {
-      return {
-        ...prevState,
-        matchText:
-          input.length > 0 && credentials.password !== input,
-      };
-    });
+  const checkConfirmInput = (input) => {
+    if (input.length > 0 && credentials.password !== input)
+      ReactDOM.render( <ErrorText text="Passwords do not match"/>, matchTextContainer);
+    else
+      ReactDOM.unmountComponentAtNode(matchTextContainer);
   }
-
-//  checkConfirmField(e.target.value);
-  
 
   const createAccount = async () => {      
     setShowMsg((prevState) => {
@@ -135,33 +129,14 @@ const MainCreateAccount = () => {
                 placeholder="Password"
                 type="password"
                 onChange={(e) => {
+                  checkPasswordInput(e.target.value);
                   setCredentials((prevState) => {
-                    checkPasswordField(e.target.value);
-/*
-                    setShowMsg((prevState) => {
-                      return {
-                        ...prevState,
-                        lengthText: e.target.value.length > 0 && e.target.value.length < 8,
-                        matchText:
-                          credentials.passwordConfirm.length > 0 &&
-                          credentials.passwordConfirm !== e.target.value,
-                      };
-                    });
-*/
                     return { ...prevState, password: e.target.value };
                   });
                 }}
               ></input>
             </div>
-            <div id="lengthTextDiv">
-
-            
-
-            <ErrorText
-              visible={showMsg.lengthText} 
-              text="Password must be at least 8 characters long"/> 
-
-            </div>                     
+            <div id="lengthTextDiv"/>               
             <div className="inputBox">
               <input
                 id="passwordConfirm"
@@ -169,27 +144,14 @@ const MainCreateAccount = () => {
                 placeholder="Confirm Password"
                 type="password"
                 onChange={(e) => {
+                  checkConfirmInput(e.target.value);
                   setCredentials((prevState) => {
-                    checkConfirmField(e.target.value);
-  
-/*                    setShowMsg((prevState) => {
-                      return {
-                        ...prevState,
-                        matchText:
-                          e.target.value.length > 0 && credentials.password !== e.target.value,
-                      };
-                    });
-*/
                     return { ...prevState, passwordConfirm: e.target.value };
                   });
                 }}
               ></input>
             </div>
-            <ErrorMessage 
-              visible={showMsg.matchText} 
-              errorStyle="errorText" 
-              text="Passwords do not match"/>  
-
+            <div id='matchTextDiv'/>
           </div>
           <Button type="button" onClick={createAccount}>
             Create Account
