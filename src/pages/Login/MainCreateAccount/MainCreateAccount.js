@@ -21,8 +21,6 @@ const MainCreateAccount = () => {
     passwordConfirm: "",
   });
   const [showMsg, setShowMsg] = useState({
-    lengthText: false,
-    matchText: false,
     lengthBox: false,
     matchBox: false,
     errorBox: false,
