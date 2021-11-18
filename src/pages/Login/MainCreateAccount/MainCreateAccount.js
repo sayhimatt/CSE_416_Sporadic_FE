@@ -147,7 +147,8 @@ const MainCreateAccount = () => {
             <ErrorMessage 
               visible={showMsg.matchText} 
               errorStyle="errorText" 
-              text="Passwords do not match"/>            
+              text="Passwords do not match"/>  
+
           </div>
           <Button type="button" onClick={createAccount}>
             Create Account
