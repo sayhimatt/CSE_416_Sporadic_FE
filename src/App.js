@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import UserContextProvider from "./contexts/UserContext/UserContext";
 import GuardedRoute from "./components/GuardedRoute/GuardedRoute";
+import UnguardedRoute from "./components/UnguardedRoute/UnguardedRoute";
 import Feed from "./pages/Feed/Feed";
 import Login from "./pages/Login/MainLogin/MainLogin";
 import CreateAccount from "./pages/Login/MainCreateAccount/MainCreateAccount";
@@ -42,18 +43,29 @@ const App = () => {
             <Route exact path="/login">
               <Login auth={auth.authenticated} authHandler={setAuthHandler} />
             </Route>
-            <Route exact path="/createAccount">
-              <CreateAccount auth={auth.authenticated} />
-            </Route>
-            <Route exact path="/createAccount/confirmation">
-              <ConfirmEmail auth={auth.authenticated} />
-            </Route>
-            <Route exact path="/forgotPassword">
-              <ForgotPassword auth={auth.authenticated} />
-            </Route>
-            <Route exact path="/forgotPassword/confirmation">
-              <ForgotPasswordConfirmation auth={auth.authenticated} />
-            </Route>
+            <UnguardedRoute
+              exact
+              path="/createAccount"
+              component={CreateAccount}
+              authenticated={auth.authenticated}
+            />
+            <UnguardedRoute
+              exact
+              path="/createAccount/confirmation"
+              component={ConfirmEmail}
+              authenticated={auth.authenticated}
+            />
+            <UnguardedRoute
+              exact
+              path="/forgotPassword"
+              component={ForgotPassword}
+              authenticated={auth.authenticated}
+            />
+            <UnguardedRoute
+              exact
+              path="/forgotPassword/confirmation"
+              component={ForgotPasswordConfirmation}
+            />
             <GuardedRoute exact path="/" component={Feed} authenticated={auth.authenticated} />
             <GuardedRoute
               exact

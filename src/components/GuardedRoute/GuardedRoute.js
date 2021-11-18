@@ -1,7 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Route, Redirect } from "react-router-dom";
-
-import { AuthContext } from "../../contexts/UserContext/UserContext";
 
 const GuardedRoute = ({ component: Component, authenticated, ...rest }) => {
   return (
