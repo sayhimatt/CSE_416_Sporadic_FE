@@ -153,14 +153,25 @@ const Platform = () => {
             <input className="search" placeholder="Search"></input>
           </div>
           {modView && (
-            <Button buttonSize="btn--large">
-              <Link
-                className="link d-flex justify-content-center"
-                to={`/p/${params.platform}/createQuiz`}
-              >
-                Create Quiz
-              </Link>
-            </Button>
+            <div className="d-flex flex-column w-100">
+              <Button buttonSize="btn--large">
+                <Link
+                  className="link d-flex justify-content-center"
+                  to={`/p/${params.platform}/createQuiz`}
+                >
+                  Create Quiz
+                </Link>
+              </Button>
+              <div className="p-1"></div>
+              <Button buttonStyle="btn--special" buttonSize="btn--large">
+                <Link
+                  className="link d-flex justify-content-center"
+                  to={`/p/${params.platform}/subscribers`}
+                >
+                  Manage Subscribers
+                </Link>
+              </Button>
+            </div>
           )}
           <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">
             {platform.description}
