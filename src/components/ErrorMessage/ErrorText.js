@@ -5,7 +5,6 @@ import React from "react";
 import "./styles.css";
 
 const ErrorText = ({visible, text}) => {
-
   if (visible) {
     return (
         <div className= {`errorText`}>

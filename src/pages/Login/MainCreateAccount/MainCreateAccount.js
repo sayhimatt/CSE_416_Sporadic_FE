@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
-
+import ReactDOM from 'react-dom'
 import { postCreateAccount } from "../../../API/API";
 import Button from "../../../components/Button/Button";
 import ErrorMessage from  "../../../components/ErrorMessage/ErrorMessage";
+import ErrorText from  "../../../components/ErrorMessage/ErrorText";
 import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay";
 import "../styles.css";
 import { resolveConfig } from "prettier";
@@ -26,6 +27,35 @@ const MainCreateAccount = () => {
     matchBox: false,
     errorBox: false,
   });
+
+  const checkPasswordField = (input) => {
+    setShowMsg( (prevState) => {
+      return {
+        ...prevState,
+        lengthText:  input.length > 0 && input.length < 8,
+        matchText:
+          credentials.passwordConfirm.length > 0 &&
+            credentials.passwordConfirm !== input,
+      };
+    });
+
+    
+  }
+
+//  checkPasswordField(e.target.value);
+
+  const checkConfirmField = (input) => {
+    setShowMsg((prevState) => {
+      return {
+        ...prevState,
+        matchText:
+          input.length > 0 && credentials.password !== input,
+      };
+    });
+  }
+
+//  checkConfirmField(e.target.value);
+  
 
   const createAccount = async () => {      
     setShowMsg((prevState) => {
@@ -106,6 +136,8 @@ const MainCreateAccount = () => {
                 type="password"
                 onChange={(e) => {
                   setCredentials((prevState) => {
+                    checkPasswordField(e.target.value);
+/*
                     setShowMsg((prevState) => {
                       return {
                         ...prevState,
@@ -115,15 +147,21 @@ const MainCreateAccount = () => {
                           credentials.passwordConfirm !== e.target.value,
                       };
                     });
+*/
                     return { ...prevState, password: e.target.value };
                   });
                 }}
               ></input>
             </div>
-            <ErrorMessage 
+            <div id="lengthTextDiv">
+
+            
+
+            <ErrorText
               visible={showMsg.lengthText} 
-              errorStyle="errorText" 
-              text="Password must be at least 8 characters long"/>                      
+              text="Password must be at least 8 characters long"/> 
+
+            </div>                     
             <div className="inputBox">
               <input
                 id="passwordConfirm"
@@ -132,13 +170,16 @@ const MainCreateAccount = () => {
                 type="password"
                 onChange={(e) => {
                   setCredentials((prevState) => {
-                    setShowMsg((prevState) => {
+                    checkConfirmField(e.target.value);
+  
+/*                    setShowMsg((prevState) => {
                       return {
                         ...prevState,
                         matchText:
                           e.target.value.length > 0 && credentials.password !== e.target.value,
                       };
                     });
+*/
                     return { ...prevState, passwordConfirm: e.target.value };
                   });
                 }}
