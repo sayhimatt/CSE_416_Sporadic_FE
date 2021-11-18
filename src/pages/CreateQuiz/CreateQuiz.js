@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router";
+import Alert from "react-bootstrap/Alert";
 
 import { postCreateQuiz } from "../../API/API";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard";
@@ -13,32 +14,27 @@ import "./styles.css";
 const CreateQuiz = () => {
   const [questions, setQuestions] = useState([defaultQuestion()]);
   const [quizInfo, setQuizInfo] = useState(defaultQuiz());
-  const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({ show: false, messages: [] });
   const params = useParams();
   const history = useHistory();
 
-  useEffect(() => {
-    renderCards();
-  }, [questions]);
-
-  const setQuizTitle = (e) => {
-    setQuizInfo((prevState) => ({ ...prevState, quizTitle: e.target.value }));
+  const setQuizTitle = (newTitle) => {
+    setQuizInfo((prevState) => ({ ...prevState, quizTitle: newTitle }));
   };
 
-  const setDescription = (e) => {
-    setQuizInfo((prevState) => ({ ...prevState, description: e.target.value }));
+  const setDescription = (newDescription) => {
+    setQuizInfo((prevState) => ({ ...prevState, description: newDescription }));
   };
 
-  const setTimeLimit = (e) => {
-    setQuizInfo((prevState) => ({ ...prevState, timeLimit: e.target.value }));
+  const setTimeLimit = (newTimeLimit) => {
+    setQuizInfo((prevState) => ({ ...prevState, timeLimit: newTimeLimit }));
   };
 
-  const setQuestionTitle = (e) => {
-    const id = parseInt(e.target.id.charAt(1));
+  const setQuestionTitle = (questionNumber, title) => {
     setQuestions((prevState) =>
       prevState.map((question, index) =>
-        index === id ? { ...question, body: e.target.value } : question,
+        index === questionNumber ? { ...question, body: title } : question,
       ),
     );
   };
@@ -47,22 +43,25 @@ const CreateQuiz = () => {
     setQuestions((prevState) => [...prevState, defaultQuestion()]);
   };
 
-  const deleteQuestion = (e) => {
-    e.preventDefault();
-    const id = parseInt(e.target.id.charAt(e.target.id.length - 1));
-    setQuestions((prevState) => prevState.filter((question, index) => id !== index));
+  const deleteQuestion = (questionNumber) => {
+    if (questions.length === 1) {
+      setErrors({
+        show: true,
+        messages: ["Your quiz must have at least one question"],
+      });
+      return;
+    }
+    setQuestions((prevState) => prevState.filter((question, index) => questionNumber !== index));
   };
 
-  const setAnswerText = (e) => {
-    const questionNumber = parseInt(e.target.id.charAt(1));
-    const answerNumber = parseInt(e.target.id.charAt(3));
+  const setAnswerText = (questionNumber, answerNumber, text) => {
     setQuestions((prevState) =>
       prevState.map((question, index) =>
         index === questionNumber
           ? {
               ...question,
               answers: question.answers.map((answer, answerIndex) =>
-                answerIndex === answerNumber ? e.target.value : answer,
+                answerIndex === answerNumber ? text : answer,
               ),
             }
           : question,
@@ -70,9 +69,7 @@ const CreateQuiz = () => {
     );
   };
 
-  const setCorrectAnswer = (e) => {
-    const questionNumber = parseInt(e.target.value.charAt(1));
-    const answerNumber = parseInt(e.target.value.charAt(3));
+  const setCorrectAnswer = (questionNumber, answerNumber) => {
     setQuestions((prevState) =>
       prevState.map((question, index) =>
         index === questionNumber ? { ...question, correctAnswer: answerNumber } : question,
@@ -82,7 +79,6 @@ const CreateQuiz = () => {
 
   const publishQuiz = () => {
     if (!checkFields()) {
-      alert("Fields are incomplete");
       return;
     }
     const correctAnswers = questions.map((question) => question.correctAnswer);
@@ -102,32 +98,85 @@ const CreateQuiz = () => {
       .then((res) => history.push(`/p/${params.platform}`))
       .catch((error) => {
         setIsLoading(false);
-        alert("could not publish quiz");
+        setErrors({ show: true, messages: ["Quiz name already taken"] });
       });
   };
 
   const checkFields = () => {
-    return checkQuizTitle() && checkDescription() && checkTimer();
+    setErrors({ show: false, messages: [] });
+    const validQuizTitle = checkQuizTitle();
+    const validDescription = checkDescription();
+    const validTimer = checkTimer();
+    const validQuestions = checkQuestions();
+    const validAnswers = checkAnswers();
+    if (!validQuizTitle || !validDescription || !validTimer || !validQuestions || !validAnswers) {
+      setErrors((prevState) => ({ ...prevState, show: true }));
+      return false;
+    }
+    return true;
   };
 
   const checkQuizTitle = () => {
-    return 1 <= quizInfo.quizTitle.length;
+    if (quizInfo.quizTitle.length === 0) {
+      setErrors((prevState) => ({
+        ...prevState,
+        messages: prevState.messages.concat(["Quiz title cannot be empty"]),
+      }));
+      return false;
+    }
+    return true;
   };
 
   const checkDescription = () => {
-    return 1 <= quizInfo.description.length;
+    if (quizInfo.description.length === 0) {
+      setErrors((prevState) => ({
+        ...prevState,
+        messages: prevState.messages.concat(["Description cannot be empty"]),
+      }));
+      return false;
+    }
+    return true;
   };
 
   const checkTimer = () => {
-    const timeLimit = parseInt(quizInfo.timeLimit);
-    return timeLimit && 0 < timeLimit;
+    if (!parseInt(quizInfo.timeLimit) || quizInfo.timeLimit < 60 || quizInfo.timeLimit > 600) {
+      setErrors((prevState) => ({
+        ...prevState,
+        messages: prevState.messages.concat(["Quiz time must a number between 60 and 600"]),
+      }));
+      return false;
+    }
+    return true;
+  };
+
+  const checkQuestions = () => {
+    for (let i = 0; i < questions.length; i++) {
+      if (questions[i].body === "") {
+        setErrors((prevState) => ({
+          ...prevState,
+          messages: prevState.messages.concat(["All questions must have a title"]),
+        }));
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const checkAnswers = () => {
+    for (let i = 0; i < questions.length; i++) {
+      if (questions[i].answers.includes("")) {
+        setErrors((prevState) => ({
+          ...prevState,
+          messages: prevState.messages.concat(["Answer choices cannot be left empty"]),
+        }));
+        return false;
+      }
+      return true;
+    }
   };
 
   const renderCards = () => {
-    if (!questions) {
-      return;
-    }
-    const cards = questions.map((question, index) => {
+    return questions.map((question, index) => {
       return (
         <div key={`Q${index}`} className="d-flex flex-row">
           <QuestionCard
@@ -142,54 +191,94 @@ const CreateQuiz = () => {
             answerTextHandler={setAnswerText}
             correctAnswerHandler={setCorrectAnswer}
           />
-          <a className="delete-question" href="#" onClick={deleteQuestion}>
+          <a
+            className="delete-question"
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              deleteQuestion(parseInt(e.target.id.charAt(e.target.id.length - 1)));
+            }}
+          >
             <img id={`delete-question-${index}`} alt="delete question" src="/question_delete.svg" />
           </a>
         </div>
       );
     });
-    setCards(cards);
+  };
+
+  const renderErrors = () => {
+    if (errors.messages.length === 0) {
+      return;
+    }
+    return (
+      <Alert
+        variant="danger"
+        show={errors.show}
+        onClose={() => setErrors({ show: false, messages: [] })}
+        dismissible
+      >
+        {errors.messages.map((message, index) => (
+          <div key={`error-${index}`}>{message}</div>
+        ))}
+      </Alert>
+    );
   };
 
   return (
     <div>
       <NavBar />
       <PlatformSubNav platformName={params.platform} />
+      <div className="quiz-alerts">{renderErrors()}</div>
       <div className="page-content d-flex flex-row justify-content-between m-4">
         <div id="quiz-controller" className="d-flex flex-column align-items-center">
-          <div className="quiz-info d-flex flex-column align-items-center mb-5">
+          <div className="quiz-info">
             <h2 className="color-secondary">Quiz Creation</h2>
-            <div id="quiz-title-input" className="input-box">
-              <textarea
-                className="input"
-                placeholder="Quiz Title"
-                maxLength={75}
-                onChange={setQuizTitle}
-              ></textarea>
+            <div className="quiz-info-section">
+              <label>Title</label>
+              <div id="quiz-title-input" className="input-box">
+                <textarea
+                  className="input"
+                  placeholder="Quiz Title"
+                  maxLength={75}
+                  onChange={(e) => setQuizTitle(e.target.value)}
+                />
+              </div>
             </div>
-            <div id="quiz-description-input" className="input-box">
-              <textarea
-                className="input"
-                placeholder="Description"
-                maxLength={500}
-                onChange={setDescription}
-              ></textarea>
+            <div className="quiz-info-section">
+              <label>About</label>
+              <div id="quiz-description-input" className="input-box">
+                <textarea
+                  className="input"
+                  placeholder="Description"
+                  maxLength={500}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
             </div>
-            <div id="timer-input" className="input-box">
-              <input
-                className="input text-center"
-                placeholder="Time Limit (seconds)"
-                maxLength={3}
-                onChange={setTimeLimit}
-              />
+            <div className="quiz-info-section">
+              <label>Time Limit (in seconds)</label>
+              <div id="timer-input" className="input-box">
+                <input
+                  className="input text-center"
+                  placeholder="Time Limit"
+                  maxLength={3}
+                  onChange={(e) => setTimeLimit(e.target.value)}
+                />
+              </div>
             </div>
-            <Button onClick={addQuestion}>Add Question</Button>
+            <div className="mt-4">
+              <Button onClick={addQuestion}>Add Question</Button>
+            </div>
           </div>
-          <Button buttonStyle="btn--special" buttonSize="btn--large" onClick={publishQuiz}>
-            Publish Quiz
-          </Button>
+          <div className="d-flex flex-column w-50">
+            <Button buttonStyle="btn--special" buttonSize="btn--large" onClick={publishQuiz}>
+              Publish Quiz
+            </Button>
+          </div>
         </div>
-        <div className="quiz-cards d-flex flex-column flex-grow-1 me-4">{cards}</div>
+        <div className="quiz-cards d-flex flex-column flex-grow-1 me-4">
+          {questions && renderCards()}
+        </div>
       </div>
       <LoadingOverlay isVisible={isLoading} />
     </div>
@@ -201,7 +290,7 @@ const defaultQuestion = () => {
 };
 
 const defaultQuiz = () => {
-  return { quizTitle: "", timeLimit: 60, description: "" };
+  return { quizTitle: "", timeLimit: "", description: "" };
 };
 
 export default CreateQuiz;

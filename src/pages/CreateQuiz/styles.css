@@ -1,6 +1,6 @@
 #quiz-controller {
   position: sticky;
-  top: 15vh;
+  top: 14vh;
   width: 50vw;
   height: 70%;
   margin: 10px 3em;
@@ -11,17 +11,19 @@
 }
 
 #quiz-controller #timer-input {
-  width: 30%;
-  margin-bottom: 2em;
+  width: 40%;
 }
 
 .quiz-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5em;
   width: 100%;
 }
 
 #quiz-controller .input-box {
-  margin: 10px 0px;
-  width: 70%;
+  width: 100%;
 }
 
 #quiz-title-input {
@@ -29,11 +31,30 @@
 }
 
 #quiz-description-input {
-  height: 10em;
+  height: 8em;
 }
 
 .delete-question {
   margin-top: 10px;
   width: 28px;
   height: 28px;
+}
+
+.quiz-info-section {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  margin: 0.3em 0em;
+  justify-content: center;
+}
+
+.quiz-info-section > label {
+  font-size: 1.5em;
+}
+
+.quiz-alerts {
+  position: sticky;
+  top: 66px;
+  width: 100%;
+  z-index: 1;
 }
