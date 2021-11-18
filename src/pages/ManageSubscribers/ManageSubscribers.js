@@ -5,7 +5,7 @@ import NavBar from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import Button from "../../components/Button/Button";
 import SmallCard from "../../components/Card/SmallCard/SmallCard";
-import { getPlatform } from "../../API/API";
+import { getPlatform, putBanUser } from "../../API/API";
 import { AuthContext } from "../../contexts/AuthContext/AuthContext";
 
 import "./styles.scss";
@@ -17,13 +17,19 @@ const ManageSubscribers = () => {
   const params = useParams();
 
   useEffect(() => {
-    getPlatform(params.platform)
-      .then((res) => setPlatform(res))
-      .catch((e) => console.log("Could not get platform"));
+    retrievePlatform(params.platform);
   }, []);
 
   const removeSubscriber = (username) => {
-    //todo
+    putBanUser(params.platfor, username)
+      .then((res) => retrievePlatform(params.platform))
+      .catch((e) => console.log(e));
+  };
+
+  const retrievePlatform = (platform) => {
+    getPlatform(platform)
+      .then((res) => setPlatform(res))
+      .catch((e) => console.log("Could not get platform"));
   };
 
   return (

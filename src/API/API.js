@@ -84,6 +84,10 @@ export const postStartQuiz = async (platform, quizTitle) => {
   return response.data;
 };
 
+export const putBanUser = async (platform, username) => {
+  //todo
+};
+
 /* Login Routing */
 
 export const postCreateAccount = async (username, password, email) => {
