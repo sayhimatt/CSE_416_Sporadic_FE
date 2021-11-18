@@ -1,18 +1,17 @@
 import React, { createContext, useReducer, useEffect } from "react";
 
-export const AuthContext = createContext();
+export const UserContext = createContext();
 
-const authReducer = (state, action) => {
+const userReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
       return {
-        authenticated: true,
         username: action.payload.username,
         subscriptions: action.payload.subscriptions || [],
         profilePicture: action.payload.profilePicture || "/propic.png",
       };
     case "LOGOUT":
-      return { authenticated: false, username: "" };
+      return {};
     case "SUBSCRIBE":
       return { ...state, subscriptions: state.subscriptions.concat([action.payload]) };
     case "UNSUBSCRIBE":
@@ -25,15 +24,15 @@ const authReducer = (state, action) => {
   }
 };
 
-export const AuthContextProvider = (props) => {
-  const [auth, dispatch] = useReducer(authReducer, { authenticated: false, username: "" }, () => {
-    const data = JSON.parse(localStorage.getItem("auth"));
-    return data ? data : { authenticated: false, username: "" };
+export const UserContextProvider = (props) => {
+  const [user, dispatch] = useReducer(userReducer, {}, () => {
+    const data = JSON.parse(localStorage.getItem("user"));
+    return data ? data : {};
   });
   useEffect(() => {
-    localStorage.setItem("auth", JSON.stringify(auth));
-  }, [auth]);
-  return <AuthContext.Provider value={{ auth, dispatch }}>{props.children}</AuthContext.Provider>;
+    localStorage.setItem("user", JSON.stringify(user));
+  }, [user]);
+  return <UserContext.Provider value={{ user, dispatch }}>{props.children}</UserContext.Provider>;
 };
 
-export default AuthContextProvider;
+export default UserContextProvider;

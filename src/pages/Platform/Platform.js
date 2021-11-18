@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 
 import { getPlatform, getQuizzesFromPlatform } from "./../../API/API";
-import { AuthContext } from "../../contexts/AuthContext/AuthContext";
+import { UserContext } from "../../contexts/UserContext/UserContext";
 import Button from "../../components/Button/Button";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
@@ -14,11 +14,11 @@ import "./styles.scss";
 const Platform = () => {
   const history = useHistory();
   const params = useParams();
-  const { auth, dispatch } = useContext(AuthContext);
+  const { user, dispatch } = useContext(UserContext);
   const [platform, setPlatform] = useState({});
   const [quizzes, setQuizzes] = useState([]);
   const [quizCards, setQuizCards] = useState([]);
-  const [subscribed, setSubscribed] = useState(auth.subscriptions.includes(params.platform));
+  const [subscribed, setSubscribed] = useState(user.subscriptions.includes(params.platform));
   const [modView, setModView] = useState(false);
 
   useEffect(() => {
@@ -134,7 +134,7 @@ const Platform = () => {
         fileUploadHandlers={{ uploadBanner, uploadIcon }}
       >
         {Object.entries(platform).length !== 0 &&
-          (platform.moderators.includes(auth.username) || platform.owner === auth.username) && (
+          (platform.moderators.includes(user.username) || platform.owner === user.username) && (
             <Button buttonStyle="btn--special" onClick={toggleModView}>
               {modView ? "User View" : "Mod View"}
             </Button>

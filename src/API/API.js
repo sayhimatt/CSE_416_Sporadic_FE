@@ -9,6 +9,10 @@ const getToken = async () => {
   return session.getIdToken().getJwtToken();
 };
 
+export const authenticate = async () => {
+  return await Auth.currentSession();
+};
+
 /* Platforms routing */
 
 export const getPlatform = async (platformName) => {
