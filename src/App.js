@@ -107,6 +107,12 @@ const App = () => {
             />
             <GuardedRoute
               exact
+              path="/p/:platform/subscribers"
+              component={ManageSubscribers}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute
+              exact
               path="/p/:platform/:quiz"
               component={Quiz}
               authenticated={auth.authenticated}

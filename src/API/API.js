@@ -88,8 +88,17 @@ export const postStartQuiz = async (platform, quizTitle) => {
   return response.data;
 };
 
-export const putBanUser = async (platform, username) => {
-  //todo
+export const putBanStatus = async (platform, username, action) => {
+  const token = await getToken();
+  const response = await axios.put(
+    `${ENDPOINT}/platforms/${platform}/updateBannedUsers`,
+    {
+      targetUsername: username,
+      action,
+    },
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
 };
 
 /* Login Routing */

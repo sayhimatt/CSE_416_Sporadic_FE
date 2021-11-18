@@ -5,14 +5,17 @@ import NavBar from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import Button from "../../components/Button/Button";
 import SmallCard from "../../components/Card/SmallCard/SmallCard";
-import { getPlatform, putBanUser } from "../../API/API";
-import { AuthContext } from "../../contexts/AuthContext/AuthContext";
+import { getPlatform, putBanStatus } from "../../API/API";
+import { UserContext } from "../../contexts/UserContext/UserContext";
+import { DropdownButton } from "react-bootstrap";
+import DropdownItem from "react-bootstrap/esm/DropdownItem";
 
 import "./styles.scss";
 
 const ManageSubscribers = () => {
-  const { auth } = useContext(AuthContext);
+  const { user } = useContext(UserContext);
   const [platform, setPlatform] = useState();
+  const [listType, setListType] = useState("Subscribers");
   const [search, setSearch] = useState("");
   const params = useParams();
 
@@ -20,8 +23,8 @@ const ManageSubscribers = () => {
     retrievePlatform(params.platform);
   }, []);
 
-  const removeSubscriber = (username) => {
-    putBanUser(params.platfor, username)
+  const manageBanStatus = (username, action) => {
+    putBanStatus(params.platform, username, action)
       .then((res) => retrievePlatform(params.platform))
       .catch((e) => console.log(e));
   };
@@ -30,6 +33,38 @@ const ManageSubscribers = () => {
     getPlatform(platform)
       .then((res) => setPlatform(res))
       .catch((e) => console.log("Could not get platform"));
+  };
+
+  const loadUserList = () => {
+    if (listType === "Subscribers") {
+      return loadSubscriberList();
+    } else {
+      return loadBannedUserList();
+    }
+  };
+
+  const loadSubscriberList = () => {
+    return platform.subscribers
+      .filter((subscriber) => subscriber.includes(search))
+      .map((subscriber) => (
+        <SmallCard
+          key={subscriber}
+          username={subscriber}
+          rightCard={<Button onClick={(e) => manageBanStatus(subscriber, "add")}>Ban User</Button>}
+        ></SmallCard>
+      ));
+  };
+
+  const loadBannedUserList = () => {
+    return platform.bannedUsers
+      .filter((user) => user.includes(search))
+      .map((user) => (
+        <SmallCard
+          key={user}
+          username={user}
+          rightCard={<Button onClick={(e) => manageBanStatus(user, "remove")}>Unban User</Button>}
+        ></SmallCard>
+      ));
   };
 
   return (
@@ -50,21 +85,12 @@ const ManageSubscribers = () => {
               onChange={(e) => setSearch(e.target.value)}
             ></input>
           </div>
+          <DropdownButton id="list-type-dropdown" title={listType} variant="secondary">
+            <DropdownItem onClick={() => setListType("Subscribers")}>Subscribers</DropdownItem>
+            <DropdownItem onClick={() => setListType("Banned Users")}>Banned Users</DropdownItem>
+          </DropdownButton>
         </div>
-        <div className="small-card-list w-50">
-          {platform &&
-            platform.subscribers
-              .filter((subscriber) => subscriber.includes(search))
-              .map((subscriber) => (
-                <SmallCard
-                  key={subscriber}
-                  username={subscriber}
-                  rightCard={
-                    <Button onClick={(e) => removeSubscriber(subscriber)}>Ban User</Button>
-                  }
-                ></SmallCard>
-              ))}
-        </div>
+        <div className="small-card-list w-50">{platform && loadUserList()}</div>
       </div>
     </div>
   );
