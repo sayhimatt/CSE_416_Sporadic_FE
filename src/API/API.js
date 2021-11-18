@@ -10,12 +10,7 @@ const getToken = async () => {
 };
 
 export const authenticate = async () => {
-  try {
-    await Auth.currentSession();
-    return true;
-  } catch {
-    return false;
-  }
+  return await Auth.currentSession();
 };
 
 /* Platforms routing */

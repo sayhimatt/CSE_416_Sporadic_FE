@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Auth from "@aws-amplify/auth";
 
 import "./styles.css";
@@ -11,11 +11,12 @@ const NavBar = () => {
   const { user, dispatch } = useContext(UserContext);
   const [subscriptionDropdownOpen, setSubscriptionDropdownOpen] = useState(false);
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
+  const history = useHistory();
 
   const logout = async () => {
     await Auth.signOut();
-    dispatch({ type: "LOGOUT" });
     window.location.reload();
+    dispatch({ type: "LOGOUT" });
   };
 
   return (

@@ -22,50 +22,93 @@ import { authenticate } from "./API/API";
 import "./App.scss";
 
 const App = () => {
-  const [auth, setAuth] = useState(false);
+  const [auth, setAuth] = useState({ authenticated: false, complete: false });
 
   useEffect(() => {
-    authenticate().then(setAuth(true));
+    authenticate()
+      .then((res) => setAuth({ authenticated: true, complete: true }))
+      .catch((e) => setAuth({ authenticated: false, complete: true }));
   }, []);
 
+  const setAuthHandler = (booleanValue) => {
+    setAuth((prevState) => ({ ...prevState, authenticated: booleanValue }));
+  };
+
   return (
-    <UserContextProvider>
-      <Router>
-        <Switch>
-          <Route path="/login" component={Login} />
-          <Route exact path="/createAccount" component={CreateAccount} />
-          <Route exact path="/createAccount/confirmation" component={ConfirmEmail} />
-          <Route exact path="/forgotPassword" component={ForgotPassword} />
-          <Route exact path="/forgotPassword/confirmation" component={ForgotPasswordConfirmation} />
-          <GuardedRoute exact path="/" component={Feed} authenticated={auth} />
-          <GuardedRoute exact path="/myAccount" component={MyAccount} authenticated={auth} />
-          <GuardedRoute exact path="/About" component={Feed} authenticated={auth} />
-          <GuardedRoute exact path="/Contact" component={Feed} authenticated={auth} />
-          <GuardedRoute exact path="/friends" component={Friends} authenticated={auth} />
-          <GuardedRoute exact path="/p/:platform" component={Platform} authenticated={auth} />
-          <GuardedRoute
-            exact
-            path="/createPlatform"
-            component={CreatePlatform}
-            authenticated={auth}
-          />
-          <GuardedRoute
-            exact
-            path="/p/:platform/createQuiz"
-            component={CreateQuiz}
-            authenticated={auth}
-          />
-          <GuardedRoute exact path="/p/:platform/:quiz" component={Quiz} authenticated={auth} />
-          <GuardedRoute
-            exact
-            path="/p/:platform/:quiz/complete"
-            component={QuizComplete}
-            authenticated={auth}
-          />
-          <GuardedRoute path="/" component={NotFound} authenticated={auth} />
-        </Switch>
-      </Router>
-    </UserContextProvider>
+    auth.complete && (
+      <UserContextProvider>
+        <Router>
+          <Switch>
+            <Route exact path="/login">
+              <Login auth={auth.authenticated} authHandler={setAuthHandler} />
+            </Route>
+            <Route exact path="/createAccount">
+              <CreateAccount auth={auth.authenticated} />
+            </Route>
+            <Route exact path="/createAccount/confirmation">
+              <ConfirmEmail auth={auth.authenticated} />
+            </Route>
+            <Route exact path="/forgotPassword">
+              <ForgotPassword auth={auth.authenticated} />
+            </Route>
+            <Route exact path="/forgotPassword/confirmation">
+              <ForgotPasswordConfirmation auth={auth.authenticated} />
+            </Route>
+            <GuardedRoute exact path="/" component={Feed} authenticated={auth.authenticated} />
+            <GuardedRoute
+              exact
+              path="/myAccount"
+              component={MyAccount}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute exact path="/About" component={Feed} authenticated={auth.authenticated} />
+            <GuardedRoute
+              exact
+              path="/Contact"
+              component={Feed}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute
+              exact
+              path="/friends"
+              component={Friends}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute
+              exact
+              path="/p/:platform"
+              component={Platform}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute
+              exact
+              path="/createPlatform"
+              component={CreatePlatform}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute
+              exact
+              path="/p/:platform/createQuiz"
+              component={CreateQuiz}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute
+              exact
+              path="/p/:platform/:quiz"
+              component={Quiz}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute
+              exact
+              path="/p/:platform/:quiz/complete"
+              component={QuizComplete}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute path="/" component={NotFound} authenticated={auth.authenticated} />
+          </Switch>
+        </Router>
+      </UserContextProvider>
+    )
   );
 };
 

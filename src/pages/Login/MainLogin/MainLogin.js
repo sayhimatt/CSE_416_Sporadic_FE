@@ -10,7 +10,7 @@ import { getUser, getUserIcon } from "../../../API/API";
 import "../styles.css";
 import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay";
 
-const MainLogin = () => {
+const MainLogin = ({ auth, authHandler }) => {
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
   const [showMsg, setShowMsg] = useState(false);
@@ -38,6 +38,7 @@ const MainLogin = () => {
           profilePicture: profilePicture,
         },
       });
+      authHandler(true);
     } catch (error) {
       setShowMsg(true);
       console.log("error signing in", error);
@@ -45,7 +46,7 @@ const MainLogin = () => {
     }
   };
 
-  return Object.keys(user).length > 0 ? (
+  return auth ? (
     <Redirect to="/" />
   ) : (
     <div className="page d-flex flex-column align-items-center justify-content-start">
@@ -83,8 +84,8 @@ const MainLogin = () => {
           </div>
           <Button
             type="button"
-            onClick={async () => {
-              await login(credentials.username, credentials.password);
+            onClick={() => {
+              login(credentials.username, credentials.password);
             }}
           >
             Log In
