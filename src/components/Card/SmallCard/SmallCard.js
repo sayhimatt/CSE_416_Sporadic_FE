@@ -5,7 +5,7 @@ import { getUserIcon } from "../../../API/API";
 
 import "./styles.scss";
 
-const SmallCard = ({ username, rightCard }) => {
+const SmallCard = ({ username, userTag, rightCard }) => {
   const [profilePicture, setProfilePicture] = useState("");
 
   useEffect(() => {
@@ -16,7 +16,10 @@ const SmallCard = ({ username, rightCard }) => {
     <div className="cardContainer cardContainer--small">
       <div className="card d-flex flex-row align-items-center">
         <img className="profilePicture" src={profilePicture} alt="icon" />
-        <div className="fs-6">{username}</div>
+        <div className="fs-6">
+          {`${username} `}
+          {userTag}
+        </div>
         <div className="flex-grow-1 d-flex justify-content-end ps-3">{rightCard}</div>
       </div>
     </div>

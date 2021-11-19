@@ -104,12 +104,8 @@ const ManageSubscribers = () => {
         return (
           <SmallCard
             key={`subscriber-card-${subscriber}`}
-            username={
-              <div>
-                {`${subscriber} `}
-                {(isModerator || isOwner) && <b className="color-special">(Moderator)</b>}
-              </div>
-            }
+            username={subscriber}
+            userTag={(isModerator || isOwner) && <b className="color-special">(Moderator)</b>}
             rightCard={
               <div className="p-1">
                 <Dropdown>
