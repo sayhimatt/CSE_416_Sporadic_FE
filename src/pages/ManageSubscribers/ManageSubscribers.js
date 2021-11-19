@@ -5,7 +5,7 @@ import NavBar from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import Button from "../../components/Button/Button";
 import SmallCard from "../../components/Card/SmallCard/SmallCard";
-import { getPlatform, putBanStatus } from "../../API/API";
+import { getPlatform, putBanStatus, putModeratorStatus } from "../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
 import { DropdownButton } from "react-bootstrap";
 import { Dropdown } from "react-bootstrap";
@@ -19,7 +19,7 @@ const ManageSubscribers = () => {
   const [platform, setPlatform] = useState();
   const [listType, setListType] = useState("Subscribers");
   const [search, setSearch] = useState("");
-  const [alert, setAlert] = useState({ show: false, message: "" });
+  const [alert, setAlert] = useState({ show: false, style: "danger", message: "" });
   const params = useParams();
 
   useEffect(() => {
@@ -27,27 +27,58 @@ const ManageSubscribers = () => {
   }, []);
 
   const manageBanStatus = (username, action) => {
-    if (!bannable(username)) {
+    if (!manageable(username)) {
       return;
     }
     putBanStatus(params.platform, username, action)
-      .then((res) => retrievePlatform(params.platform))
+      .then((res) => {
+        retrievePlatform(params.platform);
+        setAlert({
+          show: true,
+          style: "info",
+          message:
+            action === "add" ? `${username} has been banned` : `${username} has been unbanned`,
+        });
+      })
       .catch((e) => console.log(e));
   };
 
-  const bannable = (username) => {
+  const manageable = (username) => {
     let valid = true;
     if (user.username === username) {
-      setAlert({ show: true, message: "You cannot manage yourself" });
+      setAlert({ show: true, style: "danger", message: "You cannot manage yourself" });
       valid = false;
     } else if (
       platform.owner !== user.username &&
       (platform.moderators.includes(username) || platform.owner === username)
     ) {
-      setAlert({ show: true, message: "You do not have permission to manage this user" });
+      setAlert({
+        show: true,
+        style: "danger",
+        message: "You do not have permission to manage this user",
+      });
       valid = false;
     }
     return valid;
+  };
+
+  const manageModeratorStatus = (username, action) => {
+    if (!manageable(username)) {
+      return;
+    }
+    putModeratorStatus(params.platform, username, action)
+      .then((res) => {
+        retrievePlatform(params.platform);
+        setAlert({
+          show: true,
+          style: "sporadic-secondary",
+          message:
+            action === "add"
+              ? `${username} is now a moderator`
+              : `${username} is no longer a moderator`,
+        });
+      })
+      .catch((e) => console.log(e));
   };
 
   const retrievePlatform = (platform) => {
@@ -67,32 +98,46 @@ const ManageSubscribers = () => {
   const loadSubscriberList = () => {
     return platform.subscribers
       .filter((subscriber) => subscriber.includes(search))
-      .map((subscriber) => (
-        <SmallCard
-          key={subscriber}
-          username={
-            <div>
-              {`${subscriber} `}
-              {(platform.moderators.includes(subscriber) || platform.owner === subscriber) && (
-                <b className="color-special">(Moderator)</b>
-              )}
-            </div>
-          }
-          rightCard={
-            <div className="p-1">
-              <Dropdown>
-                <Dropdown.Toggle size="sm" className="btn-sporadic" variant="sporadic-secondary" />
-                <Dropdown.Menu>
-                  <DropdownItem>Make Moderator</DropdownItem>
-                  <DropdownItem onClick={(e) => manageBanStatus(subscriber, "add")}>
-                    Ban User
-                  </DropdownItem>
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-          }
-        ></SmallCard>
-      ));
+      .map((subscriber) => {
+        const isModerator = platform.moderators.includes(subscriber);
+        const isOwner = platform.owner === subscriber;
+        return (
+          <SmallCard
+            key={subscriber}
+            username={
+              <div>
+                {`${subscriber} `}
+                {(isModerator || isOwner) && <b className="color-special">(Moderator)</b>}
+              </div>
+            }
+            rightCard={
+              <div className="p-1">
+                <Dropdown>
+                  <Dropdown.Toggle
+                    size="sm"
+                    className="btn-sporadic"
+                    variant="sporadic-secondary"
+                  />
+                  <Dropdown.Menu>
+                    <DropdownItem
+                      onClick={(e) =>
+                        isModerator || isOwner
+                          ? manageModeratorStatus(subscriber, "remove")
+                          : manageModeratorStatus(subscriber, "add")
+                      }
+                    >
+                      {isModerator || isOwner ? "Remove Moderator" : "Make Moderator"}
+                    </DropdownItem>
+                    <DropdownItem onClick={(e) => manageBanStatus(subscriber, "add")}>
+                      Ban User
+                    </DropdownItem>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            }
+          ></SmallCard>
+        );
+      });
   };
 
   const loadBannedUserList = () => {
@@ -127,7 +172,7 @@ const ManageSubscribers = () => {
         <Alert
           show={alert.show}
           onClose={() => setAlert({ show: false, message: "" })}
-          variant="danger"
+          variant={alert.style}
           dismissible
         >
           {alert.message}

@@ -101,6 +101,19 @@ export const putBanStatus = async (platform, username, action) => {
   return response;
 };
 
+export const putModeratorStatus = async (platform, username, action) => {
+  const token = await getToken();
+  const response = await axios.put(
+    `${ENDPOINT}/platforms/${platform}/updateModerators`,
+    {
+      targetUsername: username,
+      action,
+    },
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
+};
+
 /* Login Routing */
 
 export const postCreateAccount = async (username, password, email) => {
