@@ -91,7 +91,9 @@ const ManageSubscribers = () => {
     return platform.moderators.includes(username) || platform.owner === username;
   };
 
-  return !platform ? null : !hasPrivilege(user.username) ? (
+  return !platform ? (
+    <MainNav />
+  ) : !hasPrivilege(user.username) ? (
     <Redirect to={`/p/${params.platform}`} />
   ) : (
     <div>
