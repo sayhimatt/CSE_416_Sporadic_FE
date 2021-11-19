@@ -103,7 +103,7 @@ const ManageSubscribers = () => {
         const isOwner = platform.owner === subscriber;
         return (
           <SmallCard
-            key={subscriber}
+            key={`subscriber-card-${subscriber}`}
             username={
               <div>
                 {`${subscriber} `}
@@ -145,7 +145,7 @@ const ManageSubscribers = () => {
       .filter((user) => user.includes(search))
       .map((user) => (
         <SmallCard
-          key={user}
+          key={`ban-card-${user}`}
           username={user}
           rightCard={<Button onClick={(e) => manageBanStatus(user, "remove")}>Unban User</Button>}
         ></SmallCard>
