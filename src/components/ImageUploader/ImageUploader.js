@@ -1,22 +1,39 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
+import { Form } from "react-bootstrap";
+import "./styles.css";
 
-const ImageUploader = ({ onFileSelect }) => {
-  const imgInput = useRef(null);
+const ImageUploader = (desiredFile) => {
+  const [file, setFile] = useState("");
+  const [uploadStatus, setUploadStatus] = useState("");
+  const onChange = (e) => {
+    console.log(e.target.files[0]);
+    if (e.target.files[0].type !== "image/png") {
+      setUploadStatus("File must be a png");
+    } else {
+      setFile(e.target.files[0]);
+    }
+  };
 
-  const handleFileInput = (e) => {
-    // handle check to see if .png
-    const file = e.target.files[0];
-    console.log(file.type);
-    console.log(file.size);
-    onFileSelect(file);
+  const onSubmit = (e) => {
+    e.preventDefault();
+    // Call API method to retrieve URL
+    // Validate and send
   };
   return (
-    <div className="image-uploader">
-      <input type="file" onChange={handleFileInput}></input>
-      <button
-        onClick={(e) => imgInput.current && imgInput.current.click()}
-        className="btn btn-primary"
-      ></button>
+    <div className="imageUploader flex-row align-items-center mt-4">
+      <Form.Group controlId="formFile" className="mb-1" onSubmit={onSubmit}>
+        <Form.Label>Please select a {desiredFile.desiredFile} image</Form.Label>
+        <Form.Control type="file" onChange={onChange} />
+      </Form.Group>
+      <div>
+        <input
+          type="submit"
+          value="Upload"
+          className="btn btn-primary btn-block"
+          onClick={onSubmit}
+        />
+        <p>{uploadStatus}</p>
+      </div>
     </div>
   );
 };

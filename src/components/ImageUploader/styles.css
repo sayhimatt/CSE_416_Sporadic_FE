@@ -1,0 +1,21 @@
+.imageUploader {
+  background: #d4f1f4;
+  padding: 5px 10px;
+  box-shadow: 1px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  border: none;
+  font-weight: bold;
+  max-width: fit-content;
+  display: table;
+}
+.imageUploader > *{
+  display: table-cell
+}
+.imageUploader div {
+  display: block;
+  text-align: center;
+}
+.imageUploader div p {
+  text-align: center;
+  color: red;
+}

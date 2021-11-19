@@ -59,7 +59,7 @@ const Feed = ({ children }) => {
     <div>
       <MainNav />
       <SubNav heading={`Welcome Back ${user.username}!`} buttons={subNavButtons} />
-      <ImageUploader onFileSelect={kickIt} />
+      <ImageUploader desiredFile={"Platform Icon"} />
       <Footer />
     </div>
   );
