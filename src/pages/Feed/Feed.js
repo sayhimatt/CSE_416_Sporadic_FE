@@ -44,9 +44,6 @@ const Feed = ({ children }) => {
       />;
     });
   };
-  const kickIt = (imageFile) => {
-    console.log(imageFile);
-  };
   const subNavButtons = [
     <Link to="/createPlatform">
       <Button>Create A Platform</Button>
@@ -59,7 +56,7 @@ const Feed = ({ children }) => {
     <div>
       <MainNav />
       <SubNav heading={`Welcome Back ${user.username}!`} buttons={subNavButtons} />
-      <ImageUploader desiredFile={"Platform Icon"} />
+      <ImageUploader desiredFile={"platform icon"} />
       <Footer />
     </div>
   );

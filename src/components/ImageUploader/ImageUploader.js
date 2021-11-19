@@ -1,22 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Form } from "react-bootstrap";
 import "./styles.css";
+import { UserContext } from "../../contexts/UserContext/UserContext";
+import { generateSetUserIconURL, setUserIcon } from "../../API/API";
 
 const ImageUploader = (desiredFile) => {
   const [file, setFile] = useState("");
   const [uploadStatus, setUploadStatus] = useState("");
+  const { user } = useContext(UserContext);
   const onChange = (e) => {
     console.log(e.target.files[0]);
     if (e.target.files[0].type !== "image/png") {
+      setFile("");
       setUploadStatus("File must be a png");
     } else {
       setFile(e.target.files[0]);
+      setUploadStatus("Press upload!");
     }
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    // Call API method to retrieve URL
+    if(file != ""){
+      // Now call the generator based on what we're uploading
+      console.log("hello there");
+      console.log(user.username);
+      const putURL = await generateSetUserIconURL(user.username);
+      console.log(putURL);
+      setUserIcon(putURL, file);      
+    }else{
+      setUploadStatus("Choose a png file");
+    }
     // Validate and send
   };
   return (

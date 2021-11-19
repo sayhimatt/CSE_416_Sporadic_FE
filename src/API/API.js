@@ -114,6 +114,35 @@ export const getUserIcon = async (username) => {
   }
 };
 
+export const generateSetUserIconURL = async (username) => {
+  try{
+    const token = await getToken();
+    const response = await axios.get(`${ENDPOINT}/users/${username}/set-avatar`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if(response.status == 200){
+      return response.data;
+    }else{ return null; }
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+}
+
+export const setUserIcon = async (url, file) => {
+  try{
+    const response = await axios.put(url, file);
+    if(response.status != 200){
+      console.log(response);
+      return -1;
+    }
+    return 1;
+  } catch (e) {
+    console.log(e);
+    return -1;
+  }
+}
+
 /* User routing */
 
 export const getUser = async (username) => {
