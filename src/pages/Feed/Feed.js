@@ -9,6 +9,7 @@ import MainNav from "../../components/NavBar/MainNav/MainNav";
 import Footer from "../../components/Footer/Footer";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard";
+import ImageUploader from "../../components/ImageUploader/ImageUploader";
 
 const Feed = ({ children }) => {
   const { user, dispatch } = useContext(UserContext);
@@ -43,7 +44,9 @@ const Feed = ({ children }) => {
       />;
     });
   };
-
+  const kickIt = (imageFile) => {
+    console.log(imageFile);
+  };
   const subNavButtons = [
     <Link to="/createPlatform">
       <Button>Create A Platform</Button>
@@ -56,6 +59,7 @@ const Feed = ({ children }) => {
     <div>
       <MainNav />
       <SubNav heading={`Welcome Back ${user.username}!`} buttons={subNavButtons} />
+      <ImageUploader onFileSelect={kickIt} />
       <Footer />
     </div>
   );
