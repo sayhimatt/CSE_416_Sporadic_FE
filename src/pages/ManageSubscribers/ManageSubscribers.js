@@ -12,6 +12,8 @@ import { Dropdown } from "react-bootstrap";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import { Alert } from "react-bootstrap";
 
+import { getUserIcon } from "../../API/API";
+
 import "./styles.scss";
 
 const ManageSubscribers = () => {
@@ -19,6 +21,7 @@ const ManageSubscribers = () => {
   const [platform, setPlatform] = useState();
   const [listType, setListType] = useState("Subscribers");
   const [search, setSearch] = useState("");
+  const [profilePictures, setProfilePictures] = useState();
   const [alert, setAlert] = useState({ show: false, style: "danger", message: "" });
   const params = useParams();
 
@@ -35,7 +38,7 @@ const ManageSubscribers = () => {
         retrievePlatform(params.platform);
         setAlert({
           show: true,
-          style: "info",
+          style: "sporadic-secondary",
           message:
             action === "add" ? `${username} has been banned` : `${username} has been unbanned`,
         });
@@ -81,10 +84,21 @@ const ManageSubscribers = () => {
       .catch((e) => console.log(e));
   };
 
-  const retrievePlatform = (platform) => {
-    getPlatform(platform)
-      .then((res) => setPlatform(res))
+  const retrievePlatform = (platformName) => {
+    getPlatform(platformName)
+      .then((platformData) => {
+        setPlatform(platformData);
+        retrieveProfilePictures(platformData.subscribers.concat(platformData.bannedUsers));
+      })
       .catch((e) => console.log("Could not get platform"));
+  };
+
+  const retrieveProfilePictures = (users) => {
+    users.forEach((user) =>
+      getUserIcon(user).then((link) =>
+        setProfilePictures((prevState) => ({ ...prevState, [user]: link })),
+      ),
+    );
   };
 
   const loadUserList = () => {
@@ -104,6 +118,7 @@ const ManageSubscribers = () => {
         return (
           <SmallCard
             key={`subscriber-card-${subscriber}`}
+            profilePicture={profilePictures[subscriber]}
             username={subscriber}
             userTag={(isModerator || isOwner) && <b className="color-special">(Moderator)</b>}
             rightCard={
@@ -142,6 +157,7 @@ const ManageSubscribers = () => {
       .map((user) => (
         <SmallCard
           key={`ban-card-${user}`}
+          profilePicture={profilePictures[user]}
           username={user}
           rightCard={<Button onClick={(e) => manageBanStatus(user, "remove")}>Unban User</Button>}
         ></SmallCard>
@@ -189,7 +205,7 @@ const ManageSubscribers = () => {
             <DropdownItem onClick={() => setListType("Banned Users")}>Banned Users</DropdownItem>
           </DropdownButton>
         </div>
-        <div className="small-card-list w-50">{platform && loadUserList()}</div>
+        <div className="small-card-list w-50">{platform && profilePictures && loadUserList()}</div>
       </div>
     </div>
   );

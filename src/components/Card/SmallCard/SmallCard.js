@@ -5,13 +5,7 @@ import { getUserIcon } from "../../../API/API";
 
 import "./styles.scss";
 
-const SmallCard = ({ username, userTag, rightCard }) => {
-  const [profilePicture, setProfilePicture] = useState("");
-
-  useEffect(() => {
-    getUserIcon(username).then((link) => setProfilePicture(link));
-  }, []);
-
+const SmallCard = ({ profilePicture, username, userTag, rightCard }) => {
   return (
     <div className="cardContainer cardContainer--small">
       <div className="card d-flex flex-row align-items-center">
