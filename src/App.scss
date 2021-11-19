@@ -35,3 +35,22 @@ a {
 .page-content {
   margin: 10px;
 }
+
+.btn-sporadic.btn-sporadic-secondary {
+  background-color: $secondaryColor;
+  border-color: $secondaryColor;
+  color: white;
+}
+
+.btn-sporadic.btn-sporadic:focus {
+  background-color: #13879e;
+  border-color: #13879e;
+  color: white;
+  box-shadow: 0 0 0 0.25rem rgba(13, 140, 179, 0.25);
+}
+
+.btn-sporadic.btn-sporadic:hover {
+  background-color: #13879e;
+  border-color: #13879e;
+  color: white;
+}

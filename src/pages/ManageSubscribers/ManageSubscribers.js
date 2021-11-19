@@ -8,6 +8,7 @@ import SmallCard from "../../components/Card/SmallCard/SmallCard";
 import { getPlatform, putBanStatus } from "../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
 import { DropdownButton } from "react-bootstrap";
+import { Dropdown } from "react-bootstrap";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import { Alert } from "react-bootstrap";
 
@@ -69,8 +70,27 @@ const ManageSubscribers = () => {
       .map((subscriber) => (
         <SmallCard
           key={subscriber}
-          username={subscriber}
-          rightCard={<Button onClick={(e) => manageBanStatus(subscriber, "add")}>Ban User</Button>}
+          username={
+            <div>
+              {`${subscriber} `}
+              {(platform.moderators.includes(subscriber) || platform.owner === subscriber) && (
+                <b className="color-special">(Moderator)</b>
+              )}
+            </div>
+          }
+          rightCard={
+            <div className="p-1">
+              <Dropdown>
+                <Dropdown.Toggle size="sm" className="btn-sporadic" variant="sporadic-secondary" />
+                <Dropdown.Menu>
+                  <DropdownItem>Make Moderator</DropdownItem>
+                  <DropdownItem onClick={(e) => manageBanStatus(subscriber, "add")}>
+                    Ban User
+                  </DropdownItem>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          }
         ></SmallCard>
       ));
   };
