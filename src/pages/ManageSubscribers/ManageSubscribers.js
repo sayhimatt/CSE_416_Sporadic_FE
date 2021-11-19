@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, Redirect } from "react-router-dom";
 
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
@@ -87,7 +87,13 @@ const ManageSubscribers = () => {
       ));
   };
 
-  return (
+  const hasPrivilege = (username) => {
+    return platform.moderators.includes(username) || platform.owner === username;
+  };
+
+  return !platform ? null : !hasPrivilege(user.username) ? (
+    <Redirect to={`/p/${params.platform}`} />
+  ) : (
     <div>
       <NavBar />
       <PlatformSubNav platformName={params.platform}>
