@@ -6,17 +6,17 @@ import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Button/Button";
 import SmallCard from "../../components/Card/SmallCard/SmallCard";
 import { getUser, manageFriend } from "../../API/API";
-import { AuthContext } from "../../contexts/AuthContext/AuthContext";
+import { UserContext } from "../../contexts/UserContext/UserContext";
 
 import "./styles.scss";
 
 const Friends = () => {
-  const { auth } = useContext(AuthContext);
+  const { user } = useContext(UserContext);
   const [friends, setFriends] = useState([]);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    getUser(auth.username)
+    getUser(user.username)
       .then((res) => setFriends(res.friends))
       .catch((e) => console.log("Could not get user"));
   }, []);

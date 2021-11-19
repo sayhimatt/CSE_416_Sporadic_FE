@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import AuthContextProvider from "./contexts/AuthContext/AuthContext";
+import UserContextProvider from "./contexts/UserContext/UserContext";
 import GuardedRoute from "./components/GuardedRoute/GuardedRoute";
+import UnguardedRoute from "./components/UnguardedRoute/UnguardedRoute";
 import Feed from "./pages/Feed/Feed";
 import Login from "./pages/Login/MainLogin/MainLogin";
 import CreateAccount from "./pages/Login/MainCreateAccount/MainCreateAccount";
@@ -17,33 +18,110 @@ import CreateQuiz from "./pages/CreateQuiz/CreateQuiz";
 import MyAccount from "./pages/MyAccount/MyAccount";
 import QuizComplete from "./pages/Quiz/QuizComplete";
 import Friends from "./pages/Friends/Friends";
+import { authenticate } from "./API/API";
+
 import "./App.scss";
 
-const MainRouter = () => {
+const App = () => {
+  const [auth, setAuth] = useState({ authenticated: false, complete: false });
+
+  useEffect(() => {
+    authenticate()
+      .then((res) => setAuth({ authenticated: true, complete: true }))
+      .catch((e) => setAuth({ authenticated: false, complete: true }));
+  }, []);
+
+  const setAuthHandler = (booleanValue) => {
+    setAuth((prevState) => ({ ...prevState, authenticated: booleanValue }));
+  };
+
   return (
-    <AuthContextProvider>
-      <Router>
-        <Switch>
-          <Route path="/login" component={Login} />
-          <Route exact path="/createAccount" component={CreateAccount} />
-          <Route exact path="/createAccount/confirmation" component={ConfirmEmail} />
-          <Route exact path="/forgotPassword" component={ForgotPassword} />
-          <Route exact path="/forgotPassword/confirmation" component={ForgotPasswordConfirmation} />
-          <GuardedRoute exact path="/" component={Feed}></GuardedRoute>
-          <GuardedRoute exact path="/myAccount" component={MyAccount}></GuardedRoute>
-          <GuardedRoute exact path="/About" component={Feed}></GuardedRoute>
-          <GuardedRoute exact path="/Contact" component={Feed}></GuardedRoute>
-          <GuardedRoute exact path="/friends" component={Friends} />
-          <GuardedRoute exact path="/p/:platform" component={Platform} />
-          <GuardedRoute exact path="/createPlatform" component={CreatePlatform} />
-          <GuardedRoute exact path="/p/:platform/createQuiz" component={CreateQuiz} />
-          <GuardedRoute exact path="/p/:platform/:quiz" component={Quiz} />
-          <GuardedRoute exact path="/p/:platform/:quiz/complete" component={QuizComplete} />
-          <GuardedRoute path="/" component={NotFound} />
-        </Switch>
-      </Router>
-    </AuthContextProvider>
+    auth.complete && (
+      <UserContextProvider>
+        <Router>
+          <Switch>
+            <Route exact path="/login">
+              <Login auth={auth.authenticated} authHandler={setAuthHandler} />
+            </Route>
+            <UnguardedRoute
+              exact
+              path="/createAccount"
+              component={CreateAccount}
+              authenticated={auth.authenticated}
+            />
+            <UnguardedRoute
+              exact
+              path="/createAccount/confirmation"
+              component={ConfirmEmail}
+              authenticated={auth.authenticated}
+            />
+            <UnguardedRoute
+              exact
+              path="/forgotPassword"
+              component={ForgotPassword}
+              authenticated={auth.authenticated}
+            />
+            <UnguardedRoute
+              exact
+              path="/forgotPassword/confirmation"
+              component={ForgotPasswordConfirmation}
+            />
+            <GuardedRoute exact path="/" component={Feed} authenticated={auth.authenticated} />
+            <GuardedRoute
+              exact
+              path="/myAccount"
+              component={MyAccount}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute exact path="/About" component={Feed} authenticated={auth.authenticated} />
+            <GuardedRoute
+              exact
+              path="/Contact"
+              component={Feed}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute
+              exact
+              path="/friends"
+              component={Friends}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute
+              exact
+              path="/p/:platform"
+              component={Platform}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute
+              exact
+              path="/createPlatform"
+              component={CreatePlatform}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute
+              exact
+              path="/p/:platform/createQuiz"
+              component={CreateQuiz}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute
+              exact
+              path="/p/:platform/:quiz"
+              component={Quiz}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute
+              exact
+              path="/p/:platform/:quiz/complete"
+              component={QuizComplete}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute path="/" component={NotFound} authenticated={auth.authenticated} />
+          </Switch>
+        </Router>
+      </UserContextProvider>
+    )
   );
 };
 
-export default MainRouter;
+export default App;
