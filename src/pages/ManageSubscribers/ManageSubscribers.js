@@ -9,6 +9,7 @@ import { getPlatform, putBanStatus } from "../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
 import { DropdownButton } from "react-bootstrap";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
+import { Alert } from "react-bootstrap";
 
 import "./styles.scss";
 
@@ -17,6 +18,7 @@ const ManageSubscribers = () => {
   const [platform, setPlatform] = useState();
   const [listType, setListType] = useState("Subscribers");
   const [search, setSearch] = useState("");
+  const [alert, setAlert] = useState({ show: false, message: "" });
   const params = useParams();
 
   useEffect(() => {
@@ -24,9 +26,27 @@ const ManageSubscribers = () => {
   }, []);
 
   const manageBanStatus = (username, action) => {
+    if (!bannable(username)) {
+      return;
+    }
     putBanStatus(params.platform, username, action)
       .then((res) => retrievePlatform(params.platform))
       .catch((e) => console.log(e));
+  };
+
+  const bannable = (username) => {
+    let valid = true;
+    if (user.username === username) {
+      setAlert({ show: true, message: "You cannot manage yourself" });
+      valid = false;
+    } else if (
+      platform.owner !== user.username &&
+      (platform.moderators.includes(username) || platform.owner === username)
+    ) {
+      setAlert({ show: true, message: "You do not have permission to manage this user" });
+      valid = false;
+    }
+    return valid;
   };
 
   const retrievePlatform = (platform) => {
@@ -75,6 +95,16 @@ const ManageSubscribers = () => {
           <Button>{`Back to ${params.platform}`}</Button>
         </Link>
       </PlatformSubNav>
+      <div className="quiz-alerts">
+        <Alert
+          show={alert.show}
+          onClose={() => setAlert({ show: false, message: "" })}
+          variant="danger"
+          dismissible
+        >
+          {alert.message}
+        </Alert>
+      </div>
       <div className="page-content d-flex flex-column align-items-center">
         <p className="fs-1">Subscriber Management</p>
         <div className="d-flex mb-3 mt-3 w-50 justify-content-center">
