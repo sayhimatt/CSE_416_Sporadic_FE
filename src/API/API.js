@@ -135,7 +135,12 @@ export const manageFriend = async (username, action) => {
 
 /* Feed routing */
 export const getFeedQuizzes = async (username) => {
-  return;
+  const token = await getToken();
+  const response = await axios.get(
+    `${ENDPOINT}/users/${username}/retreiveQuizFeed`,
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
 };
 
 /* Quiz Routing */
