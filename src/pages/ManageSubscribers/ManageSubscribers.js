@@ -92,7 +92,7 @@ const ManageSubscribers = () => {
   };
 
   return !platform ? (
-    <MainNav />
+    <NavBar />
   ) : !hasPrivilege(user.username) ? (
     <Redirect to={`/p/${params.platform}`} />
   ) : (
