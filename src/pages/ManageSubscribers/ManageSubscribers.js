@@ -5,7 +5,7 @@ import NavBar from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import Button from "../../components/Button/Button";
 import SmallCard from "../../components/Card/SmallCard/SmallCard";
-import { getPlatform, putBanStatus, putModeratorStatus } from "../../API/API";
+import { getPlatform, putBanStatus, putModeratorStatus, getPlatformIcon } from "../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
 import { DropdownButton } from "react-bootstrap";
 import { Dropdown } from "react-bootstrap";
@@ -19,6 +19,7 @@ import "./styles.scss";
 const ManageSubscribers = () => {
   const { user } = useContext(UserContext);
   const [platform, setPlatform] = useState();
+  const [platformIcon, setPlatformIcon] = useState();
   const [listType, setListType] = useState("Subscribers");
   const [search, setSearch] = useState("");
   const [profilePictures, setProfilePictures] = useState();
@@ -34,6 +35,9 @@ const ManageSubscribers = () => {
       .then((platformData) => {
         setPlatform(platformData);
         getAllUserIcons(platformData.subscribers).then((icons) => setProfilePictures(icons));
+        getPlatformIcon(params.platform).then((icon) => {
+          setPlatformIcon(icon);
+        });
       })
       .catch((e) => console.log("Could not get platform"));
   };
@@ -167,7 +171,7 @@ const ManageSubscribers = () => {
   ) : (
     <div>
       <NavBar />
-      <PlatformSubNav platformName={params.platform}>
+      <PlatformSubNav iconSrc={platformIcon} platformName={params.platform}>
         <Link to={`/p/${params.platform}`}>
           <Button>{`Back to ${params.platform}`}</Button>
         </Link>
