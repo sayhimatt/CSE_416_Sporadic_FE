@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 
-import { getPlatform, postStartQuiz, getPlatformIcon, getPlatformBanner } from "./../../API/API";
+import {
+  getPlatform,
+  postStartQuiz,
+  postSubmitQuiz,
+  getPlatformIcon,
+  getPlatformBanner,
+} from "./../../API/API";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard.js";
@@ -15,6 +21,7 @@ const Quiz = () => {
   const [platform, setPlatform] = useState({});
   const [questions, setQuestions] = useState([]);
   const [questionsCards, setQuestionCards] = useState([]);
+  const [answers, setAnswers] = useState([]);
   const [quiz, setQuiz] = useState({});
   const [timeLeft, setTimeLeft] = useState(0);
   const [banner, setBanner] = useState("/banner.svg");
@@ -42,11 +49,11 @@ const Quiz = () => {
   }, delay);
 
   const getImageMedia = async () => {
-    await getPlatformBanner(platform).then((banner) => {
+    await getPlatformBanner(params.platform).then((banner) => {
       console.log(banner);
       setBanner(banner);
     });
-    await getPlatformIcon(platform).then((icon) => {
+    await getPlatformIcon(params.platform).then((icon) => {
       console.log(icon);
       setPlatformIcon(icon);
     });
@@ -73,32 +80,56 @@ const Quiz = () => {
     try {
       const response = await postStartQuiz(platform, quiz);
       setQuestions(response.questions);
+      initAnswers(response.questions);
       setQuiz(response);
       setTimeLeft(response.timeLimit);
     } catch (error) {
       console.log(error);
     }
   };
-
+  const initAnswers = (questionList) => {
+    const answers = new Array(questionList.length);
+    for (let index = 0; index < questionList.length; index++) {
+      answers[index] = -1;
+    }
+    setAnswers(answers);
+    //console.log(answers);
+  };
+  const assignAnswer = (questionIndex, answerIndex) => {
+    //console.log(questionIndex);
+    //console.log(answerIndex);
+    const newChoices = answers;
+    newChoices[questionIndex] = answerIndex;
+    setAnswers(newChoices);
+    //console.log(answers);
+  };
   const renderCards = () => {
     const cards = questions.map((question, index) => {
       return (
         <QuestionCard
-          key={question._id + index}
+          key={"Question" + index}
           information={{
             question: question.body,
             questionIndex: index,
             answers: question.answers,
           }}
+          correctAnswerHandler={assignAnswer}
         />
       );
     });
     setQuestionCards(cards);
   };
+
+  const submitAnswers = () => {
+    // Submit all selected answers from each question card.
+    postSubmitQuiz(params.platform, params.quiz, answers);
+  };
   const quizOver = () => {
-    history.push("/p/movies/sporadic/complete");
+    history.push(`/p/movies/${params.quiz}/complete`);
+    submitAnswers();
     alert("Quiz is over now navigating to end of quiz page!");
   };
+
   return (
     <div>
       <MainNav />

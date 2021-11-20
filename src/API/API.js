@@ -114,6 +114,19 @@ export const putModeratorStatus = async (platform, username, action) => {
   return response;
 };
 
+export const postSubmitQuiz = async (platform, quizTitle, answers) => {
+  const token = await getToken();
+  const response = await axios.post(
+    `${ENDPOINT}/quizzes/${platform}/${quizTitle}/submit`,
+    {
+      answers: answers,
+    },
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  return response.data;
+};
 /* Login Routing */
 
 export const postCreateAccount = async (username, password, email) => {
@@ -278,6 +291,18 @@ export const deleteQuiz = async (platform, quiz) => {
   const response = await axios.delete(`${ENDPOINT}/quizzes/${platform}/${quiz}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
+  return response;
+};
+
+export const putComment = async (platform, quiz, text) => {
+  const token = await getToken();
+  const response = await axios.put(
+    `${ENDPOINT}/quizzes/${platform}/${quiz}/comment`,
+    {
+      commentText: text,
+    },
+    { headers: { authorization: `Bearer ${token}` } },
+  );
   return response;
 };
 
