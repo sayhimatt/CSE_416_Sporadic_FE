@@ -107,7 +107,7 @@ export const postConfirmCode = async (username, confirmCode) => {
 
 export const getUserIcon = async (username) => {
   try {
-    const response = await axios.get(`${AWS_ENDPOINT}/users/${username}/avatar.png`);
+    await axios.get(`${AWS_ENDPOINT}/users/${username}/avatar.png`);
     return `${AWS_ENDPOINT}/users/${username}/avatar.png`;
   } catch {
     return "/propic.png";
@@ -115,54 +115,60 @@ export const getUserIcon = async (username) => {
 };
 
 export const generateSetUserIconURL = async (username) => {
-  try{
+  try {
     const token = await getToken();
     const response = await axios.get(`${ENDPOINT}/users/${username}/set-avatar`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    if(response.status == 200){
+    if (response.status == 200) {
       return response.data;
-    }else{ return null; }
+    } else {
+      return null;
+    }
   } catch (e) {
     console.log(e);
     return null;
   }
-}
+};
 
 export const generateSetPlatformIconURL = async (platform) => {
-  try{
+  try {
     const token = await getToken();
     const response = await axios.get(`${ENDPOINT}/platforms/${platform}/set-icon`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    if(response.status == 200){
+    if (response.status == 200) {
       return response.data;
-    }else{ return null; }
+    } else {
+      return null;
+    }
   } catch (e) {
     console.log(e);
     return null;
   }
-}
+};
 
 export const generateSetPlatformBannerURL = async (platform) => {
-  try{
+  try {
     const token = await getToken();
     const response = await axios.get(`${ENDPOINT}/platforms/${platform}/set-banner`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    if(response.status == 200){
+    if (response.status == 200) {
       return response.data;
-    }else{ return null; }
+    } else {
+      return null;
+    }
   } catch (e) {
     console.log(e);
     return null;
   }
-}
+};
 
 export const setImage = async (url, file) => {
-  try{
+  try {
     const response = await axios.put(url, file);
-    if(response.status !== 200){
+    if (response.status !== 200) {
       return -1;
     }
     return 1;
@@ -170,7 +176,7 @@ export const setImage = async (url, file) => {
     console.log(e);
     return -1;
   }
-}
+};
 
 /* User routing */
 

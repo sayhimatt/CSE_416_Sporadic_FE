@@ -2,9 +2,14 @@ import React, { useState, useContext } from "react";
 import { Form } from "react-bootstrap";
 import "./styles.scss";
 import { UserContext } from "../../contexts/UserContext/UserContext";
-import { generateSetUserIconURL, setImage, generateSetPlatformIconURL, generateSetPlatformBannerURL } from "../../API/API";
+import {
+  generateSetUserIconURL,
+  setImage,
+  generateSetPlatformIconURL,
+  generateSetPlatformBannerURL,
+} from "../../API/API";
 
-const ImageUploader = ({desiredFile, desiredPlatform}) => {
+const ImageUploader = ({ desiredFile, desiredPlatform }) => {
   const [file, setFile] = useState("");
   const [uploadStatus, setUploadStatus] = useState("");
   const { user } = useContext(UserContext);
@@ -21,14 +26,14 @@ const ImageUploader = ({desiredFile, desiredPlatform}) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if(file != ""){
+    if (file != "") {
       // Now call the generator based on what we're uploading
       // our desiredFile's possibilities = {"platform icon", "platform banner", "quiz icon", "avatar"}
-      console.log(typeof(desiredFile));
+      console.log(typeof desiredFile);
       const uploadType = desiredFile.toString().trim().toLowerCase();
       let putURL = ``;
       console.log(desiredPlatform);
-      switch(uploadType){
+      switch (uploadType) {
         case "platform icon":
           putURL = await generateSetPlatformIconURL(desiredPlatform);
           break;
@@ -42,21 +47,21 @@ const ImageUploader = ({desiredFile, desiredPlatform}) => {
           putURL = await generateSetUserIconURL(user.username);
           break;
         default:
-          throw(`Error given invalid desiredFile ${desiredFile} not correct`);
+          throw `Error given invalid desiredFile ${desiredFile} not correct`;
       }
       console.log(putURL);
       // Validate and send
-      if(putURL != null){
+      if (putURL != null) {
         const out = await setImage(putURL, file);
-        if(out !== 1){
+        if (out !== 1) {
           setUploadStatus(`Error uploading file`);
-        }else{
+        } else {
           setUploadStatus(`File uploaded!`);
         }
-      }else{
+      } else {
         setUploadStatus(`Error uploading file`);
       }
-    }else{
+    } else {
       setUploadStatus("Choose a png file");
     }
   };
