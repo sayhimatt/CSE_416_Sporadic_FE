@@ -5,7 +5,7 @@ import NavBar from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Button/Button";
 import SmallCard from "../../components/Card/SmallCard/SmallCard";
-import { getUser, manageFriend, getUserIcon } from "../../API/API";
+import { getUser, manageFriend, getAllUserIcons } from "../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
 
 import "./styles.scss";
@@ -20,18 +20,10 @@ const Friends = () => {
     getUser(user.username)
       .then((res) => {
         setFriends(res.friends);
-        retrieveProfilePictures(res.friends);
+        getAllUserIcons(res.friends).then((icons) => setProfilePictures(icons));
       })
       .catch((e) => console.log("Could not get user"));
   }, []);
-
-  const retrieveProfilePictures = (users) => {
-    users.forEach((user) =>
-      getUserIcon(user).then((link) =>
-        setProfilePictures((prevState) => ({ ...prevState, [user]: link })),
-      ),
-    );
-  };
 
   const addFriend = () => {
     const username = search;

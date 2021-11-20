@@ -131,15 +131,6 @@ export const postConfirmCode = async (username, confirmCode) => {
   });
 };
 
-export const getUserIcon = async (username) => {
-  try {
-    const response = await axios.get(`${AWS_ENDPOINT}/users/${username}/avatar.png`);
-    return `${AWS_ENDPOINT}/users/${username}/avatar.png`;
-  } catch {
-    return "/propic.png";
-  }
-};
-
 /* User routing */
 
 export const getUser = async (username) => {
@@ -189,4 +180,28 @@ export const deleteQuiz = async (platform, quiz) => {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response;
+};
+
+/* AWS S3 Routing */
+export const getUserIcon = async (username) => {
+  try {
+    const response = await axios.get(`${AWS_ENDPOINT}/users/${username}/avatar.png`);
+    return `${AWS_ENDPOINT}/users/${username}/avatar.png`;
+  } catch {
+    return "/propic.png";
+  }
+};
+
+export const getAllUserIcons = async (usernames) => {
+  const promises = [];
+  const icons = {};
+  usernames.forEach((username) =>
+    promises.push(
+      getUserIcon(username).then((link) => {
+        icons[username] = link;
+      }),
+    ),
+  );
+  await Promise.all(promises);
+  return icons;
 };

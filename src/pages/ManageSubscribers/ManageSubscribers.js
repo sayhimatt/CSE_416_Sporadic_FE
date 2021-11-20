@@ -12,7 +12,7 @@ import { Dropdown } from "react-bootstrap";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import { Alert } from "react-bootstrap";
 
-import { getUserIcon } from "../../API/API";
+import { getAllUserIcons } from "../../API/API";
 
 import "./styles.scss";
 
@@ -28,6 +28,15 @@ const ManageSubscribers = () => {
   useEffect(() => {
     retrievePlatform(params.platform);
   }, []);
+
+  const retrievePlatform = (platformName) => {
+    getPlatform(platformName)
+      .then((platformData) => {
+        setPlatform(platformData);
+        getAllUserIcons(platformData.subscribers).then((icons) => setProfilePictures(icons));
+      })
+      .catch((e) => console.log("Could not get platform"));
+  };
 
   const manageBanStatus = (username, action) => {
     if (!manageable(username)) {
@@ -82,23 +91,6 @@ const ManageSubscribers = () => {
         });
       })
       .catch((e) => console.log(e));
-  };
-
-  const retrievePlatform = (platformName) => {
-    getPlatform(platformName)
-      .then((platformData) => {
-        setPlatform(platformData);
-        retrieveProfilePictures(platformData.subscribers.concat(platformData.bannedUsers));
-      })
-      .catch((e) => console.log("Could not get platform"));
-  };
-
-  const retrieveProfilePictures = (users) => {
-    users.forEach((user) =>
-      getUserIcon(user).then((link) =>
-        setProfilePictures((prevState) => ({ ...prevState, [user]: link })),
-      ),
-    );
   };
 
   const loadUserList = () => {
