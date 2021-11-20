@@ -17,3 +17,15 @@
   border-width: 3px;
   font-size: 1.5vw;
 }
+
+.card-comment {
+  background-color: white;
+  border-radius: 6px;
+  color: black;
+  font-size: 14px;
+  min-height: 2em;
+  padding: 3px 10px;
+  margin-right: 5px;
+  display: flex;
+  flex-grow: 1;
+}
