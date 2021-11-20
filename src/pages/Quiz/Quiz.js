@@ -15,6 +15,7 @@ const Quiz = () => {
   const [platform, setPlatform] = useState({});
   const [questions, setQuestions] = useState([]);
   const [questionsCards, setQuestionCards] = useState([]);
+  const [answers, setAnswers] = useState([]);
   const [quiz, setQuiz] = useState({});
   const [timeLeft, setTimeLeft] = useState(0);
   const [banner, setBanner] = useState("/banner.svg");
@@ -42,11 +43,11 @@ const Quiz = () => {
   }, delay);
 
   const getImageMedia = async () => {
-    await getPlatformBanner(platform).then((banner) => {
+    await getPlatformBanner(params.platform).then((banner) => {
       console.log(banner);
       setBanner(banner);
     });
-    await getPlatformIcon(platform).then((icon) => {
+    await getPlatformIcon(params.platform).then((icon) => {
       console.log(icon);
       setPlatformIcon(icon);
     });
@@ -73,13 +74,24 @@ const Quiz = () => {
     try {
       const response = await postStartQuiz(platform, quiz);
       setQuestions(response.questions);
+      initAnswers();
       setQuiz(response);
       setTimeLeft(response.timeLimit);
     } catch (error) {
       console.log(error);
     }
   };
-
+  const initAnswers = () => {
+    const answers = new Array(questions.length);
+    for (let index = 0; index < questions.length; index++) {
+      answers[index] = -1;
+    }
+    console.log(answers);
+  };
+  const assignAnswer = (questionIndex, answerIndex) => {
+    console.log(questionIndex);
+    console.log(answerIndex);
+  };
   const renderCards = () => {
     const cards = questions.map((question, index) => {
       return (
@@ -90,17 +102,20 @@ const Quiz = () => {
             questionIndex: index,
             answers: question.answers,
           }}
+          correctAnswerHandler={assignAnswer}
         />
       );
     });
     setQuestionCards(cards);
   };
+
   const submitAnswers = () => {
     // Gather all selected answers from each question card.
-    questionsCards.forEach(question, index => {
-      
+    questionsCards.forEach((value, index) => {
+      console.log(value);
+      console.log(index);
     });
-  }
+  };
   const quizOver = () => {
     history.push("/p/movies/sporadic/complete");
     submitAnswers();
