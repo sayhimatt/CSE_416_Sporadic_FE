@@ -5,7 +5,7 @@ import SubNav from "../SubNav/SubNav";
 
 import "./styles.css";
 
-const PlatformSubNav = ({ children, platformName, bannerSrc, modView, fileUploadHandlers }) => {
+const PlatformSubNav = ({ children, platformName, bannerSrc, iconSrc, modView, fileUploadHandlers }) => {
   return (
     <div className="platformSubNav">
       {bannerSrc && (
@@ -29,7 +29,7 @@ const PlatformSubNav = ({ children, platformName, bannerSrc, modView, fileUpload
               "d-flex " +
               (bannerSrc ? "icon--large" : "icon--small")
             }
-            src="/platformIcon.svg"
+            src={iconSrc}
             alt="Icon"
           />
         </div>

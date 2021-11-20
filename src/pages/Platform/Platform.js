@@ -8,7 +8,7 @@ import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
 import ImageUploader from "../../components/ImageUploader/ImageUploader"
-import { patchSubscribe, patchUnsubscribe, deleteQuiz } from "./../../API/API";
+import { getPlatformIcon, getPlatformBanner, patchSubscribe, patchUnsubscribe, deleteQuiz } from "./../../API/API";
 
 import "./styles.scss";
 
@@ -21,7 +21,8 @@ const Platform = () => {
   const [quizCards, setQuizCards] = useState([]);
   const [subscribed, setSubscribed] = useState(user.subscriptions.includes(params.platform));
   const [modView, setModView] = useState(false);
-
+  const [banner, setBanner] = useState("/banner.svg");
+  const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
   useEffect(() => {
     getCurrentPlatform();
     getQuizzes();
@@ -32,6 +33,20 @@ const Platform = () => {
     renderCards();
   }, [quizzes, modView]);
 
+  useEffect(() => {
+    getImageMedia();
+  }, [])
+  const getImageMedia = async () => {
+    await getPlatformBanner(params.platform).then((banner) => {
+      console.log(banner);
+      setBanner(banner);
+    });
+    await getPlatformIcon(params.platform).then((icon) => {
+      console.log(icon);
+      setPlatformIcon(icon);
+    });
+
+  }
   const getCurrentPlatform = async () => {
     const name = params.platform;
     await getPlatform(name)
@@ -130,9 +145,10 @@ const Platform = () => {
       <MainNav />
       <PlatformSubNav
         platformName={params.platform}
-        bannerSrc="/banner.svg"
+        bannerSrc={banner}
+        iconSrc={platformIcon}
         modView={modView}
-        fileUploadHandlers={{ uploadBanner, uploadIcon }}
+        
       >
         {Object.entries(platform).length !== 0 &&
           (platform.moderators.includes(user.username) || platform.owner === user.username) && (
@@ -162,7 +178,10 @@ const Platform = () => {
                 Create Quiz
               </Link>
             </Button>
+            
           )}
+          <ImageUploader visible={modView} desiredFile="platform banner" desiredPlatform={params.platform}/>
+          <ImageUploader visible={modView} desiredFile="platform icon" desiredPlatform={params.platform}/>
           <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">
             {platform.description}
           </div>

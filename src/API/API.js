@@ -107,10 +107,37 @@ export const postConfirmCode = async (username, confirmCode) => {
 
 export const getUserIcon = async (username) => {
   try {
-    await axios.get(`${AWS_ENDPOINT}/users/${username}/avatar.png`);
+    const resp = await axios.get(`${AWS_ENDPOINT}/users/${username}/avatar.png`);
+    if(resp.status != 200){
+      return "/propic.png";
+    }
     return `${AWS_ENDPOINT}/users/${username}/avatar.png`;
   } catch {
     return "/propic.png";
+  }
+};
+// https://sporadic-development-bucket.s3.amazonaws.com/platforms/MattLand/banner.png
+export const getPlatformIcon = async (platform) => {
+  try {
+    const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/icon.png`);
+    if(resp.status != 200){
+      return "/platformIcon.svg";
+    }
+    return `${AWS_ENDPOINT}/platforms/${platform}/icon.png`;
+  } catch {
+    return "/platformIcon.svg";
+  }
+};
+
+export const getPlatformBanner = async (platform) => {
+  try {
+    const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/banner.png`);
+    if(resp.status != 200){
+      return "/banner.svg";
+    }
+    return `${AWS_ENDPOINT}/platforms/${platform}/banner.png`;
+  } catch {
+    return "/banner.svg";
   }
 };
 
