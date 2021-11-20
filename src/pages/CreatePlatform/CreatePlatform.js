@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
-import { postCreatePlatform } from "../../API/API";
+import {
+  postCreatePlatform,
+  generateSetPlatformBannerURL,
+  generateSetPlatformIconURL,
+  setImage,
+} from "../../API/API";
+import { UserContext } from "../../contexts/UserContext/UserContext";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Button/Button";
 import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 import ImageUploader from "../../components/ImageUploader/ImageUploader";
+
 import "./styles.scss";
 
 const CreatePlatform = () => {
@@ -20,7 +27,7 @@ const CreatePlatform = () => {
   const [showInUseMsg, setShowInUseMsg] = useState(false);
   const [images, setImages] = useState({ icon: "", banner: "" });
   const [imageUploaders, setImageUploaders] = useState({ icon: false, banner: false });
-  const [platformInit, setPlatformInit] = useState(false);
+  const { dispatch } = useContext(UserContext);
 
   const history = useHistory();
 
@@ -37,15 +44,40 @@ const CreatePlatform = () => {
     if (invalidInputs()) {
       return;
     }
-    await postCreatePlatform(platformData)
+    postCreatePlatform(platformData)
       .then((res) => {
-        setPlatformInit(true);
+        dispatch({ type: "SUBSCRIBE", payload: platformData.title });
+        return sendImagesToAWS();
+      })
+      .then((res) => {
+        history.push(`/p/${platformData.title}`);
       })
       .catch((error) => {
         if (error.response.status === 400) {
           setShowInUseMsg(true);
-        } else setShowInUseMsg(false);
+        } else {
+          history.push(`/p/${platformData.title}`);
+        }
       });
+  };
+
+  const sendImagesToAWS = async () => {
+    const promises = [];
+    if (images.icon !== "") {
+      promises.push(
+        generateSetPlatformIconURL(platformData.title)
+          .then((putURL) => setImage(putURL, images.icon))
+          .catch((e) => console.log(e)),
+      );
+    }
+    if (images.banner !== "") {
+      promises.push(
+        generateSetPlatformBannerURL(platformData.title)
+          .then((putURL) => setImage(putURL, images.banner))
+          .catch((e) => console.log(e)),
+      );
+    }
+    return await Promise.all(promises).catch((e) => console.log(e));
   };
 
   const customIconSubmit = (file) => {
@@ -56,10 +88,6 @@ const CreatePlatform = () => {
   const customBannerSubmit = (file) => {
     setImages((prevState) => ({ ...prevState, banner: file }));
     setImageUploaders((prevState) => ({ ...prevState, banner: false }));
-  };
-
-  const finishCustomization = () => {
-    history.push(`/p/${platformData.title}`);
   };
 
   const invalidInputs = () => {
