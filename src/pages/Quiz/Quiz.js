@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 
-import { getPlatform, postStartQuiz } from "./../../API/API";
+import { getPlatform, postStartQuiz, getPlatformIcon, getPlatformBanner } from "./../../API/API";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard.js";
@@ -17,12 +17,15 @@ const Quiz = () => {
   const [questionsCards, setQuestionCards] = useState([]);
   const [quiz, setQuiz] = useState({});
   const [timeLeft, setTimeLeft] = useState(0);
+  const [banner, setBanner] = useState("/banner.svg");
+  const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
   const history = useHistory();
   const params = useParams();
   let delay = 1000;
   useEffect(() => {
     getCurrentPlatform();
     getQuestions();
+    getImageMedia();
   }, [params]);
 
   useEffect(() => {
@@ -37,6 +40,18 @@ const Quiz = () => {
       setTimeLeft(timeLeft - 1);
     }
   }, delay);
+
+  const getImageMedia = async () => {
+    await getPlatformBanner(platform).then((banner) => {
+      console.log(banner);
+      setBanner(banner);
+    });
+    await getPlatformIcon(platform).then((icon) => {
+      console.log(icon);
+      setPlatformIcon(icon);
+    });
+  };
+
   const getCurrentPlatform = async () => {
     const name = params.platform;
     await getPlatform(name)
@@ -95,7 +110,11 @@ const Quiz = () => {
   return (
     <div>
       <MainNav />
-      <PlatformSubNav platformName={"Quiz: " + params.quiz} />
+      <PlatformSubNav
+        platformName={"Quiz: " + params.quiz}
+        bannerSrc={banner}
+        iconSrc={platformIcon}
+      />
       <div className="content d-flex m-4 flex-row align-items-start">
         <div className="d-flex flex-column flex-md-fill">{questionsCards}</div>
         <div className="information d-flex flex-column">
