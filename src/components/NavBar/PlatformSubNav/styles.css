@@ -39,4 +39,10 @@
   border-radius: 100px;
   border: 1px solid black;
   margin-right: 0.5vw;
+  width: 10em;
+  height: 10em;
+}
+.icon-container img {
+  width: 10em;
+  height: 10em;
 }

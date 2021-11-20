@@ -10,7 +10,7 @@ const PlatformSubNav = ({ children, platformName, bannerSrc, iconSrc, modView, f
     <div className="platformSubNav">
       {bannerSrc && (
         <div
-          className={`banner ${modView ? "selectable" : ""}`}
+          className={`banner`}
           style={{ backgroundImage: `url(${bannerSrc})` }}
         >
         </div>
