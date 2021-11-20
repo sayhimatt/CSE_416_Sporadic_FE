@@ -2,33 +2,47 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { UserContext } from "../../contexts/UserContext/UserContext";
-import { getUser } from "../../API/API";
+import { getUser, patchUserAbout } from "../../API/API";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Button/Button";
 
 import "./styles.scss";
+import ImageUploader from "../../components/ImageUploader/ImageUploader";
+import { Alert } from "react-bootstrap";
 
 const MyAccount = () => {
   const { user, dispatch } = useContext(UserContext);
-  const [userState, setuserState] = useState({});
+  const [userState, setuserState] = useState();
   const [about, setAbout] = useState("");
+  const [showAvatarUpload, setShowAvatarUpload] = useState(false);
+  const [alerts, setAlerts] = useState({ show: false, style: "danger", message: "" });
 
   useEffect(() => {
     getUser(user.username)
-      .then((user) => setuserState(user))
+      .then((user) => {
+        setuserState(user);
+        setAbout(user.aboutSection);
+      })
       .catch((e) => console.log("Could not retrieve user"));
-    return () => {
-      updateAbout(); // On onmount
-    };
   }, []);
 
   const updateAbout = () => {
-    // send updated about section to API
-  };
-
-  const changeAvatar = () => {
-    // send Avatar to API and update on page
+    patchUserAbout(user.username, about)
+      .then((res) =>
+        setAlerts({
+          show: true,
+          style: "sporadic-secondary",
+          message: "Your about section has been updated!",
+        }),
+      )
+      .catch((e) =>
+        setAlerts({
+          show: true,
+          style: "danger",
+          message: "Could not save your updates. Please try again.",
+        }),
+      );
   };
 
   const changePassword = () => {
@@ -49,7 +63,15 @@ const MyAccount = () => {
           </Link>,
         ]}
       />
-      {Object.entries(userState).length != 0 && (
+      <Alert
+        variant={alerts.style}
+        show={alerts.show}
+        onClose={() => setAlerts((prevState) => ({ ...prevState, show: false }))}
+        dismissible
+      >
+        {alerts.message}
+      </Alert>
+      {userState && (
         <div className="page-content ms-5 me-5">
           <div className="d-flex flex-column">
             <div className="account-section">
@@ -75,15 +97,19 @@ const MyAccount = () => {
                 <textarea
                   className="input"
                   placeholder="About"
+                  defaultValue={userState.aboutSection}
                   onChange={(e) => setAbout(e.target.value)}
                 />
+              </div>
+              <div className="mt-3">
+                <Button onClick={updateAbout}>Save About</Button>
               </div>
             </div>
             <div className="account-section">
               <h2>AVATAR</h2>
               <img className="avatar" alt="avatar" src={user.profilePicture} />
               <div>
-                <Button>Change Avatar</Button>
+                <Button onClick={() => setShowAvatarUpload(true)}>Change Avatar</Button>
               </div>
             </div>
             <div className="account-section">
@@ -118,6 +144,11 @@ const MyAccount = () => {
               </div>
             </div>
           </div>
+          <ImageUploader
+            visible={showAvatarUpload}
+            desiredFile="avatar"
+            visibilityHandler={() => setShowAvatarUpload(false)}
+          />
         </div>
       )}
     </div>

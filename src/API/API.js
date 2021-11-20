@@ -135,7 +135,7 @@ export const postConfirmCode = async (username, confirmCode) => {
 export const getPlatformIcon = async (platform) => {
   try {
     const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/icon.png`);
-    if(resp.status != 200){
+    if (resp.status != 200) {
       return "/platformIcon.svg";
     }
     return `${AWS_ENDPOINT}/platforms/${platform}/icon.png`;
@@ -147,7 +147,7 @@ export const getPlatformIcon = async (platform) => {
 export const getPlatformBanner = async (platform) => {
   try {
     const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/banner.png`);
-    if(resp.status != 200){
+    if (resp.status != 200) {
       return "/banner.svg";
     }
     return `${AWS_ENDPOINT}/platforms/${platform}/banner.png`;
@@ -238,6 +238,16 @@ export const manageFriend = async (username, action) => {
       targetUsername: username,
       action: action,
     },
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
+};
+
+export const patchUserAbout = async (username, text) => {
+  const token = await getToken();
+  const response = await axios.patch(
+    `${ENDPOINT}/users/about`,
+    { aboutSection: text },
     { headers: { authorization: `Bearer ${token}` } },
   );
   return response;
