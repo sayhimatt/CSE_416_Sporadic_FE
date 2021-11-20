@@ -74,29 +74,34 @@ const Quiz = () => {
     try {
       const response = await postStartQuiz(platform, quiz);
       setQuestions(response.questions);
-      initAnswers();
+      initAnswers(response.questions);
       setQuiz(response);
       setTimeLeft(response.timeLimit);
     } catch (error) {
       console.log(error);
     }
   };
-  const initAnswers = () => {
-    const answers = new Array(questions.length);
-    for (let index = 0; index < questions.length; index++) {
+  const initAnswers = (questionList) => {
+    const answers = new Array(questionList.length);
+    for (let index = 0; index < questionList.length; index++) {
       answers[index] = -1;
     }
-    console.log(answers);
+    setAnswers(answers);
+    //console.log(answers);
   };
   const assignAnswer = (questionIndex, answerIndex) => {
-    console.log(questionIndex);
-    console.log(answerIndex);
+    //console.log(questionIndex);
+    //console.log(answerIndex);
+    const newChoices = answers;
+    newChoices[questionIndex] = answerIndex;
+    setAnswers(newChoices);
+    //console.log(answers);
   };
   const renderCards = () => {
     const cards = questions.map((question, index) => {
       return (
         <QuestionCard
-          key={question._id + index}
+          key={"Question" + index}
           information={{
             question: question.body,
             questionIndex: index,
@@ -110,11 +115,7 @@ const Quiz = () => {
   };
 
   const submitAnswers = () => {
-    // Gather all selected answers from each question card.
-    questionsCards.forEach((value, index) => {
-      console.log(value);
-      console.log(index);
-    });
+    // Submit all selected answers from each question card.
   };
   const quizOver = () => {
     history.push("/p/movies/sporadic/complete");

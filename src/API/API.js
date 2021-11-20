@@ -88,6 +88,19 @@ export const postStartQuiz = async (platform, quizTitle) => {
   return response.data;
 };
 
+export const postSubmitQuiz = async (platform, quizTitle, answers) => {
+  const token = await getToken();
+  const response = await axios.post(
+    `${ENDPOINT}/quizzes/${platform}/${quizTitle}/submit`,
+    {
+      answers: answers,
+    },
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  return response.data;
+}
 /* Login Routing */
 
 export const postCreateAccount = async (username, password, email) => {
@@ -108,7 +121,7 @@ export const postConfirmCode = async (username, confirmCode) => {
 export const getUserIcon = async (username) => {
   try {
     const resp = await axios.get(`${AWS_ENDPOINT}/users/${username}/avatar.png`);
-    if(resp.status != 200){
+    if (resp.status != 200) {
       return "/propic.png";
     }
     return `${AWS_ENDPOINT}/users/${username}/avatar.png`;
@@ -120,7 +133,7 @@ export const getUserIcon = async (username) => {
 export const getPlatformIcon = async (platform) => {
   try {
     const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/icon.png`);
-    if(resp.status != 200){
+    if (resp.status != 200) {
       return "/platformIcon.svg";
     }
     return `${AWS_ENDPOINT}/platforms/${platform}/icon.png`;
@@ -132,7 +145,7 @@ export const getPlatformIcon = async (platform) => {
 export const getPlatformBanner = async (platform) => {
   try {
     const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/banner.png`);
-    if(resp.status != 200){
+    if (resp.status != 200) {
       return "/banner.svg";
     }
     return `${AWS_ENDPOINT}/platforms/${platform}/banner.png`;
