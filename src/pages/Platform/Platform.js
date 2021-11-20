@@ -7,7 +7,14 @@ import Button from "../../components/Button/Button";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
-import { patchSubscribe, patchUnsubscribe, deleteQuiz } from "./../../API/API";
+import ImageUploader from "../../components/ImageUploader/ImageUploader";
+import {
+  getPlatformIcon,
+  getPlatformBanner,
+  patchSubscribe,
+  patchUnsubscribe,
+  deleteQuiz,
+} from "./../../API/API";
 
 import "./styles.scss";
 
@@ -21,16 +28,32 @@ const Platform = () => {
   const [subscribed, setSubscribed] = useState(user.subscriptions.includes(params.platform));
   const [modView, setModView] = useState(false);
   const [isBanned, setIsBanned] = useState(false);
+  const [banner, setBanner] = useState("/banner.svg");
+  const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
+  const [uploadBanner, setUploadBanner] = useState(false);
+  const [uploadIcon, setUploadIcon] = useState(false);
 
   useEffect(() => {
     getCurrentPlatform();
     getQuizzes();
+    getImageMedia();
     setModView(false);
   }, [params]);
 
   useEffect(() => {
     renderCards();
   }, [quizzes, modView]);
+
+  const getImageMedia = async () => {
+    await getPlatformBanner(params.platform).then((banner) => {
+      console.log(banner);
+      setBanner(banner);
+    });
+    await getPlatformIcon(params.platform).then((icon) => {
+      console.log(icon);
+      setPlatformIcon(icon);
+    });
+  };
 
   const getCurrentPlatform = async () => {
     const name = params.platform;
@@ -86,12 +109,12 @@ const Platform = () => {
     setModView(!modView);
   };
 
-  const uploadBanner = () => {
-    //todo
-  };
-
-  const uploadIcon = () => {
-    //todo
+  const showImageUploader = (type) => {
+    if (type == "banner") {
+      setUploadBanner(true);
+    } else {
+      setUploadIcon(true);
+    }
   };
 
   const removeQuiz = (quiz) => {
@@ -151,9 +174,10 @@ const Platform = () => {
       <MainNav />
       <PlatformSubNav
         platformName={params.platform}
-        bannerSrc="/banner.svg"
+        bannerSrc={banner}
+        iconSrc={platformIcon}
         modView={modView}
-        fileUploadHandlers={{ uploadBanner, uploadIcon }}
+        showUpload={showImageUploader}
       >
         {(platform.moderators.includes(user.username) || platform.owner === user.username) && (
           <Button buttonStyle="btn--special" onClick={toggleModView}>
@@ -203,6 +227,18 @@ const Platform = () => {
           </div>
         </div>
       </div>
+      <ImageUploader
+        visible={uploadBanner}
+        desiredFile="platform banner"
+        desiredPlatform={params.platform}
+        visibilityHandler={() => setUploadBanner(false)}
+      />
+      <ImageUploader
+        visible={uploadIcon}
+        desiredFile="platform icon"
+        desiredPlatform={params.platform}
+        visibilityHandler={() => setUploadIcon(false)}
+      />
     </div>
   );
 };
