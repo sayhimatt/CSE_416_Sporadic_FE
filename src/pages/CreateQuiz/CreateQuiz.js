@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router";
 import Alert from "react-bootstrap/Alert";
 
-import { postCreateQuiz } from "../../API/API";
+import { postCreateQuiz, getPlatformIcon, getPlatformBanner } from "../../API/API";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard";
 import Button from "../../components/Button/Button";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
@@ -16,9 +16,25 @@ const CreateQuiz = () => {
   const [quizInfo, setQuizInfo] = useState(defaultQuiz());
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({ show: false, messages: [] });
+  const [banner, setBanner] = useState("/banner.svg");
+  const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
   const params = useParams();
   const history = useHistory();
 
+  useEffect(() => {
+    getImageMedia();
+  }, [params]);
+
+  const getImageMedia = async () => {
+    await getPlatformBanner(params.platform).then((banner) => {
+      console.log(banner);
+      setBanner(banner);
+    });
+    await getPlatformIcon(params.platform).then((icon) => {
+      console.log(icon);
+      setPlatformIcon(icon);
+    });
+  };
   const setQuizTitle = (newTitle) => {
     setQuizInfo((prevState) => ({ ...prevState, quizTitle: newTitle }));
   };
@@ -227,7 +243,11 @@ const CreateQuiz = () => {
   return (
     <div>
       <NavBar />
-      <PlatformSubNav platformName={params.platform} />
+      <PlatformSubNav
+        platformName={"Quiz: " + quizInfo.quizTitle}
+        bannerSrc={banner}
+        iconSrc={platformIcon}
+      />
       <div className="quiz-alerts">{renderErrors()}</div>
       <div className="page-content d-flex flex-row justify-content-between m-4">
         <div id="quiz-controller" className="d-flex flex-column align-items-center">
