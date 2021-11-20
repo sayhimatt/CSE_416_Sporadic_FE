@@ -8,8 +8,6 @@ import SubNav from "../../components/NavBar/SubNav/SubNav";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import Footer from "../../components/Footer/Footer";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
-import QuestionCard from "../../components/Card/QuestionCard/QuestionCard";
-import ImageUploader from "../../components/ImageUploader/ImageUploader";
 
 const Feed = ({ children }) => {
   const { user, dispatch } = useContext(UserContext);
@@ -29,7 +27,7 @@ const Feed = ({ children }) => {
   };
 
   const mapQuizzesToCards = (quizzes) => {
-    return quizzes.map((quiz) => {
+    return quizzes.items.map((quiz) => {
       <LargeCard
         key={quiz._id}
         cardInfo={{

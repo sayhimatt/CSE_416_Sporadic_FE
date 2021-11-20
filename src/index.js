@@ -19,7 +19,7 @@ Amplify.configure({
     endpoints: [
       {
         name: "BackendAPI",
-        endpoint: "https://matt-training-server.herokuapp.com",
+        endpoint: "http://localhost:5000",
         custom_header: async () => {
           return {
             Authorization: `Bearer ${(await Auth.currentSession()).getIdToken().getJwtToken()}`,
