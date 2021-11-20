@@ -131,17 +131,6 @@ export const postConfirmCode = async (username, confirmCode) => {
   });
 };
 
-export const getUserIcon = async (username) => {
-  try {
-    const resp = await axios.get(`${AWS_ENDPOINT}/users/${username}/avatar.png`);
-    if(resp.status != 200){
-      return "/propic.png";
-    }
-    return `${AWS_ENDPOINT}/users/${username}/avatar.png`;
-  } catch {
-    return "/propic.png";
-  }
-};
 // https://sporadic-development-bucket.s3.amazonaws.com/platforms/MattLand/banner.png
 export const getPlatformIcon = async (platform) => {
   try {
