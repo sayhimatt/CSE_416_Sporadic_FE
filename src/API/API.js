@@ -244,10 +244,10 @@ export const manageFriend = async (username, action) => {
 };
 
 /* Feed routing */
-export const getFeedQuizzes = async (username) => {
+export const getFeedQuizzes = async () => {
   const token = await getToken();
   const response = await axios.get(
-    `${ENDPOINT}/users/${username}/retreiveQuizFeed`,
+    `${ENDPOINT}/quizzes/feed`,
     { headers: { authorization: `Bearer ${token}` } },
   );
   return response;

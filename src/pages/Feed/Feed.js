@@ -20,7 +20,7 @@ const Feed = ({ children }) => {
   }, []);
 
   const loadQuizzes = async () => {
-    await getFeedQuizzes(user.username)
+    await getFeedQuizzes()
       .then((quizzes) => {
         const cards = mapQuizzesToCards(quizzes);
         setQuizCards(cards);
@@ -35,6 +35,8 @@ const Feed = ({ children }) => {
         cardInfo={{
           title: quiz.title,
           description: quiz.description,
+          upvotes: quiz.upvotes,
+          downvotes: quiz.downvotes,
           subtext: (
             <Link className="link" to={`/p/${quiz.platform}`}>
               {quiz.platform}
@@ -56,6 +58,12 @@ const Feed = ({ children }) => {
     <div>
       <MainNav />
       <SubNav heading={`Welcome Back ${user.username}!`} buttons={subNavButtons} />
+      <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
+        <div className="d-flex flex-column m-5 align-items-end">
+          <div className="sort"></div>
+          <div className="quizzes d-flex flex-column m-10">{quizCards}</div>
+        </div>
+      </div>
       <Footer />
     </div>
   );
