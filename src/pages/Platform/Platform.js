@@ -7,6 +7,7 @@ import Button from "../../components/Button/Button";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
+import ImageUploader from "../../components/ImageUploader/ImageUploader"
 import { patchSubscribe, patchUnsubscribe, deleteQuiz } from "./../../API/API";
 
 import "./styles.scss";
@@ -82,11 +83,11 @@ const Platform = () => {
     setModView(!modView);
   };
 
-  const uploadBanner = () => {
-    //todo
+  const uploadBanner = (e) => {
+    
   };
 
-  const uploadIcon = () => {
+  const uploadIcon = (e) => {
     //todo
   };
 
