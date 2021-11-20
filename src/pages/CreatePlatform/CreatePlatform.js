@@ -13,6 +13,7 @@ import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Button/Button";
 import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 import ImageUploader from "../../components/ImageUploader/ImageUploader";
+import LoadingOverlay from "../../components/LoadingIndicators/LoadingOverlay";
 
 import "./styles.scss";
 
@@ -27,6 +28,7 @@ const CreatePlatform = () => {
   const [showInUseMsg, setShowInUseMsg] = useState(false);
   const [images, setImages] = useState({ icon: "", banner: "" });
   const [imageUploaders, setImageUploaders] = useState({ icon: false, banner: false });
+  const [showLoading, setShowLoading] = useState(false);
   const { dispatch } = useContext(UserContext);
 
   const history = useHistory();
@@ -40,6 +42,7 @@ const CreatePlatform = () => {
   };
 
   const createPlatform = async () => {
+    setShowLoading(true);
     setShowInUseMsg(false);
     if (invalidInputs()) {
       return;
@@ -53,6 +56,7 @@ const CreatePlatform = () => {
         history.push(`/p/${platformData.title}`);
       })
       .catch((error) => {
+        setShowLoading(false);
         if (error.response.status === 400) {
           setShowInUseMsg(true);
         } else {
@@ -181,6 +185,7 @@ const CreatePlatform = () => {
         }
         customSubmit={customBannerSubmit}
       />
+      <LoadingOverlay isVisible={showLoading} />
     </div>
   );
 };
