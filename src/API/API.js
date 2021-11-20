@@ -129,11 +129,40 @@ export const generateSetUserIconURL = async (username) => {
   }
 }
 
-export const setUserIcon = async (url, file) => {
+export const generateSetPlatformIconURL = async (platform) => {
+  try{
+    const token = await getToken();
+    const response = await axios.get(`${ENDPOINT}/platforms/${platform}/set-icon`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if(response.status == 200){
+      return response.data;
+    }else{ return null; }
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+}
+
+export const generateSetPlatformBannerURL = async (platform) => {
+  try{
+    const token = await getToken();
+    const response = await axios.get(`${ENDPOINT}/platforms/${platform}/set-banner`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if(response.status == 200){
+      return response.data;
+    }else{ return null; }
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+}
+
+export const setImage = async (url, file) => {
   try{
     const response = await axios.put(url, file);
-    if(response.status != 200){
-      console.log(response);
+    if(response.status !== 200){
       return -1;
     }
     return 1;

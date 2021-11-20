@@ -1,10 +1,10 @@
 import React, { useState, useContext } from "react";
 import { Form } from "react-bootstrap";
-import "./styles.css";
+import "./styles.scss";
 import { UserContext } from "../../contexts/UserContext/UserContext";
-import { generateSetUserIconURL, setUserIcon } from "../../API/API";
+import { generateSetUserIconURL, setImage, generateSetPlatformIconURL, generateSetPlatformBannerURL } from "../../API/API";
 
-const ImageUploader = (desiredFile) => {
+const ImageUploader = ({desiredFile, desiredPlatform}) => {
   const [file, setFile] = useState("");
   const [uploadStatus, setUploadStatus] = useState("");
   const { user } = useContext(UserContext);
@@ -23,27 +23,54 @@ const ImageUploader = (desiredFile) => {
     e.preventDefault();
     if(file != ""){
       // Now call the generator based on what we're uploading
-      console.log("hello there");
-      console.log(user.username);
-      const putURL = await generateSetUserIconURL(user.username);
+      // our desiredFile's possibilities = {"platform icon", "platform banner", "quiz icon", "avatar"}
+      console.log(typeof(desiredFile));
+      const uploadType = desiredFile.toString().trim().toLowerCase();
+      let putURL = ``;
+      console.log(desiredPlatform);
+      switch(uploadType){
+        case "platform icon":
+          putURL = await generateSetPlatformIconURL(desiredPlatform);
+          break;
+        case "platform banner":
+          putURL = await generateSetPlatformBannerURL(desiredPlatform);
+          break;
+        case "quiz icon":
+          // TODO: See if we're implementing on API
+          break;
+        case "avatar":
+          putURL = await generateSetUserIconURL(user.username);
+          break;
+        default:
+          throw(`Error given invalid desiredFile ${desiredFile} not correct`);
+      }
       console.log(putURL);
-      setUserIcon(putURL, file);      
+      // Validate and send
+      if(putURL != null){
+        const out = await setImage(putURL, file);
+        if(out !== 1){
+          setUploadStatus(`Error uploading file`);
+        }else{
+          setUploadStatus(`File uploaded!`);
+        }
+      }else{
+        setUploadStatus(`Error uploading file`);
+      }
     }else{
       setUploadStatus("Choose a png file");
     }
-    // Validate and send
   };
   return (
-    <div className="imageUploader flex-row align-items-center mt-4">
-      <Form.Group controlId="formFile" className="mb-1" onSubmit={onSubmit}>
-        <Form.Label>Please select a {desiredFile.desiredFile} image</Form.Label>
+    <div className="image-uploader flex-row align-items-center mt-4">
+      <Form.Group controlId="formFile" className="mb-3" onSubmit={onSubmit}>
+        <Form.Label>Please select a {desiredFile} image</Form.Label>
         <Form.Control type="file" onChange={onChange} />
       </Form.Group>
       <div>
         <input
           type="submit"
           value="Upload"
-          className="btn btn-primary btn-block"
+          className="btn btn-primary btn-block upload-button"
           onClick={onSubmit}
         />
         <p>{uploadStatus}</p>
