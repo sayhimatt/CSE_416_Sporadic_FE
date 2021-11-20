@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 
-import { getPlatform, postStartQuiz, getPlatformIcon, getPlatformBanner } from "./../../API/API";
+import {
+  getPlatform,
+  postStartQuiz,
+  postSubmitQuiz,
+  getPlatformIcon,
+  getPlatformBanner,
+} from "./../../API/API";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard.js";
@@ -116,6 +122,7 @@ const Quiz = () => {
 
   const submitAnswers = () => {
     // Submit all selected answers from each question card.
+    postSubmitQuiz(params.platform, params.quiz, answers);
   };
   const quizOver = () => {
     history.push("/p/movies/sporadic/complete");
