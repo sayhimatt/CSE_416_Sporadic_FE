@@ -18,6 +18,7 @@ import CreateQuiz from "./pages/CreateQuiz/CreateQuiz";
 import MyAccount from "./pages/MyAccount/MyAccount";
 import QuizComplete from "./pages/Quiz/QuizComplete";
 import Friends from "./pages/Friends/Friends";
+import ManageSubscribers from "./pages/ManageSubscribers/ManageSubscribers";
 import { authenticate } from "./API/API";
 
 import "./App.scss";
@@ -102,6 +103,12 @@ const App = () => {
               exact
               path="/p/:platform/createQuiz"
               component={CreateQuiz}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute
+              exact
+              path="/p/:platform/subscribers"
+              component={ManageSubscribers}
               authenticated={auth.authenticated}
             />
             <GuardedRoute

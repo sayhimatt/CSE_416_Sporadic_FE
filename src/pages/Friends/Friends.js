@@ -5,7 +5,7 @@ import NavBar from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Button/Button";
 import SmallCard from "../../components/Card/SmallCard/SmallCard";
-import { getUser, manageFriend } from "../../API/API";
+import { getUser, manageFriend, getAllUserIcons } from "../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
 
 import "./styles.scss";
@@ -13,11 +13,15 @@ import "./styles.scss";
 const Friends = () => {
   const { user } = useContext(UserContext);
   const [friends, setFriends] = useState([]);
+  const [profilePictures, setProfilePictures] = useState();
   const [search, setSearch] = useState("");
 
   useEffect(() => {
     getUser(user.username)
-      .then((res) => setFriends(res.friends))
+      .then((res) => {
+        setFriends(res.friends);
+        getAllUserIcons(res.friends).then((icons) => setProfilePictures(icons));
+      })
       .catch((e) => console.log("Could not get user"));
   }, []);
 
@@ -67,9 +71,11 @@ const Friends = () => {
         </div>
         <div className="small-card-list w-50">
           {friends &&
+            profilePictures &&
             friends.map((friend) => (
               <SmallCard
                 key={friend}
+                profilePicture={profilePictures[friend]}
                 username={friend}
                 rightCard={<Button onClick={(e) => removeFriend(friend)}>Remove Friend</Button>}
               ></SmallCard>
