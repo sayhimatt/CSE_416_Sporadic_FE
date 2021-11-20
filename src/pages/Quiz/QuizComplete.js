@@ -75,7 +75,9 @@ const QuizComplete = () => {
 
   const makeComment = () => {
     putComment(params.platform, params.quiz, comment)
-      .then()
+      .then((res) => {
+       getQuiz();
+    })
       .catch((error) => {
         setShowAlert(true);
       });
