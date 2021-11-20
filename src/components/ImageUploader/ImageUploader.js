@@ -9,7 +9,13 @@ import {
   generateSetPlatformBannerURL,
 } from "../../API/API";
 
-const ImageUploader = ({ visible, desiredFile, desiredPlatform, visibilityHandler }) => {
+const ImageUploader = ({
+  visible,
+  desiredFile,
+  desiredPlatform,
+  visibilityHandler,
+  customSubmit,
+}) => {
   const [file, setFile] = useState("");
   const [uploadStatus, setUploadStatus] = useState("");
   const { user } = useContext(UserContext);
@@ -82,7 +88,7 @@ const ImageUploader = ({ visible, desiredFile, desiredPlatform, visibilityHandle
               type="submit"
               value="Upload"
               className="btn btn-primary btn-block upload-button"
-              onClick={onSubmit}
+              onClick={customSubmit ? () => customSubmit(file) : onSubmit}
             />
             <p>{uploadStatus}</p>
           </div>
