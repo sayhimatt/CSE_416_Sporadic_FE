@@ -8,41 +8,61 @@ import SubNav from "../../components/NavBar/SubNav/SubNav";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import Footer from "../../components/Footer/Footer";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
-import QuestionCard from "../../components/Card/QuestionCard/QuestionCard";
-import ImageUploader from "../../components/ImageUploader/ImageUploader";
 
 const Feed = ({ children }) => {
   const { user, dispatch } = useContext(UserContext);
   const [quizCards, setQuizCards] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
+
 
   useEffect(() => {
-    loadQuizzes();
+    getQuizzes();
   }, []);
 
-  const loadQuizzes = async () => {
-    await getFeedQuizzes(user.username)
+  useEffect(() => {
+    renderCards();
+  }, [quizzes]);
+
+  /*
+  const getQuizzes = async () => {
+    await getFeedQuizzes()
       .then((quizzes) => {
         const cards = mapQuizzesToCards(quizzes);
         setQuizCards(cards);
       })
       .catch((error) => console.log(error));
   };
+*/
 
-  const mapQuizzesToCards = (quizzes) => {
-    return quizzes.map((quiz) => {
-      <LargeCard
-        key={quiz._id}
-        cardInfo={{
-          title: quiz.title,
-          description: quiz.description,
-          subtext: (
-            <Link className="link" to={`/p/${quiz.platform}`}>
-              {quiz.platform}
-            </Link>
-          ),
-        }}
-      />;
+const getQuizzes = async () => {
+  try {
+    const response = await getFeedQuizzes();
+    setQuizzes(response.items);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+  const renderCards = () => {
+    const cards = quizzes.map((quiz) => {
+      return (
+        <LargeCard
+          key={quiz._id}
+          cardInfo={{
+            title: quiz.title,
+            description: quiz.description,
+            upvotes: quiz.upvotes,
+            downvotes: quiz.downvotes,
+            subtext: (
+              <Link className="link" to={`/p/${quiz.platform}`}>
+                {quiz.platform}
+              </Link>
+            ),
+          }}
+        />
+      );
     });
+    setQuizCards(cards);
   };
   const subNavButtons = [
     <Link to="/createPlatform">
@@ -56,6 +76,12 @@ const Feed = ({ children }) => {
     <div>
       <MainNav />
       <SubNav heading={`Welcome Back ${user.username}!`} buttons={subNavButtons} />
+      <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
+        <div className="d-flex flex-column m-5 align-items-end">
+          <div className="sort"></div>
+          <div className="quizzes d-flex flex-column m-10">{quizCards}</div>
+        </div>
+      </div>
       <Footer />
     </div>
   );

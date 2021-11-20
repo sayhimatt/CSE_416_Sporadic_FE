@@ -123,6 +123,12 @@ const App = () => {
               component={QuizComplete}
               authenticated={auth.authenticated}
             />
+            <GuardedRoute
+              exact
+              path="/"
+              component={Feed}
+              authenticated={auth.authenticated}
+            />
             <GuardedRoute path="/" component={NotFound} authenticated={auth.authenticated} />
           </Switch>
         </Router>

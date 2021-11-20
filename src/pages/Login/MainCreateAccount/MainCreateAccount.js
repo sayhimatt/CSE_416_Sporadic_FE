@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
-
+import ReactDOM from 'react-dom'
 import { postCreateAccount } from "../../../API/API";
 import Button from "../../../components/Button/Button";
 import ErrorMessage from  "../../../components/ErrorMessage/ErrorMessage";
+import ErrorText from  "../../../components/ErrorMessage/ErrorText";
 import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay";
 import "../styles.css";
 import { resolveConfig } from "prettier";
@@ -20,12 +21,33 @@ const MainCreateAccount = () => {
     passwordConfirm: "",
   });
   const [showMsg, setShowMsg] = useState({
-    lengthText: false,
-    matchText: false,
     lengthBox: false,
     matchBox: false,
     errorBox: false,
   });
+
+  const lengthTextContainer = document.querySelector('#lengthTextDiv');
+
+  const matchTextContainer = document.querySelector('#matchTextDiv');
+
+  const checkPasswordInput = (input) => {    
+    if (input.length > 0 && input.length < 8)
+      ReactDOM.render( <ErrorText text="Password must be at least 8 characters long"/>, lengthTextContainer );
+    else 
+      ReactDOM.unmountComponentAtNode(lengthTextContainer);
+
+    if (credentials.passwordConfirm.length > 0 && credentials.passwordConfirm !== input)
+      ReactDOM.render( <ErrorText text="Passwords do not match"/>, matchTextContainer);
+    else 
+      ReactDOM.unmountComponentAtNode(matchTextContainer);
+  }
+
+  const checkConfirmInput = (input) => {
+    if (input.length > 0 && credentials.password !== input)
+      ReactDOM.render( <ErrorText text="Passwords do not match"/>, matchTextContainer);
+    else
+      ReactDOM.unmountComponentAtNode(matchTextContainer);
+  }
 
   const createAccount = async () => {      
     setShowMsg((prevState) => {
@@ -105,25 +127,14 @@ const MainCreateAccount = () => {
                 placeholder="Password"
                 type="password"
                 onChange={(e) => {
+                  checkPasswordInput(e.target.value);
                   setCredentials((prevState) => {
-                    setShowMsg((prevState) => {
-                      return {
-                        ...prevState,
-                        lengthText: e.target.value.length > 0 && e.target.value.length < 8,
-                        matchText:
-                          credentials.passwordConfirm.length > 0 &&
-                          credentials.passwordConfirm !== e.target.value,
-                      };
-                    });
                     return { ...prevState, password: e.target.value };
                   });
                 }}
               ></input>
             </div>
-            <ErrorMessage 
-              visible={showMsg.lengthText} 
-              errorStyle="errorText" 
-              text="Password must be at least 8 characters long"/>                      
+            <div id="lengthTextDiv"/>               
             <div className="inputBox">
               <input
                 id="passwordConfirm"
@@ -131,23 +142,14 @@ const MainCreateAccount = () => {
                 placeholder="Confirm Password"
                 type="password"
                 onChange={(e) => {
+                  checkConfirmInput(e.target.value);
                   setCredentials((prevState) => {
-                    setShowMsg((prevState) => {
-                      return {
-                        ...prevState,
-                        matchText:
-                          e.target.value.length > 0 && credentials.password !== e.target.value,
-                      };
-                    });
                     return { ...prevState, passwordConfirm: e.target.value };
                   });
                 }}
               ></input>
             </div>
-            <ErrorMessage 
-              visible={showMsg.matchText} 
-              errorStyle="errorText" 
-              text="Passwords do not match"/>            
+            <div id='matchTextDiv'/>
           </div>
           <Button type="button" onClick={createAccount}>
             Create Account

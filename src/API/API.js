@@ -267,8 +267,13 @@ export const patchUserAbout = async (username, text) => {
 };
 
 /* Feed routing */
-export const getFeedQuizzes = async (username) => {
-  return;
+export const getFeedQuizzes = async () => {
+  const token = await getToken();
+  const response = await axios.get(
+    `${ENDPOINT}/quizzes/feed`,
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response.data;
 };
 
 /* Quiz Routing */
