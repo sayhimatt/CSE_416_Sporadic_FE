@@ -22,11 +22,12 @@ const Platform = () => {
   const history = useHistory();
   const params = useParams();
   const { user, dispatch } = useContext(UserContext);
-  const [platform, setPlatform] = useState({});
+  const [platform, setPlatform] = useState();
   const [quizzes, setQuizzes] = useState([]);
   const [quizCards, setQuizCards] = useState([]);
   const [subscribed, setSubscribed] = useState(user.subscriptions.includes(params.platform));
   const [modView, setModView] = useState(false);
+  const [isBanned, setIsBanned] = useState(false);
   const [banner, setBanner] = useState("/banner.svg");
   const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
   const [uploadBanner, setUploadBanner] = useState(false);
@@ -56,13 +57,16 @@ const Platform = () => {
 
   const getCurrentPlatform = async () => {
     const name = params.platform;
-    await getPlatform(name)
+    getPlatform(name)
       .then((platformData) => {
         setPlatform(platformData);
       })
       .catch((error) => {
         if (error.response.status === 400) {
           history.replace(`/search?=${name}`);
+        } else if (error.response.status === 403) {
+          setIsBanned(true);
+          setPlatform({});
         } else {
           history.replace("/error");
         }
@@ -147,7 +151,25 @@ const Platform = () => {
     setQuizCards(cards);
   };
 
-  return (
+  const bannedPage = () => {
+    return (
+      <div>
+        <MainNav />
+        <div className="page-content d-flex mt-5 flex-column align-items-center justify-content-center">
+          <h1 className="mb-4">You are banned from this platform</h1>
+          <Link to="/">
+            <Button>Return Home</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  };
+
+  return !platform ? (
+    <MainNav />
+  ) : isBanned ? (
+    bannedPage()
+  ) : (
     <div>
       <MainNav />
       <PlatformSubNav
@@ -157,12 +179,11 @@ const Platform = () => {
         modView={modView}
         showUpload={showImageUploader}
       >
-        {Object.entries(platform).length !== 0 &&
-          (platform.moderators.includes(user.username) || platform.owner === user.username) && (
-            <Button buttonStyle="btn--special" onClick={toggleModView}>
-              {modView ? "User View" : "Mod View"}
-            </Button>
-          )}
+        {(platform.moderators.includes(user.username) || platform.owner === user.username) && (
+          <Button buttonStyle="btn--special" onClick={toggleModView}>
+            {modView ? "User View" : "Mod View"}
+          </Button>
+        )}
         <Button onClick={subscribed ? unsubscribe : subscribe}>
           {subscribed ? "Unsubscribe" : "Subscribe"}
         </Button>
@@ -177,14 +198,25 @@ const Platform = () => {
             <input className="search" placeholder="Search"></input>
           </div>
           {modView && (
-            <Button buttonSize="btn--large">
-              <Link
-                className="link d-flex justify-content-center"
-                to={`/p/${params.platform}/createQuiz`}
-              >
-                Create Quiz
-              </Link>
-            </Button>
+            <div className="d-flex flex-column w-100">
+              <Button buttonSize="btn--large">
+                <Link
+                  className="link d-flex justify-content-center"
+                  to={`/p/${params.platform}/createQuiz`}
+                >
+                  Create Quiz
+                </Link>
+              </Button>
+              <div className="p-1"></div>
+              <Button buttonStyle="btn--special" buttonSize="btn--large">
+                <Link
+                  className="link d-flex justify-content-center"
+                  to={`/p/${params.platform}/subscribers`}
+                >
+                  Manage Subscribers
+                </Link>
+              </Button>
+            </div>
           )}
           <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">
             {platform.description}

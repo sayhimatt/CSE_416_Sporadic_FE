@@ -88,6 +88,32 @@ export const postStartQuiz = async (platform, quizTitle) => {
   return response.data;
 };
 
+export const putBanStatus = async (platform, username, action) => {
+  const token = await getToken();
+  const response = await axios.put(
+    `${ENDPOINT}/platforms/${platform}/updateBannedUsers`,
+    {
+      targetUsername: username,
+      action,
+    },
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
+};
+
+export const putModeratorStatus = async (platform, username, action) => {
+  const token = await getToken();
+  const response = await axios.put(
+    `${ENDPOINT}/platforms/${platform}/updateModerators`,
+    {
+      targetUsername: username,
+      action,
+    },
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
+};
+
 /* Login Routing */
 
 export const postCreateAccount = async (username, password, email) => {
@@ -254,4 +280,28 @@ export const deleteQuiz = async (platform, quiz) => {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response;
+};
+
+/* AWS S3 Routing */
+export const getUserIcon = async (username) => {
+  try {
+    const response = await axios.get(`${AWS_ENDPOINT}/users/${username}/avatar.png`);
+    return `${AWS_ENDPOINT}/users/${username}/avatar.png`;
+  } catch {
+    return "/propic.png";
+  }
+};
+
+export const getAllUserIcons = async (usernames) => {
+  const promises = [];
+  const icons = {};
+  usernames.forEach((username) =>
+    promises.push(
+      getUserIcon(username).then((link) => {
+        icons[username] = link;
+      }),
+    ),
+  );
+  await Promise.all(promises);
+  return icons;
 };
