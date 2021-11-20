@@ -80,10 +80,18 @@ const Quiz = () => {
     });
     setQuestionCards(cards);
   };
+  const submitAnswers = () => {
+    // Gather all selected answers from each question card.
+    questionsCards.forEach(question, index => {
+      
+    });
+  }
   const quizOver = () => {
     history.push("/p/movies/sporadic/complete");
+    submitAnswers();
     alert("Quiz is over now navigating to end of quiz page!");
   };
+
   return (
     <div>
       <MainNav />
