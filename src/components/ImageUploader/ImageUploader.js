@@ -9,7 +9,7 @@ import {
   generateSetPlatformBannerURL,
 } from "../../API/API";
 
-const ImageUploader = ({ desiredFile, desiredPlatform }) => {
+const ImageUploader = ({ visible, desiredFile, desiredPlatform }) => {
   const [file, setFile] = useState("");
   const [uploadStatus, setUploadStatus] = useState("");
   const { user, dispatch } = useContext(UserContext);
@@ -68,23 +68,27 @@ const ImageUploader = ({ desiredFile, desiredPlatform }) => {
       setUploadStatus("Choose a png file");
     }
   };
-  return (
-    <div className="image-uploader flex-row align-items-center mt-4">
-      <Form.Group controlId="formFile" className="mb-3" onSubmit={onSubmit}>
-        <Form.Label>Please select a {desiredFile} image</Form.Label>
-        <Form.Control type="file" onChange={onChange} />
-      </Form.Group>
-      <div>
-        <input
-          type="submit"
-          value="Upload"
-          className="btn btn-primary btn-block upload-button"
-          onClick={onSubmit}
-        />
-        <p>{uploadStatus}</p>
+  if (visible) {
+    return (
+      <div className="image-uploader flex-row align-items-center mt-4">
+        <Form.Group controlId="formFile" className="mb-3" onSubmit={onSubmit}>
+          <Form.Label>Please select a {desiredFile} image</Form.Label>
+          <Form.Control type="file" onChange={onChange} />
+        </Form.Group>
+        <div>
+          <input
+            type="submit"
+            value="Upload"
+            className="btn btn-primary btn-block upload-button"
+            onClick={onSubmit}
+          />
+          <p>{uploadStatus}</p>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }else{
+    return ( null );
+  }
 };
 
 export default ImageUploader;
