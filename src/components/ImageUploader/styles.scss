@@ -1,5 +1,6 @@
 @import "../../App.scss";
 .image-uploader {
+  position: relative;
   background: #d4f1f4;
   padding: 5px 5px;
   box-shadow: 1px 4px 4px rgba(0, 0, 0, 0.25);
@@ -10,8 +11,8 @@
   margin-left: 0.5em;
   margin-right: 0.5em;
 }
-.image-uploader > *{
-  display: table-cell
+.image-uploader > * {
+  display: table-cell;
 }
 .image-uploader div {
   display: block;
@@ -24,4 +25,17 @@
 .upload-button {
   background-color: $secondaryColor !important;
   border-color: $secondaryColor !important;
+}
+
+.custom-overlay {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }

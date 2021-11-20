@@ -5,15 +5,15 @@ import SubNav from "../SubNav/SubNav";
 
 import "./styles.css";
 
-const PlatformSubNav = ({ children, platformName, bannerSrc, iconSrc, modView, fileUploadHandlers }) => {
+const PlatformSubNav = ({ children, platformName, bannerSrc, iconSrc, modView, showUpload }) => {
   return (
     <div className="platformSubNav">
       {bannerSrc && (
         <div
-          className={`banner`}
+          className={`banner ${modView ? "selectable" : ""}`}
           style={{ backgroundImage: `url(${bannerSrc})` }}
-        >
-        </div>
+          onClick={() => (modView ? showUpload("banner") : null)}
+        ></div>
       )}
       <SubNav
         heading={
@@ -25,12 +25,13 @@ const PlatformSubNav = ({ children, platformName, bannerSrc, iconSrc, modView, f
       >
         <div className="icon-container">
           <img
-            className={
-              "d-flex " +
-              (bannerSrc ? "icon--large" : "icon--small")
-            }
+            className={"d-flex " + (bannerSrc ? "icon--large" : "icon--small")}
             src={iconSrc}
             alt="Icon"
+          />
+          <div
+            className={`image-overlay ${modView ? "selectable" : ""}`}
+            onClick={() => (modView ? showUpload("icon") : null)}
           />
         </div>
       </SubNav>
