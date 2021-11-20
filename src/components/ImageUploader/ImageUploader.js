@@ -12,7 +12,7 @@ import {
 const ImageUploader = ({ desiredFile, desiredPlatform }) => {
   const [file, setFile] = useState("");
   const [uploadStatus, setUploadStatus] = useState("");
-  const { user } = useContext(UserContext);
+  const { user, dispatch } = useContext(UserContext);
   const onChange = (e) => {
     console.log(e.target.files[0]);
     if (e.target.files[0].type !== "image/png") {
@@ -57,6 +57,9 @@ const ImageUploader = ({ desiredFile, desiredPlatform }) => {
           setUploadStatus(`Error uploading file`);
         } else {
           setUploadStatus(`File uploaded!`);
+          if(uploadType === "avatar"){
+            window.location.reload(false); // They're changing their avatar so have it reload the page.
+          }
         }
       } else {
         setUploadStatus(`Error uploading file`);
