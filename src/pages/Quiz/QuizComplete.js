@@ -6,12 +6,14 @@ import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import award from "../../award.svg";
 import "./styles.scss";
+import SmallCard from "../../components/Card/SmallCard/SmallCard";
 
 const QuizComplete = () => {
   const [platform, setPlatform] = useState({});
   const [quiz, setQuiz] = useState({});
   const [banner, setBanner] = useState("/banner.svg");
   const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
+  const [comment, setComment] = useState("");
   const history = useHistory();
   const params = useParams();
 
@@ -22,11 +24,11 @@ const QuizComplete = () => {
   }, [params]);
 
   const getImageMedia = async () => {
-    await getPlatformBanner(platform).then((banner) => {
+    await getPlatformBanner(params.platform).then((banner) => {
       console.log(banner);
       setBanner(banner);
     });
-    await getPlatformIcon(platform).then((icon) => {
+    await getPlatformIcon(params.platform).then((icon) => {
       console.log(icon);
       setPlatformIcon(icon);
     });
@@ -64,11 +66,20 @@ const QuizComplete = () => {
         bannerSrc={banner}
         iconSrc={platformIcon}
       />
-      <div className="content d-flex m-4 flex-row align-items-center">
-        <div className="d-flex flex-column flex-md-fill color-secondary fw-bold fs-3 center">
+      <div className="flex-row input-box w-75">
+        <textarea
+          className="input"
+          placeholder="Enter a comment"
+          onChange={(e) => setComment(e.target.value)}
+        />
+        <input type="submit" value="Post" className="btn btn-primary btn-block" />
+      </div>
+      <div className="content d-flex m-4 flex-row">
+        <div className="d-flex flex-column flex-md-fill color-secondary fw-bold fs-3">
           Your Score is: 100/100
+          <SmallCard username={"jackson"} rightCard={"Not So Hard"} />
         </div>
-        <div className="information d-flex flex-column">
+        <div className="information d-flex flex-column m-4">
           <div className="searchBar searchBar--border">
             <input className="search" placeholder="Search"></input>
           </div>
