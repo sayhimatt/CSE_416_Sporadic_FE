@@ -56,9 +56,6 @@ const Feed = ({ children }) => {
     <div>
       <MainNav />
       <SubNav heading={`Welcome Back ${user.username}!`} buttons={subNavButtons} />
-      <ImageUploader desiredFile={"platform icon"} desiredPlatform={"MattLand"} />
-      <ImageUploader desiredFile={"platform banner"} desiredPlatform={"MattLand"} />
-      <ImageUploader desiredFile={"avatar"} />
       <Footer />
     </div>
   );
