@@ -125,7 +125,7 @@ const App = () => {
             />
             <GuardedRoute
               exact
-              path="/feed"
+              path="/"
               component={Feed}
               authenticated={auth.authenticated}
             />
