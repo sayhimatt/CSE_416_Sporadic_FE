@@ -19,7 +19,7 @@ Amplify.configure({
     endpoints: [
       {
         name: "BackendAPI",
-        endpoint: "https://sporadic-development-bucket.s3.us-east-1.amazonaws.com",
+        endpoint: "https://cse-416-sporadic-api-prod.herokuapp.com",
         custom_header: async () => {
           return {
             Authorization: `Bearer ${(await Auth.currentSession()).getIdToken().getJwtToken()}`,
