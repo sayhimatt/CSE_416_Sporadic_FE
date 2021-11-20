@@ -8,11 +8,13 @@ import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Button/Button";
 
 import "./styles.scss";
+import ImageUploader from "../../components/ImageUploader/ImageUploader";
 
 const MyAccount = () => {
   const { user, dispatch } = useContext(UserContext);
   const [userState, setuserState] = useState({});
   const [about, setAbout] = useState("");
+  const [showAvatarUpload, setShowAvatarUpload] = useState(false);
 
   useEffect(() => {
     getUser(user.username)
@@ -83,7 +85,7 @@ const MyAccount = () => {
               <h2>AVATAR</h2>
               <img className="avatar" alt="avatar" src={user.profilePicture} />
               <div>
-                <Button>Change Avatar</Button>
+                <Button onClick={() => setShowAvatarUpload(true)}>Change Avatar</Button>
               </div>
             </div>
             <div className="account-section">
@@ -118,6 +120,11 @@ const MyAccount = () => {
               </div>
             </div>
           </div>
+          <ImageUploader
+            visible={showAvatarUpload}
+            desiredFile="avatar"
+            visibilityHandler={() => setShowAvatarUpload(false)}
+          />
         </div>
       )}
     </div>
