@@ -11,12 +11,18 @@ const NavBar = () => {
   const { user, dispatch } = useContext(UserContext);
   const [subscriptionDropdownOpen, setSubscriptionDropdownOpen] = useState(false);
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
+  const [search, setSearch] = useState("");
   const history = useHistory();
 
   const logout = async () => {
     await Auth.signOut();
     window.location.reload();
     dispatch({ type: "LOGOUT" });
+  };
+
+  const submitSearch = (e) => {
+    e.preventDefault();
+    history.push(`/search?=${search}`);
   };
 
   return (
@@ -26,9 +32,13 @@ const NavBar = () => {
           <img src="/logo.svg" alt="placeholder" />
         </Link>
       </div>
-      <div className="searchBar">
-        <input className="search" placeholder="Search"></input>
-      </div>
+      <form className="searchBar" onSubmit={submitSearch}>
+        <input
+          className="search"
+          placeholder="Search"
+          onChange={(e) => setSearch(e.target.value)}
+        ></input>
+      </form>
       <div className="navbar-nav ms-auto">
         <a
           href="#"

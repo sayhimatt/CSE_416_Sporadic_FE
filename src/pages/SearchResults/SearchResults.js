@@ -18,7 +18,7 @@ const SearchResults = ({ location }) => {
 
   useEffect(() => {
     search("platforms");
-  }, []);
+  }, [location]);
 
   const search = (type) => {
     setActiveTab(type);
