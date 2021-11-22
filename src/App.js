@@ -19,6 +19,7 @@ import MyAccount from "./pages/MyAccount/MyAccount";
 import QuizComplete from "./pages/Quiz/QuizComplete";
 import Friends from "./pages/Friends/Friends";
 import ManageSubscribers from "./pages/ManageSubscribers/ManageSubscribers";
+import SearchResults from "./pages/SearchResults/SearchResults";
 import { authenticate } from "./API/API";
 
 import "./App.scss";
@@ -123,10 +124,11 @@ const App = () => {
               component={QuizComplete}
               authenticated={auth.authenticated}
             />
+            <GuardedRoute exact path="/" component={Feed} authenticated={auth.authenticated} />
             <GuardedRoute
               exact
-              path="/"
-              component={Feed}
+              path="/search"
+              component={SearchResults}
               authenticated={auth.authenticated}
             />
             <GuardedRoute path="/" component={NotFound} authenticated={auth.authenticated} />
