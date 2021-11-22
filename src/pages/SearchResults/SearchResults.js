@@ -17,8 +17,19 @@ const SearchResults = ({ location }) => {
   const query = location.search.substring(2);
 
   useEffect(() => {
-    search("platforms");
+    search(getCurrentType());
   }, [location]);
+
+  const getCurrentType = () => {
+    let type = "platforms";
+    Object.keys(searchType).forEach((key) => {
+      console.log(key);
+      if (searchType[key]) {
+        type = key;
+      }
+    });
+    return type;
+  };
 
   const search = (type) => {
     setActiveTab(type);
@@ -112,7 +123,7 @@ const SearchResults = ({ location }) => {
           </Link>,
         ]}
       />
-      <div className="page-content ms-5">
+      <div className="page-content ms-5 me-5">
         <div className="results">
           <div className="tab-bar">
             <div className="d-flex flex-row ms-4">
