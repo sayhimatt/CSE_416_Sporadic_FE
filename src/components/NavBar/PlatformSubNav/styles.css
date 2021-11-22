@@ -1,9 +1,11 @@
 :root {
-  --banner-height: 20vh;
+  --banner-height: 10em;
 }
 
 .icon--large {
-  height: 15vh;
+  height: 8em;
+  width: 8em;
+  border-radius: 50%;
   overflow-y: visible;
   align-self: end;
   transition: background 1s;
@@ -11,6 +13,8 @@
 
 .icon--small {
   height: 42px;
+  width: 42px;
+  border-radius: 50%;
   align-self: center;
 }
 
@@ -27,17 +31,20 @@
   transition: background 0.3s;
 }
 
-#banner-upload {
-  position: absolute;
-  width: 100%;
-  height: var(--banner-height);
-  opacity: 0%;
-}
-
 .icon-container {
   align-self: end;
-  border-radius: 100px;
-  border: 1px solid black;
-  margin-right: 0.5vw;
-  background-color: black;
+  border-radius: 50%;
+  border: 2px solid white;
+  margin-right: 0.5em;
+  margin-left: 1em;
+}
+
+.image-overlay {
+  width: 8em;
+  height: 8em;
+  position: absolute;
+  z-index: 2;
+  bottom: 12px;
+  border-radius: 50%;
+  transition: background 1s;
 }

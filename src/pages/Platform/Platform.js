@@ -2,28 +2,41 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 
 import { getPlatform, getQuizzesFromPlatform } from "./../../API/API";
-import { AuthContext } from "../../contexts/AuthContext/AuthContext";
+import { UserContext } from "../../contexts/UserContext/UserContext";
 import Button from "../../components/Button/Button";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
-import { patchSubscribe, patchUnsubscribe, deleteQuiz } from "./../../API/API";
+import ImageUploader from "../../components/ImageUploader/ImageUploader";
+import {
+  getPlatformIcon,
+  getPlatformBanner,
+  patchSubscribe,
+  patchUnsubscribe,
+  deleteQuiz,
+} from "./../../API/API";
 
 import "./styles.scss";
 
 const Platform = () => {
   const history = useHistory();
   const params = useParams();
-  const { auth, dispatch } = useContext(AuthContext);
-  const [platform, setPlatform] = useState({});
+  const { user, dispatch } = useContext(UserContext);
+  const [platform, setPlatform] = useState();
   const [quizzes, setQuizzes] = useState([]);
   const [quizCards, setQuizCards] = useState([]);
-  const [subscribed, setSubscribed] = useState(auth.subscriptions.includes(params.platform));
+  const [subscribed, setSubscribed] = useState(user.subscriptions.includes(params.platform));
   const [modView, setModView] = useState(false);
+  const [isBanned, setIsBanned] = useState(false);
+  const [banner, setBanner] = useState("/banner.svg");
+  const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
+  const [uploadBanner, setUploadBanner] = useState(false);
+  const [uploadIcon, setUploadIcon] = useState(false);
 
   useEffect(() => {
     getCurrentPlatform();
     getQuizzes();
+    getImageMedia();
     setModView(false);
   }, [params]);
 
@@ -31,15 +44,29 @@ const Platform = () => {
     renderCards();
   }, [quizzes, modView]);
 
+  const getImageMedia = async () => {
+    await getPlatformBanner(params.platform).then((banner) => {
+      console.log(banner);
+      setBanner(banner);
+    });
+    await getPlatformIcon(params.platform).then((icon) => {
+      console.log(icon);
+      setPlatformIcon(icon);
+    });
+  };
+
   const getCurrentPlatform = async () => {
     const name = params.platform;
-    await getPlatform(name)
+    getPlatform(name)
       .then((platformData) => {
         setPlatform(platformData);
       })
       .catch((error) => {
         if (error.response.status === 400) {
           history.replace(`/search?=${name}`);
+        } else if (error.response.status === 403) {
+          setIsBanned(true);
+          setPlatform({});
         } else {
           history.replace("/error");
         }
@@ -82,12 +109,12 @@ const Platform = () => {
     setModView(!modView);
   };
 
-  const uploadBanner = () => {
-    //todo
-  };
-
-  const uploadIcon = () => {
-    //todo
+  const showImageUploader = (type) => {
+    if (type == "banner") {
+      setUploadBanner(true);
+    } else {
+      setUploadIcon(true);
+    }
   };
 
   const removeQuiz = (quiz) => {
@@ -124,21 +151,39 @@ const Platform = () => {
     setQuizCards(cards);
   };
 
-  return (
+  const bannedPage = () => {
+    return (
+      <div>
+        <MainNav />
+        <div className="page-content d-flex mt-5 flex-column align-items-center justify-content-center">
+          <h1 className="mb-4">You are banned from this platform</h1>
+          <Link to="/">
+            <Button>Return Home</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  };
+
+  return !platform ? (
+    <MainNav />
+  ) : isBanned ? (
+    bannedPage()
+  ) : (
     <div>
       <MainNav />
       <PlatformSubNav
         platformName={params.platform}
-        bannerSrc="/banner.svg"
+        bannerSrc={banner}
+        iconSrc={platformIcon}
         modView={modView}
-        fileUploadHandlers={{ uploadBanner, uploadIcon }}
+        showUpload={showImageUploader}
       >
-        {Object.entries(platform).length !== 0 &&
-          (platform.moderators.includes(auth.username) || platform.owner === auth.username) && (
-            <Button buttonStyle="btn--special" onClick={toggleModView}>
-              {modView ? "User View" : "Mod View"}
-            </Button>
-          )}
+        {(platform.moderators.includes(user.username) || platform.owner === user.username) && (
+          <Button buttonStyle="btn--special" onClick={toggleModView}>
+            {modView ? "User View" : "Mod View"}
+          </Button>
+        )}
         <Button onClick={subscribed ? unsubscribe : subscribe}>
           {subscribed ? "Unsubscribe" : "Subscribe"}
         </Button>
@@ -153,14 +198,25 @@ const Platform = () => {
             <input className="search" placeholder="Search"></input>
           </div>
           {modView && (
-            <Button buttonSize="btn--large">
-              <Link
-                className="link d-flex justify-content-center"
-                to={`/p/${params.platform}/createQuiz`}
-              >
-                Create Quiz
-              </Link>
-            </Button>
+            <div className="d-flex flex-column w-100">
+              <Button buttonSize="btn--large">
+                <Link
+                  className="link d-flex justify-content-center"
+                  to={`/p/${params.platform}/createQuiz`}
+                >
+                  Create Quiz
+                </Link>
+              </Button>
+              <div className="p-1"></div>
+              <Button buttonStyle="btn--special" buttonSize="btn--large">
+                <Link
+                  className="link d-flex justify-content-center"
+                  to={`/p/${params.platform}/subscribers`}
+                >
+                  Manage Subscribers
+                </Link>
+              </Button>
+            </div>
           )}
           <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">
             {platform.description}
@@ -171,6 +227,18 @@ const Platform = () => {
           </div>
         </div>
       </div>
+      <ImageUploader
+        visible={uploadBanner}
+        desiredFile="platform banner"
+        desiredPlatform={params.platform}
+        visibilityHandler={() => setUploadBanner(false)}
+      />
+      <ImageUploader
+        visible={uploadIcon}
+        desiredFile="platform icon"
+        desiredPlatform={params.platform}
+        visibilityHandler={() => setUploadIcon(false)}
+      />
     </div>
   );
 };

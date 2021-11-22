@@ -1,48 +1,52 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { AuthContext } from "../../contexts/AuthContext/AuthContext";
-import { getUser, getUserIcon } from "../../API/API";
+import { UserContext } from "../../contexts/UserContext/UserContext";
+import { getUser, patchUserAbout } from "../../API/API";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Button/Button";
 
 import "./styles.scss";
+import ImageUploader from "../../components/ImageUploader/ImageUploader";
+import { Alert } from "react-bootstrap";
 
 const MyAccount = () => {
-  const { auth, dispatch } = useContext(AuthContext);
-  const [profileIcon, setProfileIcon] = useState("/propic.png");
-  const [user, setUser] = useState({});
+  const { user, dispatch } = useContext(UserContext);
+  const [userState, setuserState] = useState();
   const [about, setAbout] = useState("");
+  const [showAvatarUpload, setShowAvatarUpload] = useState(false);
+  const [alerts, setAlerts] = useState({ show: false, style: "danger", message: "" });
 
   useEffect(() => {
-    getProfileIcon();
-    getUser(auth.username)
-      .then((user) => setUser(user))
+    getUser(user.username)
+      .then((user) => {
+        setuserState(user);
+        setAbout(user.aboutSection);
+      })
       .catch((e) => console.log("Could not retrieve user"));
-    return () => {
-      updateAbout(); // On onmount
-    };
   }, []);
 
   const updateAbout = () => {
-    // send updated about section to API
-  };
-
-  const changeAvatar = () => {
-    // send Avatar to API and update on page
+    patchUserAbout(user.username, about)
+      .then((res) =>
+        setAlerts({
+          show: true,
+          style: "sporadic-secondary",
+          message: "Your about section has been updated!",
+        }),
+      )
+      .catch((e) =>
+        setAlerts({
+          show: true,
+          style: "danger",
+          message: "Could not save your updates. Please try again.",
+        }),
+      );
   };
 
   const changePassword = () => {
     // implement change password functionality
-  };
-  const getProfileIcon = async () => {
-    try {
-      const url = await getUserIcon(auth.username);
-      setProfileIcon(url);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (
@@ -59,21 +63,31 @@ const MyAccount = () => {
           </Link>,
         ]}
       />
-      {Object.entries(user).length != 0 && (
+      <Alert
+        variant={alerts.style}
+        show={alerts.show}
+        onClose={() => setAlerts((prevState) => ({ ...prevState, show: false }))}
+        dismissible
+      >
+        {alerts.message}
+      </Alert>
+      {userState && (
         <div className="page-content ms-5 me-5">
           <div className="d-flex flex-column">
             <div className="account-section">
               <h2>STATS</h2>
               <div className="d-flex w-75 justify-content-between">
                 <h3>
-                  <b className="color-secondary">{(user.awards && user.awards.length) || 0}</b>{" "}
+                  <b className="color-secondary">
+                    {(userState.awards && userState.awards.length) || 0}
+                  </b>{" "}
                   Awards
                 </h3>
                 <h3>
-                  <b className="color-secondary">{user.friends.length}</b> Friends
+                  <b className="color-secondary">{userState.friends.length}</b> Friends
                 </h3>
                 <h3>
-                  <b className="color-secondary">{user.subscriptions.length}</b> Subscriptions
+                  <b className="color-secondary">{userState.subscriptions.length}</b> Subscriptions
                 </h3>
               </div>
             </div>
@@ -83,22 +97,26 @@ const MyAccount = () => {
                 <textarea
                   className="input"
                   placeholder="About"
+                  defaultValue={userState.aboutSection}
                   onChange={(e) => setAbout(e.target.value)}
                 />
+              </div>
+              <div className="mt-3">
+                <Button onClick={updateAbout}>Save About</Button>
               </div>
             </div>
             <div className="account-section">
               <h2>AVATAR</h2>
-              <img className="avatar" alt="avatar" src={profileIcon} />
+              <img className="avatar" alt="avatar" src={user.profilePicture} />
               <div>
-                <Button>Change Avatar</Button>
+                <Button onClick={() => setShowAvatarUpload(true)}>Change Avatar</Button>
               </div>
             </div>
             <div className="account-section">
               <h2>AWARDS</h2>
               <div id="account-awards-shelf">
-                {user.awards &&
-                  user.awards
+                {userState.awards &&
+                  userState.awards
                     .filter((award) => award.isShowcased)
                     .map((award, index) => (
                       <div key={`award-${index}`} className="account-award">
@@ -114,11 +132,11 @@ const MyAccount = () => {
               <h2>ACCOUNT</h2>
               <div className="account-info">
                 <div className="account-info-heading">Email</div>
-                <p>{user.email}</p>
+                <p>{userState.email}</p>
               </div>
               <div className="account-info">
                 <div className="account-info-heading">Username</div>
-                <p>{user.username}</p>
+                <p>{userState.username}</p>
               </div>
               <div className="account-info">
                 <div className="account-info-heading mb-2">Password</div>
@@ -126,6 +144,11 @@ const MyAccount = () => {
               </div>
             </div>
           </div>
+          <ImageUploader
+            visible={showAvatarUpload}
+            desiredFile="avatar"
+            visibilityHandler={() => setShowAvatarUpload(false)}
+          />
         </div>
       )}
     </div>

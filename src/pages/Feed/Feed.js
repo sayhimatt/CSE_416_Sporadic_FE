@@ -1,49 +1,69 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import { AuthContext } from "../../contexts/AuthContext/AuthContext";
+import { UserContext } from "../../contexts/UserContext/UserContext";
 import { getFeedQuizzes } from "../../API/API";
 import Button from "../../components/Button/Button";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import Footer from "../../components/Footer/Footer";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
-import QuestionCard from "../../components/Card/QuestionCard/QuestionCard";
 
 const Feed = ({ children }) => {
-  const { auth, dispatch } = useContext(AuthContext);
+  const { user, dispatch } = useContext(UserContext);
   const [quizCards, setQuizCards] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
+
 
   useEffect(() => {
-    loadQuizzes();
+    getQuizzes();
   }, []);
 
-  const loadQuizzes = async () => {
-    await getFeedQuizzes(auth.username)
+  useEffect(() => {
+    renderCards();
+  }, [quizzes]);
+
+  /*
+  const getQuizzes = async () => {
+    await getFeedQuizzes()
       .then((quizzes) => {
         const cards = mapQuizzesToCards(quizzes);
         setQuizCards(cards);
       })
       .catch((error) => console.log(error));
   };
+*/
 
-  const mapQuizzesToCards = (quizzes) => {
-    return quizzes.map((quiz) => {
-      <LargeCard
-        key={quiz._id}
-        cardInfo={{
-          title: quiz.title,
-          description: quiz.description,
-          subtext: (
-            <Link className="link" to={`/p/${quiz.platform}`}>
-              {quiz.platform}
-            </Link>
-          ),
-        }}
-      />;
+const getQuizzes = async () => {
+  try {
+    const response = await getFeedQuizzes();
+    setQuizzes(response.items);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+  const renderCards = () => {
+    const cards = quizzes.map((quiz) => {
+      return (
+        <LargeCard
+          key={quiz._id}
+          cardInfo={{
+            title: quiz.title,
+            description: quiz.description,
+            upvotes: quiz.upvotes,
+            downvotes: quiz.downvotes,
+            subtext: (
+              <Link className="link" to={`/p/${quiz.platform}`}>
+                {quiz.platform}
+              </Link>
+            ),
+          }}
+        />
+      );
     });
+    setQuizCards(cards);
   };
-
   const subNavButtons = [
     <Link to="/createPlatform">
       <Button>Create A Platform</Button>
@@ -55,7 +75,13 @@ const Feed = ({ children }) => {
   return (
     <div>
       <MainNav />
-      <SubNav heading={`Welcome Back ${auth.username}!`} buttons={subNavButtons} />
+      <SubNav heading={`Welcome Back ${user.username}!`} buttons={subNavButtons} />
+      <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
+        <div className="d-flex flex-column m-5 align-items-end">
+          <div className="sort"></div>
+          <div className="quizzes d-flex flex-column m-10">{quizCards}</div>
+        </div>
+      </div>
       <Footer />
     </div>
   );

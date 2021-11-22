@@ -9,6 +9,10 @@ const getToken = async () => {
   return session.getIdToken().getJwtToken();
 };
 
+export const authenticate = async () => {
+  return await Auth.currentSession();
+};
+
 /* Platforms routing */
 
 export const getPlatform = async (platformName) => {
@@ -84,6 +88,45 @@ export const postStartQuiz = async (platform, quizTitle) => {
   return response.data;
 };
 
+export const putBanStatus = async (platform, username, action) => {
+  const token = await getToken();
+  const response = await axios.put(
+    `${ENDPOINT}/platforms/${platform}/updateBannedUsers`,
+    {
+      targetUsername: username,
+      action,
+    },
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
+};
+
+export const putModeratorStatus = async (platform, username, action) => {
+  const token = await getToken();
+  const response = await axios.put(
+    `${ENDPOINT}/platforms/${platform}/updateModerators`,
+    {
+      targetUsername: username,
+      action,
+    },
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
+};
+
+export const postSubmitQuiz = async (platform, quizTitle, answers) => {
+  const token = await getToken();
+  const response = await axios.post(
+    `${ENDPOINT}/quizzes/${platform}/${quizTitle}/submit`,
+    {
+      answers: answers,
+    },
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  return response.data;
+};
 /* Login Routing */
 
 export const postCreateAccount = async (username, password, email) => {
@@ -101,13 +144,93 @@ export const postConfirmCode = async (username, confirmCode) => {
   });
 };
 
-export const getUserIcon = async (username) => {
-  const response = await axios.get(`${AWS_ENDPOINT}/users/${username}/avatar.png`);
-  console.log(response);
-  if (response.status != 200) {
-    return "/propic.png";
+// https://sporadic-development-bucket.s3.amazonaws.com/platforms/MattLand/banner.png
+export const getPlatformIcon = async (platform) => {
+  try {
+    const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/icon.png`);
+    if (resp.status != 200) {
+      return "/platformIcon.svg";
+    }
+    return `${AWS_ENDPOINT}/platforms/${platform}/icon.png`;
+  } catch {
+    return "/platformIcon.svg";
   }
-  return `${AWS_ENDPOINT}/users/${username}/avatar.png`;
+};
+
+export const getPlatformBanner = async (platform) => {
+  try {
+    const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/banner.png`);
+    if (resp.status != 200) {
+      return "/banner.svg";
+    }
+    return `${AWS_ENDPOINT}/platforms/${platform}/banner.png`;
+  } catch {
+    return "/banner.svg";
+  }
+};
+
+export const generateSetUserIconURL = async (username) => {
+  try {
+    const token = await getToken();
+    const response = await axios.get(`${ENDPOINT}/users/${username}/set-avatar`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const generateSetPlatformIconURL = async (platform) => {
+  try {
+    const token = await getToken();
+    const response = await axios.get(`${ENDPOINT}/platforms/${platform}/set-icon`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const generateSetPlatformBannerURL = async (platform) => {
+  try {
+    const token = await getToken();
+    const response = await axios.get(`${ENDPOINT}/platforms/${platform}/set-banner`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const setImage = async (url, file) => {
+  try {
+    const response = await axios.put(url, file);
+    if (response.status !== 200) {
+      return -1;
+    }
+    return 1;
+  } catch (e) {
+    console.log(e);
+    return -1;
+  }
 };
 
 /* User routing */
@@ -117,13 +240,40 @@ export const getUser = async (username) => {
   const response = await axios.get(`${ENDPOINT}/users/${username}`, {
     headers: { authorization: `Bearer ${token}` },
   });
-  console.log(response.data);
   return response.data;
 };
 
+export const manageFriend = async (username, action) => {
+  const token = await getToken();
+  const response = await axios.put(
+    `${ENDPOINT}/users/updateRelationship`,
+    {
+      targetUsername: username,
+      action: action,
+    },
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
+};
+
+export const patchUserAbout = async (username, text) => {
+  const token = await getToken();
+  const response = await axios.patch(
+    `${ENDPOINT}/users/about`,
+    { aboutSection: text },
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
+};
+
 /* Feed routing */
-export const getFeedQuizzes = async (username) => {
-  return;
+export const getFeedQuizzes = async () => {
+  const token = await getToken();
+  const response = await axios.get(
+    `${ENDPOINT}/quizzes/feed`,
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response.data;
 };
 
 /* Quiz Routing */
@@ -147,4 +297,40 @@ export const deleteQuiz = async (platform, quiz) => {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response;
+};
+
+export const putComment = async (platform, quiz, text) => {
+  const token = await getToken();
+  const response = await axios.put(
+    `${ENDPOINT}/quizzes/${platform}/${quiz}/comment`,
+    {
+      commentText: text,
+    },
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
+};
+
+/* AWS S3 Routing */
+export const getUserIcon = async (username) => {
+  try {
+    const response = await axios.get(`${AWS_ENDPOINT}/users/${username}/avatar.png`);
+    return `${AWS_ENDPOINT}/users/${username}/avatar.png`;
+  } catch {
+    return "/propic.png";
+  }
+};
+
+export const getAllUserIcons = async (usernames) => {
+  const promises = [];
+  const icons = {};
+  usernames.forEach((username) =>
+    promises.push(
+      getUserIcon(username).then((link) => {
+        icons[username] = link;
+      }),
+    ),
+  );
+  await Promise.all(promises);
+  return icons;
 };

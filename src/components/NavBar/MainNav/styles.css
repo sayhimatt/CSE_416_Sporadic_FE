@@ -43,8 +43,9 @@
 
 .profilePicture {
   height: 32px;
+  width: 32px;
   border-radius: 50%;
-  padding-right: 5px;
+  margin-right: 5px;
 }
 
 .searchBar {

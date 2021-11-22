@@ -2,33 +2,43 @@ import React, { useState, useContext, useEffect } from "react";
 import { Link, useHistory, Redirect } from "react-router-dom";
 import { Auth } from "aws-amplify";
 
-import { AuthContext } from "../../../contexts/AuthContext/AuthContext";
+import { UserContext } from "../../../contexts/UserContext/UserContext";
 import Button from "../../../components/Button/Button";
 import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
-import { getUser } from "../../../API/API";
+import { getUser, getUserIcon } from "../../../API/API";
 
 import "../styles.css";
 import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay";
 
-const MainLogin = () => {
+const MainLogin = ({ auth, authHandler }) => {
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
   const [showMsg, setShowMsg] = useState(false);
-  const { auth, dispatch } = useContext(AuthContext);
+  const { user, dispatch } = useContext(UserContext);
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
   });
+
+  useEffect(() => {
+    return () => setIsLoading(false);
+  }, []);
 
   const login = async (username, password) => {
     try {
       setIsLoading(true);
       await Auth.signIn(username, password);
       const user = await getUser(username);
+      const profilePicture = await getUserIcon(username);
       dispatch({
         type: "LOGIN",
-        payload: { username: user.username, subscriptions: user.subscriptions },
+        payload: {
+          username: user.username,
+          subscriptions: user.subscriptions,
+          profilePicture: profilePicture,
+        },
       });
+      authHandler(true);
     } catch (error) {
       setShowMsg(true);
       console.log("error signing in", error);
@@ -36,11 +46,7 @@ const MainLogin = () => {
     }
   };
 
-  useEffect(() => {
-    return () => setIsLoading(false);
-  }, []);
-
-  return auth.authenticated ? (
+  return auth ? (
     <Redirect to="/" />
   ) : (
     <div className="page d-flex flex-column align-items-center justify-content-start">
@@ -78,8 +84,8 @@ const MainLogin = () => {
           </div>
           <Button
             type="button"
-            onClick={async () => {
-              await login(credentials.username, credentials.password);
+            onClick={() => {
+              login(credentials.username, credentials.password);
             }}
           >
             Log In

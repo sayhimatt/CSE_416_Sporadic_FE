@@ -2,6 +2,17 @@
 
 .create-platform-container {
   background: $primaryColor;
+  margin-top: 2em;
+  border: 2px solid $secondaryColor;
+  border-radius: 30px;
+  padding: 30px;
+  min-width: 30vw;
+  min-height: 40vh;
+  margin-bottom: 2em;
+}
+
+.customize-platform-container {
+  background: white;
   border: 2px solid $secondaryColor;
   border-radius: 30px;
   padding: 30px;
@@ -57,4 +68,19 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+#icon-preview {
+  width: 3em;
+  height: 3em;
+  border-radius: 50%;
+  border: 1px solid white;
+  margin-bottom: 0.5em;
+}
+
+#banner-preview {
+  width: 5em;
+  height: 3em;
+  border: 1px solid white;
+  margin-bottom: 0.5em;
 }
