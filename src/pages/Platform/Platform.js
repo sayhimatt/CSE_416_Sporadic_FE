@@ -29,7 +29,7 @@ const Platform = () => {
   const [modView, setModView] = useState(false);
   const [isBanned, setIsBanned] = useState(false);
   const [banner, setBanner] = useState("/banner.svg");
-  const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
+  const [platformIcon, setPlatformIcon] = useState();
   const [uploadBanner, setUploadBanner] = useState(false);
   const [uploadIcon, setUploadIcon] = useState(false);
 
@@ -42,7 +42,7 @@ const Platform = () => {
 
   useEffect(() => {
     renderCards();
-  }, [quizzes, modView]);
+  }, [quizzes, modView, platformIcon]);
 
   const getImageMedia = async () => {
     await getPlatformBanner(params.platform).then((banner) => {
@@ -63,7 +63,7 @@ const Platform = () => {
       })
       .catch((error) => {
         if (error.response.status === 400) {
-          history.replace(`/search?=${name}`);
+          history.replace(`/search?searchQuery=${name}`);
         } else if (error.response.status === 403) {
           setIsBanned(true);
           setPlatform({});
@@ -126,11 +126,15 @@ const Platform = () => {
   };
 
   const renderCards = () => {
+    if (!platformIcon) {
+      return;
+    }
     const cards = quizzes.map((quiz) => {
       const name = params.platform;
       return (
         <LargeCard
           key={quiz._id}
+          iconSrc={platformIcon}
           cardInfo={{
             title: quiz.title,
             description: quiz.description,
