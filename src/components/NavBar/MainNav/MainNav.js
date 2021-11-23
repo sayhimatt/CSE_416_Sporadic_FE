@@ -22,7 +22,7 @@ const NavBar = () => {
 
   const submitSearch = (e) => {
     e.preventDefault();
-    history.push(`/search?=${search}`);
+    history.push(`/search?searchQuery=${search}`);
   };
 
   return (

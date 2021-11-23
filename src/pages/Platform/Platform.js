@@ -63,7 +63,7 @@ const Platform = () => {
       })
       .catch((error) => {
         if (error.response.status === 400) {
-          history.replace(`/search?=${name}`);
+          history.replace(`/search?searchQuery=${name}`);
         } else if (error.response.status === 403) {
           setIsBanned(true);
           setPlatform({});

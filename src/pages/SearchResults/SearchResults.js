@@ -16,7 +16,8 @@ const SearchResults = ({ location }) => {
   const [searchType, setSearchType] = useState({ platforms: true, quizzes: false, users: false });
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
-  const query = location.search.substring(2);
+  const searchParams = new URLSearchParams(location.search);
+  const query = searchParams.has("searchQuery") ? searchParams.get("searchQuery") : "";
 
   useEffect(() => {
     search(getCurrentType());
@@ -127,7 +128,7 @@ const SearchResults = ({ location }) => {
   };
 
   const renderError = () => {
-    return <div className="result-error">{`There are no reults for "${query}"`}</div>;
+    return <div className="result-error">{`There are no results for "${query}"`}</div>;
   };
 
   return (
