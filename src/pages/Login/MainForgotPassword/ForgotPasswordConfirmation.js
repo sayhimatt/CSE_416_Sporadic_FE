@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Auth } from "aws-amplify";
 
-import Button from "../../../components/Button/Button";
+import Button from "../../../components/Buttons/Button/Button";
 import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay";
-import ErrorMessage from  "../../../components/ErrorMessage/ErrorMessage";
+import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
 import "../styles.css";
 
 const ForgotPasswordConfirmation = () => {
@@ -23,20 +23,19 @@ const ForgotPasswordConfirmation = () => {
     errorBox: false,
   });
   const ForgotPasswordConfirmation = async () => {
-
     setShowMsg((prevState) => {
       return { ...prevState, errorBox: false };
     });
 
     setShowMsg((prevState) => {
-      return { ...prevState, lengthBox: (password.password.length < 8) };
+      return { ...prevState, lengthBox: password.password.length < 8 };
     });
 
     setShowMsg((prevState) => {
-      return { ...prevState, matchBox: (password.password !== password.passwordConfirm) };
+      return { ...prevState, matchBox: password.password !== password.passwordConfirm };
     });
 
-    if ((password.password.length < 8) || (password.password !== password.passwordConfirm)) return;
+    if (password.password.length < 8 || password.password !== password.passwordConfirm) return;
 
     setIsLoading(true);
 
@@ -53,8 +52,8 @@ const ForgotPasswordConfirmation = () => {
       setShowMsg((prevState) => {
         return { ...prevState, errorBox: true };
       }),
-      console.log(error),
-      setIsLoading(false);
+        console.log(error),
+        setIsLoading(false);
     }
   };
 
@@ -102,10 +101,11 @@ const ForgotPasswordConfirmation = () => {
                 }}
               ></input>
             </div>
-            <ErrorMessage 
-              visible={showMsg.lengthText} 
-              errorStyle="errorText" 
-              text="Password must be at least 8 characters long"/>
+            <ErrorMessage
+              visible={showMsg.lengthText}
+              errorStyle="errorText"
+              text="Password must be at least 8 characters long"
+            />
             <div className="inputBox">
               <input
                 id="passwordConfirm"
@@ -117,7 +117,8 @@ const ForgotPasswordConfirmation = () => {
                     setShowMsg((prevState) => {
                       return {
                         ...prevState,
-                        matchText: e.target.value.length > 0 && password.password !== e.target.value,
+                        matchText:
+                          e.target.value.length > 0 && password.password !== e.target.value,
                       };
                     });
                     return { ...prevState, passwordConfirm: e.target.value };
@@ -125,10 +126,11 @@ const ForgotPasswordConfirmation = () => {
                 }}
               ></input>
             </div>
-            <ErrorMessage 
-              visible={showMsg.matchText} 
-              errorStyle="errorText" 
-              text="Passwords do not match"/>
+            <ErrorMessage
+              visible={showMsg.matchText}
+              errorStyle="errorText"
+              text="Passwords do not match"
+            />
           </div>
           <Button type="button" onClick={ForgotPasswordConfirmation}>
             Submit
@@ -140,18 +142,17 @@ const ForgotPasswordConfirmation = () => {
           </Link>
         </div>
       </div>
-      <ErrorMessage 
-        visible={showMsg.errorBox} 
-        errorStyle="errorBox" 
-        text="Invalid Code"/>
-      <ErrorMessage 
-        visible={showMsg.lengthBox} 
-        errorStyle="errorBox" 
-        text="Password is not long enough"/>
-      <ErrorMessage 
-        visible={showMsg.matchBox} 
-        errorStyle="errorBox" 
-        text="Passwords do not match" />
+      <ErrorMessage visible={showMsg.errorBox} errorStyle="errorBox" text="Invalid Code" />
+      <ErrorMessage
+        visible={showMsg.lengthBox}
+        errorStyle="errorBox"
+        text="Password is not long enough"
+      />
+      <ErrorMessage
+        visible={showMsg.matchBox}
+        errorStyle="errorBox"
+        text="Passwords do not match"
+      />
       <LoadingOverlay isVisible={isLoading} />
     </div>
   );

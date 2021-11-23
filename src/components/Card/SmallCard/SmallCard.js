@@ -1,8 +1,4 @@
-import React, { useEffect, useState } from "react";
-
-import Button from "../../Button/Button";
-import { getUserIcon } from "../../../API/API";
-
+import React from "react";
 import "./styles.scss";
 
 const SmallCard = ({ profilePicture, username, userTag, rightCard }) => {

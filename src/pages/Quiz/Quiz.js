@@ -14,7 +14,7 @@ import QuestionCard from "../../components/Card/QuestionCard/QuestionCard.js";
 import Timer from "../../components/Timer/Timer";
 import useInterval from "../../components/Timer/Interval";
 import award from "../../award.svg";
-import Button from "../../components/Button/Button";
+import Button from "../../components/Buttons/Button/Button";
 import "./styles.scss";
 
 const Quiz = () => {

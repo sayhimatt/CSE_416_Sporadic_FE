@@ -4,7 +4,7 @@ import { Link, useParams, useHistory } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext/UserContext";
 import { getUser, getUserIcon, manageFriend } from "../../API/API";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
-import Button from "../../components/Button/Button";
+import Button from "../../components/Buttons/Button/Button";
 import { Alert } from "react-bootstrap";
 
 import "./styles.scss";
