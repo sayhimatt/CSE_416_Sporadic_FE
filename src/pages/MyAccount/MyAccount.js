@@ -55,10 +55,10 @@ const MyAccount = () => {
       <SubNav
         heading="My Account"
         buttons={[
-          <Link to="/createPlatform">
+          <Link key="nav-createPlatformB" to="/createPlatform">
             <Button>Create A Platform</Button>
           </Link>,
-          <Link to="/Notifications">
+          <Link key="nav-notificationsB" to="/Notifications">
             <Button>Notifications</Button>
           </Link>,
         ]}
