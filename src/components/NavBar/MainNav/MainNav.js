@@ -6,6 +6,7 @@ import "./styles.css";
 
 import { UserContext } from "../../../contexts/UserContext/UserContext";
 import DropdownMenu from "../../Dropdown/DropdownMenu/DropdownMenu";
+import DropdownItem from "../../Dropdown/DropdownItem/DropdownItem";
 
 const NavBar = () => {
   const { user, dispatch } = useContext(UserContext);
@@ -51,8 +52,10 @@ const NavBar = () => {
           {subscriptionDropdownOpen && (
             <DropdownMenu proximity="navbar">
               {user.subscriptions &&
-                user.subscriptions.map((subscription) => (
-                  <Link to={`/p/${subscription}`}>{subscription}</Link>
+                user.subscriptions.map((subscription, index) => (
+                  <DropdownItem key={index} to={`/p/${subscription}`}>
+                    {subscription}
+                  </DropdownItem>
                 ))}
             </DropdownMenu>
           )}
@@ -68,10 +71,10 @@ const NavBar = () => {
           <div className="navText">{user.username}</div>
           {accountDropdownOpen && (
             <DropdownMenu proximity="navbar">
-              <Link to="/myAccount">My Account</Link>
-              <Link to="/friends">Friends</Link>
-              <Link to="/nofitifcations">Notifications</Link>
-              <div onClick={logout}>Logout</div>
+              <DropdownItem to="/myAccount">My Account</DropdownItem>
+              <DropdownItem to="/friends">Friends</DropdownItem>
+              <DropdownItem to="/nofitifcations">Notifications</DropdownItem>
+              <DropdownItem onClick={logout}>Logout</DropdownItem>
             </DropdownMenu>
           )}
         </a>
