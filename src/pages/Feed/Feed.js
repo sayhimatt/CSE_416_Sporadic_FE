@@ -14,6 +14,7 @@ const Feed = ({ children }) => {
   const [quizCards, setQuizCards] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
 
+
   useEffect(() => {
     getQuizzes();
   }, []);
@@ -33,14 +34,14 @@ const Feed = ({ children }) => {
   };
 */
 
-  const getQuizzes = async () => {
-    try {
-      const response = await getFeedQuizzes();
-      setQuizzes(response.items);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const getQuizzes = async () => {
+  try {
+    const response = await getFeedQuizzes();
+    setQuizzes(response.items);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   const renderCards = () => {
     const cards = quizzes.map((quiz) => {
@@ -64,10 +65,10 @@ const Feed = ({ children }) => {
     setQuizCards(cards);
   };
   const subNavButtons = [
-    <Link key="nav-createPlatformB" to="/createPlatform">
+    <Link to="/createPlatform">
       <Button>Create A Platform</Button>
     </Link>,
-    <Link key="nav-notificationsB" to="/Notifications">
+    <Link to="/Notifications">
       <Button>Notifications</Button>
     </Link>,
   ];

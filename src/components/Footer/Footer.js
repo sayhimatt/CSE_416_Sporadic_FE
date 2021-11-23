@@ -12,7 +12,7 @@ const Footer = () => {
           </Link>
         </div>
         <div className="navItem">
-          <Link className="link" to="/Contact">
+          <Link className="link" to="Contact">
             Contact Us
           </Link>
         </div>
