@@ -38,7 +38,6 @@ const About = () => {
           <img className="avatar p4" alt="avatar" src={"/guidi.png"} />
         </div>
       </div>
-      
 
       <Footer />
     </div>
