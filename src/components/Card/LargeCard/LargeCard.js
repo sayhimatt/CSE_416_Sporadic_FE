@@ -6,7 +6,7 @@ import "./styles.css";
 import DropdownMenu from "../../Dropdown/DropdownMenu/DropdownMenu";
 import img from "../../../movie.svg";
 
-const LargeCard = ({ children, modOptions, cardInfo, cardLink, dropdownHandlers }) => {
+const LargeCard = ({ children, iconSrc, modOptions, cardInfo, cardLink, dropdownHandlers }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const toggleDropdown = () => {
@@ -18,7 +18,7 @@ const LargeCard = ({ children, modOptions, cardInfo, cardLink, dropdownHandlers 
       <div className="card d-flex flex-column">
         <div className="topCard d-flex flex-row">
           <div>
-            <img className="icon" src={img} alt="what" />
+            <img className="icon" src={iconSrc} alt="what" />
           </div>
           <div className="info flex-grow-1">
             <div className="d-flex">
@@ -26,7 +26,9 @@ const LargeCard = ({ children, modOptions, cardInfo, cardLink, dropdownHandlers 
                 {cardInfo.title}
               </Link>
             </div>
-            <div className="description">{cardInfo.description}</div>
+            <div className="description">
+              {cardInfo.description ? cardInfo.description : "No Description"}
+            </div>
           </div>
           <div className="d-flex align-items-start">
             {modOptions && (
@@ -52,16 +54,18 @@ const LargeCard = ({ children, modOptions, cardInfo, cardLink, dropdownHandlers 
         </div>
         <div className="bottomCard d-flex flex-row justify-content-between align-items-end">
           <div className="description subtext">{cardInfo.subtext}</div>
-          <div className="feedback d-flex flex-row">
-            <div className="feedbackItem d-flex flex-row align-items-center">
-              <img className="feedbackImage" src="/like.png" alt="like" />
-              <div className="count">{cardInfo.upvotes}</div>
+          {cardInfo.upvotes && cardInfo.downvotes && (
+            <div className="feedback d-flex flex-row">
+              <div className="feedbackItem d-flex flex-row align-items-center">
+                <img className="feedbackImage" src="/like.png" alt="like" />
+                <div className="count">{cardInfo.upvotes}</div>
+              </div>
+              <div className="feedbackItem d-flex flex-row align-items-center">
+                <img className="feedbackImage" src="/dislike.png" alt="dislike" />
+                <div className="count">{cardInfo.downvotes}</div>
+              </div>
             </div>
-            <div className="feedbackItem d-flex flex-row align-items-center">
-              <img className="feedbackImage" src="/dislike.png" alt="dislike" />
-              <div className="count">{cardInfo.downvotes}</div>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
