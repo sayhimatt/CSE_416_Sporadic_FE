@@ -11,6 +11,7 @@
   border: none;
   margin: 0px 5px;
   cursor: pointer;
+  text-align: center;
 }
 
 /* Button Styles */
@@ -19,13 +20,25 @@
   background-color: var(--primary);
 }
 
+.btn--primary:hover {
+  background-color: #138096;
+}
+
 .btn--special {
   background-color: var(--special);
+}
+
+.btn--special:hover {
+  background-color: #e76161;
 }
 
 .btn--secondary {
   background-color: var(--secondary);
   color: black;
+}
+
+.btn--secondary:hover {
+  background-color: #c0dadd;
 }
 
 /* Button Sizes */

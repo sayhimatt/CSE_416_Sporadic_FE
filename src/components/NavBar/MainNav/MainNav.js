@@ -42,7 +42,7 @@ const NavBar = () => {
       <div className="navbar-nav ms-auto">
         <a
           href="#"
-          className="navItem"
+          className="navItem link"
           onClick={() => {
             setSubscriptionDropdownOpen(!subscriptionDropdownOpen);
           }}
@@ -59,7 +59,7 @@ const NavBar = () => {
         </a>
         <a
           href="#"
-          className="navItem"
+          className="navItem link"
           onClick={() => {
             setAccountDropdownOpen(!accountDropdownOpen);
           }}
