@@ -19,6 +19,8 @@ import MyAccount from "./pages/MyAccount/MyAccount";
 import QuizComplete from "./pages/Quiz/QuizComplete";
 import Friends from "./pages/Friends/Friends";
 import ManageSubscribers from "./pages/ManageSubscribers/ManageSubscribers";
+import ContactUs from "./pages/ContactUs/ContactUs";
+import About from "./pages/About/About";
 import SearchResults from "./pages/SearchResults/SearchResults";
 import { authenticate } from "./API/API";
 
@@ -75,11 +77,16 @@ const App = () => {
               component={MyAccount}
               authenticated={auth.authenticated}
             />
-            <GuardedRoute exact path="/About" component={Feed} authenticated={auth.authenticated} />
+            <GuardedRoute
+              exact
+              path="/About"
+              component={About}
+              authenticated={auth.authenticated}
+            />
             <GuardedRoute
               exact
               path="/Contact"
-              component={Feed}
+              component={ContactUs}
               authenticated={auth.authenticated}
             />
             <GuardedRoute
