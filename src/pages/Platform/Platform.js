@@ -4,6 +4,7 @@ import { Link, useParams, useHistory } from "react-router-dom";
 import { getPlatform, getQuizzesFromPlatform } from "./../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
 import Button from "../../components/Buttons/Button/Button";
+import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
@@ -203,23 +204,17 @@ const Platform = () => {
           </div>
           {modView && (
             <div className="d-flex flex-column w-100">
-              <Button buttonSize="btn--large">
-                <Link
-                  className="link d-flex justify-content-center"
-                  to={`/p/${params.platform}/createQuiz`}
-                >
-                  Create Quiz
-                </Link>
-              </Button>
+              <LinkButton buttonSize="btn--large" to={`/p/${params.platform}/createQuiz`}>
+                Create Quiz
+              </LinkButton>
               <div className="p-1"></div>
-              <Button buttonStyle="btn--special" buttonSize="btn--large">
-                <Link
-                  className="link d-flex justify-content-center"
-                  to={`/p/${params.platform}/subscribers`}
-                >
-                  Manage Subscribers
-                </Link>
-              </Button>
+              <LinkButton
+                buttonStyle="btn--special"
+                buttonSize="btn--large"
+                to={`/p/${params.platform}/subscribers`}
+              >
+                Manage Subscribers
+              </LinkButton>
             </div>
           )}
           <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">

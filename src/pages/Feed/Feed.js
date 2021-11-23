@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { UserContext } from "../../contexts/UserContext/UserContext";
 import { getFeedQuizzes } from "../../API/API";
-import Button from "../../components/Buttons/Button/Button";
+import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import Footer from "../../components/Footer/Footer";
@@ -64,12 +64,8 @@ const Feed = ({ children }) => {
     setQuizCards(cards);
   };
   const subNavButtons = [
-    <Link key="nav-createPlatformB" to="/createPlatform">
-      <Button>Create A Platform</Button>
-    </Link>,
-    <Link key="nav-notificationsB" to="/Notifications">
-      <Button>Notifications</Button>
-    </Link>,
+    <LinkButton to="/createPlatform">Create A Platform</LinkButton>,
+    <LinkButton to="/notifications">Notifications</LinkButton>,
   ];
   return (
     <div>

@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Buttons/Button/Button";
+import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
 import SmallCard from "../../components/Card/SmallCard/SmallCard";
 import { getUser, manageFriend, getAllUserIcons } from "../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
@@ -48,12 +48,8 @@ const Friends = () => {
       <SubNav
         heading="Manage Friends"
         buttons={[
-          <Link to="/createPlatform">
-            <Button>Create a Platform</Button>
-          </Link>,
-          <Link to="/notfications">
-            <Button>Notifications</Button>
-          </Link>,
+          <LinkButton to="/createPlatform">Create A Platform</LinkButton>,
+          <LinkButton to="/notifications">Notifications</LinkButton>,
         ]}
       />
       <div className="page-content d-flex flex-column align-items-center">
