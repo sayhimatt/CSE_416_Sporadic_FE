@@ -73,7 +73,7 @@ const MyAccount = () => {
       </Alert>
       {userState && (
         <div className="page-content ms-5 me-5">
-          <div className="d-flex flex-column">
+          <div className="d-flex flex-column justify-content-center align-items-center">
             <div className="account-section">
               <h2>AVATAR</h2>
               <img className="profile-avatar" alt="avatar" src={user.profilePicture} />
@@ -133,15 +133,11 @@ const MyAccount = () => {
               <div className="account-info">
                 <div className="account-info-heading">Email</div>
                 <p>{userState.email}</p>
-              </div>
-              <div className="account-info">
                 <div className="account-info-heading">Username</div>
                 <p>{userState.username}</p>
-              </div>
-              <div className="account-info">
                 <div className="account-info-heading mb-2">Password</div>
-                <Button>Change Password</Button>
               </div>
+              <Button>Change Password</Button>
             </div>
           </div>
           <ImageUploader
