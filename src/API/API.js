@@ -224,12 +224,9 @@ export const putComment = async (platform, quiz, text) => {
 /* Search Routing */
 export const getSearchResults = async (type, query) => {
   const token = await getToken();
-  const response = await axios.get(
-    `http://localhost:5000/search?scope=${type}&searchQuery=${query}`,
-    {
-      headers: { authorization: `Bearer ${token}` },
-    },
-  );
+  const response = await axios.get(`${ENDPOINT}/search?scope=${type}&searchQuery=${query}`, {
+    headers: { authorization: `Bearer ${token}` },
+  });
   return response.data.items;
 };
 

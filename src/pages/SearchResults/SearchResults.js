@@ -6,6 +6,7 @@ import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Button/Button";
 import Tab from "../../components/Tab/Tab";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
+import LoadingSpinner from "../../components/LoadingIndicators/LoadingSpinner";
 
 import { getSearchResults, getAllUserIcons, getAllPlatformIcons } from "../../API/API";
 
@@ -14,6 +15,7 @@ import "./styles.scss";
 const SearchResults = ({ location }) => {
   const [searchType, setSearchType] = useState({ platforms: true, quizzes: false, users: false });
   const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(true);
   const query = location.search.substring(2);
 
   useEffect(() => {
@@ -23,7 +25,6 @@ const SearchResults = ({ location }) => {
   const getCurrentType = () => {
     let type = "platforms";
     Object.keys(searchType).forEach((key) => {
-      console.log(key);
       if (searchType[key]) {
         type = key;
       }
@@ -33,6 +34,7 @@ const SearchResults = ({ location }) => {
 
   const search = (type) => {
     setActiveTab(type);
+    setLoading(true);
     getSearchResults(type, query)
       .then((results) =>
         getImages(type, results).then((images) => renderResults(type, results, images)),
@@ -42,7 +44,8 @@ const SearchResults = ({ location }) => {
       })
       .catch((e) => {
         console.log(e);
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   const setActiveTab = (type) => {
@@ -52,7 +55,6 @@ const SearchResults = ({ location }) => {
   };
 
   const getImages = async (type, data) => {
-    console.log(data);
     if (type === "platforms") {
       const platforms = data.map((platform) => platform.title);
       return getAllPlatformIcons(platforms);
@@ -66,7 +68,6 @@ const SearchResults = ({ location }) => {
   };
 
   const renderResults = (type, results, images) => {
-    console.log(images);
     if (results.length === 0) {
       return renderError();
     } else if (type === "platforms") {
@@ -159,7 +160,13 @@ const SearchResults = ({ location }) => {
             </div>
             <div className="divider" />
           </div>
-          <div className="results-list">{results}</div>
+          {!loading ? (
+            <div className="results-list">{results}</div>
+          ) : (
+            <div className="results-loading">
+              <LoadingSpinner isVisible={loading} />
+            </div>
+          )}
         </div>
       </div>
     </div>
