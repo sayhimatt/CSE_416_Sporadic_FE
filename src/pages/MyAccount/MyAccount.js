@@ -107,7 +107,7 @@ const MyAccount = () => {
             </div>
             <div className="account-section">
               <h2>AVATAR</h2>
-              <img className="avatar" alt="avatar" src={user.profilePicture} />
+              <img className="profile-avatar" alt="avatar" src={user.profilePicture} />
               <div>
                 <Button onClick={() => setShowAvatarUpload(true)}>Change Avatar</Button>
               </div>
