@@ -10,7 +10,7 @@ import {
 import { UserContext } from "../../contexts/UserContext/UserContext";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
-import Button from "../../components/Button/Button";
+import Button from "../../components/Buttons/Button/Button";
 import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 import ImageUploader from "../../components/ImageUploader/ImageUploader";
 import LoadingOverlay from "../../components/LoadingIndicators/LoadingOverlay";

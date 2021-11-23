@@ -20,11 +20,8 @@ $specialColor: #ff6c6c;
   color: $specialColor !important;
 }
 
-a {
-  color: inherit !important;
-}
-
 .link {
+  color: inherit;
   text-decoration: none;
 }
 

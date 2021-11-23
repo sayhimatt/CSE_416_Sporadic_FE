@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "../styles.css";
 import "./styles.css";
 import DropdownMenu from "../../Dropdown/DropdownMenu/DropdownMenu";
-import img from "../../../movie.svg";
+import DropdownItem from "../../Dropdown/DropdownItem/DropdownItem";
 
 const LargeCard = ({ children, iconSrc, modOptions, cardInfo, cardLink, dropdownHandlers }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -36,8 +36,8 @@ const LargeCard = ({ children, iconSrc, modOptions, cardInfo, cardLink, dropdown
                 <img alt="dropdown" src="/three_dot_menu.svg" />
                 {showDropdown && (
                   <DropdownMenu>
-                    <div>Pin quiz</div>
-                    <div
+                    <DropdownItem>Pin quiz</DropdownItem>
+                    <DropdownItem
                       id={`delete-quiz-${cardInfo.title}`}
                       onClick={(e) => {
                         e.preventDefault();
@@ -45,7 +45,7 @@ const LargeCard = ({ children, iconSrc, modOptions, cardInfo, cardLink, dropdown
                       }}
                     >
                       Delete quiz
-                    </div>
+                    </DropdownItem>
                   </DropdownMenu>
                 )}
               </a>
