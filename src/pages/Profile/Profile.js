@@ -132,7 +132,9 @@ const Profile = () => {
             <div className="profile-section">
               <h3>ABOUT</h3>
               <div id="account-about-input" className="input-box w-75">
-                <div className="input">{userState.aboutSection}</div>
+                <div className="input">
+                  {userState.aboutSection ? userState.aboutSection : "This user has no description"}
+                </div>
               </div>
             </div>
             <div className="profile-section">
