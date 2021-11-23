@@ -6,7 +6,7 @@ import "./styles.css";
 import DropdownMenu from "../../Dropdown/DropdownMenu/DropdownMenu";
 import img from "../../../movie.svg";
 
-const LargeCard = ({ children, modOptions, cardInfo, cardLink, dropdownHandlers }) => {
+const LargeCard = ({ children, iconSrc, modOptions, cardInfo, cardLink, dropdownHandlers }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const toggleDropdown = () => {
@@ -18,7 +18,7 @@ const LargeCard = ({ children, modOptions, cardInfo, cardLink, dropdownHandlers 
       <div className="card d-flex flex-column">
         <div className="topCard d-flex flex-row">
           <div>
-            <img className="icon" src={img} alt="what" />
+            <img className="icon" src={iconSrc} alt="what" />
           </div>
           <div className="info flex-grow-1">
             <div className="d-flex">

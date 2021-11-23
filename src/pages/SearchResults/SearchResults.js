@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
@@ -7,7 +7,7 @@ import Button from "../../components/Button/Button";
 import Tab from "../../components/Tab/Tab";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
 
-import { getSearchResults } from "../../API/API";
+import { getSearchResults, getAllUserIcons, getAllPlatformIcons } from "../../API/API";
 
 import "./styles.scss";
 
@@ -34,7 +34,9 @@ const SearchResults = ({ location }) => {
   const search = (type) => {
     setActiveTab(type);
     getSearchResults(type, query)
-      .then((results) => renderResults(type, results))
+      .then((results) =>
+        getImages(type, results).then((images) => renderResults(type, results, images)),
+      )
       .then((cards) => {
         setResults(cards);
       })
@@ -49,22 +51,38 @@ const SearchResults = ({ location }) => {
     setSearchType(activeTab);
   };
 
-  const renderResults = (type, results) => {
-    if (results.length === 0) {
-      return renderError();
-    } else if (type === "platforms") {
-      return renderPlatformCards(results);
+  const getImages = async (type, data) => {
+    console.log(data);
+    if (type === "platforms") {
+      const platforms = data.map((platform) => platform.title);
+      return getAllPlatformIcons(platforms);
     } else if (type === "quizzes") {
-      return renderQuizCards(results);
+      const quizzes = data.map((quiz) => quiz.platform);
+      return getAllPlatformIcons(quizzes);
     } else {
-      return renderUserCards(results);
+      const users = data.map((user) => user.username);
+      return getAllUserIcons(users);
     }
   };
 
-  const renderPlatformCards = (platforms) => {
+  const renderResults = (type, results, images) => {
+    console.log(images);
+    if (results.length === 0) {
+      return renderError();
+    } else if (type === "platforms") {
+      return renderPlatformCards(results, images);
+    } else if (type === "quizzes") {
+      return renderQuizCards(results, images);
+    } else {
+      return renderUserCards(results, images);
+    }
+  };
+
+  const renderPlatformCards = (platforms, images) => {
     return platforms.map((platform, index) => (
       <LargeCard
         key={index}
+        iconSrc={images[platform.title]}
         cardInfo={{
           title: platform.title,
           description: platform.description,
@@ -75,10 +93,11 @@ const SearchResults = ({ location }) => {
     ));
   };
 
-  const renderQuizCards = (quizzes) => {
+  const renderQuizCards = (quizzes, images) => {
     return quizzes.map((quiz, index) => (
       <LargeCard
         key={index}
+        iconSrc={images[quiz.platform]}
         cardInfo={{
           title: quiz.title,
           description: quiz.description,
@@ -91,10 +110,11 @@ const SearchResults = ({ location }) => {
     ));
   };
 
-  const renderUserCards = (users) => {
+  const renderUserCards = (users, images) => {
     return users.map((user, index) => (
       <LargeCard
         key={index}
+        iconSrc={images[user.username]}
         cardInfo={{
           title: user.username,
           description: user.aboutSection,

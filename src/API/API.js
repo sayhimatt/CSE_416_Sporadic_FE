@@ -144,95 +144,6 @@ export const postConfirmCode = async (username, confirmCode) => {
   });
 };
 
-// https://sporadic-development-bucket.s3.amazonaws.com/platforms/MattLand/banner.png
-export const getPlatformIcon = async (platform) => {
-  try {
-    const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/icon.png`);
-    if (resp.status != 200) {
-      return "/platformIcon.svg";
-    }
-    return `${AWS_ENDPOINT}/platforms/${platform}/icon.png`;
-  } catch {
-    return "/platformIcon.svg";
-  }
-};
-
-export const getPlatformBanner = async (platform) => {
-  try {
-    const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/banner.png`);
-    if (resp.status != 200) {
-      return "/banner.svg";
-    }
-    return `${AWS_ENDPOINT}/platforms/${platform}/banner.png`;
-  } catch {
-    return "/banner.svg";
-  }
-};
-
-export const generateSetUserIconURL = async (username) => {
-  try {
-    const token = await getToken();
-    const response = await axios.get(`${ENDPOINT}/users/${username}/set-avatar`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (response.status == 200) {
-      return response.data;
-    } else {
-      return null;
-    }
-  } catch (e) {
-    console.log(e);
-    return null;
-  }
-};
-
-export const generateSetPlatformIconURL = async (platform) => {
-  try {
-    const token = await getToken();
-    const response = await axios.get(`${ENDPOINT}/platforms/${platform}/set-icon`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (response.status == 200) {
-      return response.data;
-    } else {
-      return null;
-    }
-  } catch (e) {
-    console.log(e);
-    return null;
-  }
-};
-
-export const generateSetPlatformBannerURL = async (platform) => {
-  try {
-    const token = await getToken();
-    const response = await axios.get(`${ENDPOINT}/platforms/${platform}/set-banner`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (response.status == 200) {
-      return response.data;
-    } else {
-      return null;
-    }
-  } catch (e) {
-    console.log(e);
-    return null;
-  }
-};
-
-export const setImage = async (url, file) => {
-  try {
-    const response = await axios.put(url, file);
-    if (response.status !== 200) {
-      return -1;
-    }
-    return 1;
-  } catch (e) {
-    console.log(e);
-    return -1;
-  }
-};
-
 /* User routing */
 
 export const getUser = async (username) => {
@@ -344,4 +255,107 @@ export const getAllUserIcons = async (usernames) => {
   );
   await Promise.all(promises);
   return icons;
+};
+
+// https://sporadic-development-bucket.s3.amazonaws.com/platforms/MattLand/banner.png
+export const getPlatformIcon = async (platform) => {
+  try {
+    const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/icon.png`);
+    if (resp.status != 200) {
+      return "/platformIcon.svg";
+    }
+    return `${AWS_ENDPOINT}/platforms/${platform}/icon.png`;
+  } catch {
+    return "/platformIcon.svg";
+  }
+};
+
+export const getAllPlatformIcons = async (platforms) => {
+  const promises = [];
+  const icons = {};
+  platforms.forEach((platform) =>
+    promises.push(
+      getPlatformIcon(platform).then((link) => {
+        icons[platform] = link;
+      }),
+    ),
+  );
+  await Promise.all(promises);
+  return icons;
+};
+
+export const getPlatformBanner = async (platform) => {
+  try {
+    const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/banner.png`);
+    if (resp.status != 200) {
+      return "/banner.svg";
+    }
+    return `${AWS_ENDPOINT}/platforms/${platform}/banner.png`;
+  } catch {
+    return "/banner.svg";
+  }
+};
+
+export const generateSetUserIconURL = async (username) => {
+  try {
+    const token = await getToken();
+    const response = await axios.get(`${ENDPOINT}/users/${username}/set-avatar`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const generateSetPlatformIconURL = async (platform) => {
+  try {
+    const token = await getToken();
+    const response = await axios.get(`${ENDPOINT}/platforms/${platform}/set-icon`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const generateSetPlatformBannerURL = async (platform) => {
+  try {
+    const token = await getToken();
+    const response = await axios.get(`${ENDPOINT}/platforms/${platform}/set-banner`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const setImage = async (url, file) => {
+  try {
+    const response = await axios.put(url, file);
+    if (response.status !== 200) {
+      return -1;
+    }
+    return 1;
+  } catch (e) {
+    console.log(e);
+    return -1;
+  }
 };

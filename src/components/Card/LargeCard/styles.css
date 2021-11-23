@@ -7,6 +7,8 @@
 .icon {
   margin-right: 5px;
   margin-top: 3px;
+  border-radius: 50%;
+  border: 1px solid white;
   height: 40px;
   width: 40px;
 }
