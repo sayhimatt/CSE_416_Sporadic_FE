@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
-import Button from "../../components/Button/Button";
+import Button from "../../components/Buttons/Button/Button";
 import Tab from "../../components/Tab/Tab";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
 import LoadingSpinner from "../../components/LoadingIndicators/LoadingSpinner";

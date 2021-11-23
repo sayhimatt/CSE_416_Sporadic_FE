@@ -3,7 +3,7 @@ import { Link, useHistory, Redirect } from "react-router-dom";
 import { Auth } from "aws-amplify";
 
 import { UserContext } from "../../../contexts/UserContext/UserContext";
-import Button from "../../../components/Button/Button";
+import Button from "../../../components/Buttons/Button/Button";
 import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
 import { getUser, getUserIcon } from "../../../API/API";
 

@@ -3,7 +3,7 @@ import { Link, useParams, useHistory } from "react-router-dom";
 
 import { getPlatform, getQuizzesFromPlatform } from "./../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
-import Button from "../../components/Button/Button";
+import Button from "../../components/Buttons/Button/Button";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";

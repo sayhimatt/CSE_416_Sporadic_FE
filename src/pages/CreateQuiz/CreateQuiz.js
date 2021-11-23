@@ -4,7 +4,7 @@ import Alert from "react-bootstrap/Alert";
 
 import { postCreateQuiz, getPlatformIcon, getPlatformBanner } from "../../API/API";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard";
-import Button from "../../components/Button/Button";
+import Button from "../../components/Buttons/Button/Button";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LoadingOverlay from "../../components/LoadingIndicators/LoadingOverlay";

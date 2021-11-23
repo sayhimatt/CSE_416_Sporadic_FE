@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
-import Button from "../../components/Button/Button";
+import Button from "../../components/Buttons/Button/Button";
 import SmallCard from "../../components/Card/SmallCard/SmallCard";
 import { getUser, manageFriend, getAllUserIcons } from "../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
