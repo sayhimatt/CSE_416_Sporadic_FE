@@ -5,6 +5,7 @@ import { UserContext } from "../../contexts/UserContext/UserContext";
 import { getUser, getUserIcon, manageFriend } from "../../API/API";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import Button from "../../components/Buttons/Button/Button";
+import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
 import { Alert } from "react-bootstrap";
 
 import "./styles.scss";
@@ -32,16 +33,14 @@ const Profile = () => {
         setFriends(user.friends);
       })
       .catch((e) => console.log("Could not retrieve user"));
-  }, []);
+  }, [params]);
 
   const loadButton = () => {
     if (params.username === user.username) {
       return (
-        <Link to="/myAccount">
-          <Button buttonStyle="btn--secondary">
-            <b>Edit Profile</b>
-          </Button>
-        </Link>
+        <LinkButton to="/myAccount" buttonStyle="btn--secondary">
+          <b>Edit Profile</b>
+        </LinkButton>
       );
     } else if (friends.includes(params.username)) {
       return (
@@ -113,7 +112,9 @@ const Profile = () => {
             <div className="profile-section">
               <h1 className="color-secondary">{params.username}</h1>
               <img className="profile-avatar" alt="avatar" src={avatar} />
-              <div className="d-flex flex-column">{userState && friends && loadButton()}</div>
+              <div className="d-flex flex-column">
+                <div className="profile-button">{userState && friends && loadButton()}</div>
+              </div>
             </div>
             <div className="profile-section">
               <h3>STATS</h3>
