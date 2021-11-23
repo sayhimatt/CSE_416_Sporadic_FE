@@ -26,7 +26,9 @@ const LargeCard = ({ children, iconSrc, modOptions, cardInfo, cardLink, dropdown
                 {cardInfo.title}
               </Link>
             </div>
-            <div className="description">{cardInfo.description}</div>
+            <div className="description">
+              {cardInfo.description ? cardInfo.description : "No Description"}
+            </div>
           </div>
           <div className="d-flex align-items-start">
             {modOptions && (
@@ -52,16 +54,18 @@ const LargeCard = ({ children, iconSrc, modOptions, cardInfo, cardLink, dropdown
         </div>
         <div className="bottomCard d-flex flex-row justify-content-between align-items-end">
           <div className="description subtext">{cardInfo.subtext}</div>
-          <div className="feedback d-flex flex-row">
-            <div className="feedbackItem d-flex flex-row align-items-center">
-              <img className="feedbackImage" src="/like.png" alt="like" />
-              <div className="count">{cardInfo.upvotes}</div>
+          {cardInfo.upvotes && cardInfo.downvotes && (
+            <div className="feedback d-flex flex-row">
+              <div className="feedbackItem d-flex flex-row align-items-center">
+                <img className="feedbackImage" src="/like.png" alt="like" />
+                <div className="count">{cardInfo.upvotes}</div>
+              </div>
+              <div className="feedbackItem d-flex flex-row align-items-center">
+                <img className="feedbackImage" src="/dislike.png" alt="dislike" />
+                <div className="count">{cardInfo.downvotes}</div>
+              </div>
             </div>
-            <div className="feedbackItem d-flex flex-row align-items-center">
-              <img className="feedbackImage" src="/dislike.png" alt="dislike" />
-              <div className="count">{cardInfo.downvotes}</div>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

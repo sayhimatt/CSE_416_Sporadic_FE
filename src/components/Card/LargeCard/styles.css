@@ -36,3 +36,11 @@
   width: 32px;
   margin-right: 5px;
 }
+
+.bottomCard {
+  min-height: 3em;
+}
+
+.info {
+  min-height: 3em;
+}
