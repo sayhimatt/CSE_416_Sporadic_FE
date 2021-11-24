@@ -1,3 +1,5 @@
+@import "../../../App.scss";
+
 .navBar {
   /* Auto Layout */
   display: flex;
@@ -84,4 +86,8 @@
 
 .search:focus {
   outline: none;
+}
+
+.navText {
+  font-size: 0.9em;
 }

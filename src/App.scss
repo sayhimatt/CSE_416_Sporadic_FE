@@ -58,3 +58,16 @@ $specialColor: #ff6c6c;
   background-color: rgba(24, 154, 180);
   color: white;
 }
+
+// Custom Bootstrap Dropdown
+.custom-dropdown-item {
+  font-size: 0.8em !important;
+}
+
+.custom-dropdown-item:active {
+  background-color: $secondaryColor !important;
+}
+
+.custom-dropdown-menu {
+  min-width: 5em !important;
+}
