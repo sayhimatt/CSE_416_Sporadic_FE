@@ -1,4 +1,3 @@
-import { wait, waitFor } from "@testing-library/dom";
 import { useEffect, useLayoutEffect, useRef } from "react";
 
 function useInterval(callback, delay) {
