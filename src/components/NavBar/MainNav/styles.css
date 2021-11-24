@@ -85,3 +85,15 @@
 .search:focus {
   outline: none;
 }
+
+.navText {
+  font-size: 0.9em;
+}
+
+.custom-dropdown-item {
+  font-size: 0.8em;
+}
+
+.navbar-dropdowns .custom-dropdown-menu {
+  min-width: 5em;
+}
