@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router";
 import Alert from "react-bootstrap/Alert";
 
-import { postCreateQuiz, getPlatformIcon, getPlatformBanner } from "../../API/API";
+import {
+  postCreateQuiz,
+  getPlatformIcon,
+  getPlatformBanner,
+  generateSetQuizIconURL,
+  setImage,
+} from "../../API/API";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard";
 import ImageUploader from "../../components/ImageUploader/ImageUploader";
 import Button from "../../components/Buttons/Button/Button";
@@ -105,18 +111,12 @@ const CreateQuiz = () => {
     const promises = [];
     if (images.icon !== "") {
       promises.push(
-        generateSetPlatformIconURL(platformData.title)
+        generateSetQuizIconURL(params.platform, quizInfo.quizTitle)
           .then((putURL) => setImage(putURL, images.icon))
           .catch((e) => console.log(e)),
       );
     }
-    if (images.banner !== "") {
-      promises.push(
-        generateSetPlatformBannerURL(platformData.title)
-          .then((putURL) => setImage(putURL, images.banner))
-          .catch((e) => console.log(e)),
-      );
-    }
+    // TODO: Add Award
     return await Promise.all(promises).catch((e) => console.log(e));
   };
 
@@ -138,7 +138,10 @@ const CreateQuiz = () => {
     quiz.timeLimit = parseInt(quiz.timeLimit);
     setIsLoading(true);
     postCreateQuiz(quiz)
-      .then(() => history.push(`/p/${params.platform}`))
+      .then(() => {
+        sendImagesToAWS();
+        history.push(`/p/${params.platform}`);
+      })
       .catch((error) => {
         console.log(error);
         setIsLoading(false);
