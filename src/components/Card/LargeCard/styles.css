@@ -1,5 +1,6 @@
 .cardContainer--large .card {
   width: 60vw;
+  height: 7.5em;
   margin: 6px 0px;
   color: black;
 }
@@ -28,7 +29,8 @@
 }
 
 .feedbackItem {
-  margin: 5px 10px;
+  margin: 5px 8px;
+  width: 5em;
 }
 
 .feedbackImage {
