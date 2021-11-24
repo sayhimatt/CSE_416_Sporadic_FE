@@ -5,6 +5,8 @@ import "../styles.css";
 import "./styles.css";
 import DropdownMenu from "../../Dropdown/DropdownMenu/DropdownMenu";
 import DropdownItem from "../../Dropdown/DropdownItem/DropdownItem";
+import CustomToggle from "../../CustomToggle/CustomToggle";
+import { Dropdown } from "react-bootstrap";
 
 const LargeCard = ({ children, iconSrc, modOptions, cardInfo, cardLink, dropdownHandlers }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -32,23 +34,24 @@ const LargeCard = ({ children, iconSrc, modOptions, cardInfo, cardLink, dropdown
           </div>
           <div className="d-flex align-items-start">
             {modOptions && (
-              <a className="mod-options" onClick={toggleDropdown}>
-                <img alt="dropdown" src="/three_dot_menu.svg" />
-                {showDropdown && (
-                  <DropdownMenu>
-                    <DropdownItem>Pin quiz</DropdownItem>
-                    <DropdownItem
-                      id={`delete-quiz-${cardInfo.title}`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        dropdownHandlers.removeQuiz(cardInfo.title);
-                      }}
-                    >
-                      Delete quiz
-                    </DropdownItem>
-                  </DropdownMenu>
-                )}
-              </a>
+              <Dropdown>
+                <Dropdown.Toggle as={CustomToggle}>
+                  <img alt="dropdown" src="/three_dot_menu.svg" />
+                </Dropdown.Toggle>
+                <Dropdown.Menu className="custom-dropdown-menu" align="start">
+                  <Dropdown.Item className="custom-dropdown-item">Pin Quiz</Dropdown.Item>
+                  <Dropdown.Item
+                    id={`delete-quiz-${cardInfo.title}`}
+                    className="custom-dropdown-item"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      dropdownHandlers.removeQuiz(cardInfo.title);
+                    }}
+                  >
+                    Delete Quiz
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             )}
           </div>
         </div>

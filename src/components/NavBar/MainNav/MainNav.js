@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Auth from "@aws-amplify/auth";
 
-import "./styles.css";
+import "./styles.scss";
 
 import { UserContext } from "../../../contexts/UserContext/UserContext";
 import CustomToggle from "../../CustomToggle/CustomToggle";
@@ -10,8 +10,6 @@ import { Dropdown } from "react-bootstrap";
 
 const NavBar = () => {
   const { user, dispatch } = useContext(UserContext);
-  const [subscriptionDropdownOpen, setSubscriptionDropdownOpen] = useState(false);
-  const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
   const [search, setSearch] = useState("");
   const history = useHistory();
 
