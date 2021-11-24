@@ -4,6 +4,7 @@ import Alert from "react-bootstrap/Alert";
 
 import { postCreateQuiz, getPlatformIcon, getPlatformBanner } from "../../API/API";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard";
+import ImageUploader from "../../components/ImageUploader/ImageUploader";
 import Button from "../../components/Buttons/Button/Button";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
@@ -18,6 +19,8 @@ const CreateQuiz = () => {
   const [errors, setErrors] = useState({ show: false, messages: [] });
   const [banner, setBanner] = useState("/banner.svg");
   const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
+  const [images, setImages] = useState({ icon: "" });
+  const [imageUploaders, setImageUploaders] = useState({ icon: false });
   const params = useParams();
   const history = useHistory();
 
@@ -93,6 +96,30 @@ const CreateQuiz = () => {
     );
   };
 
+  const customIconSubmit = (file) => {
+    setImages((prevState) => ({ ...prevState, icon: file }));
+    setImageUploaders((prevState) => ({ ...prevState, icon: false }));
+  };
+
+  const sendImagesToAWS = async () => {
+    const promises = [];
+    if (images.icon !== "") {
+      promises.push(
+        generateSetPlatformIconURL(platformData.title)
+          .then((putURL) => setImage(putURL, images.icon))
+          .catch((e) => console.log(e)),
+      );
+    }
+    if (images.banner !== "") {
+      promises.push(
+        generateSetPlatformBannerURL(platformData.title)
+          .then((putURL) => setImage(putURL, images.banner))
+          .catch((e) => console.log(e)),
+      );
+    }
+    return await Promise.all(promises).catch((e) => console.log(e));
+  };
+
   const publishQuiz = () => {
     if (!checkFields()) {
       return;
@@ -111,8 +138,9 @@ const CreateQuiz = () => {
     quiz.timeLimit = parseInt(quiz.timeLimit);
     setIsLoading(true);
     postCreateQuiz(quiz)
-      .then((res) => history.push(`/p/${params.platform}`))
+      .then(() => history.push(`/p/${params.platform}`))
       .catch((error) => {
+        console.log(error);
         setIsLoading(false);
         setErrors({ show: true, messages: ["Quiz name already taken"] });
       });
@@ -289,6 +317,13 @@ const CreateQuiz = () => {
             <div className="mt-4">
               <Button onClick={addQuestion}>Add Question</Button>
             </div>
+            <div className="mt-4">
+              <Button
+                onClick={() => setImageUploaders((prevState) => ({ ...prevState, icon: true }))}
+              >
+                Upload Icon
+              </Button>
+            </div>
           </div>
           <div className="d-flex flex-column w-50">
             <Button buttonStyle="btn--special" buttonSize="btn--large" onClick={publishQuiz}>
@@ -299,6 +334,18 @@ const CreateQuiz = () => {
         <div className="quiz-cards d-flex flex-column flex-grow-1 me-4">
           {questions && renderCards()}
         </div>
+      </div>
+      <div className="uploader">
+        <ImageUploader
+          visible={imageUploaders.icon}
+          desiredFile="quiz icon"
+          desiredQuiz={quizInfo.quizTitle}
+          desiredPlatform={params.platform}
+          visibilityHandler={() =>
+            setImageUploaders((prevState) => ({ ...prevState, icon: false }))
+          }
+          customSubmit={customIconSubmit}
+        />
       </div>
       <LoadingOverlay isVisible={isLoading} />
     </div>
