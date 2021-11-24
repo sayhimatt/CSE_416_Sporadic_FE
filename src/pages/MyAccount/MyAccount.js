@@ -12,7 +12,7 @@ import ImageUploader from "../../components/ImageUploader/ImageUploader";
 import { Alert } from "react-bootstrap";
 
 const MyAccount = () => {
-  const { user, dispatch } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [userState, setuserState] = useState();
   const [about, setAbout] = useState("");
   const [showAvatarUpload, setShowAvatarUpload] = useState(false);
@@ -24,19 +24,19 @@ const MyAccount = () => {
         setuserState(user);
         setAbout(user.aboutSection);
       })
-      .catch((e) => console.log("Could not retrieve user"));
+      .catch(() => console.log("Could not retrieve user"));
   }, []);
 
   const updateAbout = () => {
     patchUserAbout(user.username, about)
-      .then((res) =>
+      .then(() =>
         setAlerts({
           show: true,
           style: "sporadic-secondary",
           message: "Your about section has been updated!",
         }),
       )
-      .catch((e) =>
+      .catch(() =>
         setAlerts({
           show: true,
           style: "danger",
@@ -55,8 +55,12 @@ const MyAccount = () => {
       <SubNav
         heading="My Account"
         buttons={[
-          <LinkButton to="/createPlatform">Create A Platform</LinkButton>,
-          <LinkButton to="/notifications">Notifications</LinkButton>,
+          <LinkButton key="navCreatePlatB" to="/createPlatform">
+            Create A Platform
+          </LinkButton>,
+          <LinkButton key="navNotificationB" to="/notifications">
+            Notifications
+          </LinkButton>,
         ]}
       />
       <Alert
@@ -69,7 +73,14 @@ const MyAccount = () => {
       </Alert>
       {userState && (
         <div className="page-content ms-5 me-5">
-          <div className="d-flex flex-column">
+          <div className="d-flex flex-column justify-content-center align-items-center">
+            <div className="account-section">
+              <h2>AVATAR</h2>
+              <img className="profile-avatar" alt="avatar" src={user.profilePicture} />
+              <div>
+                <Button onClick={() => setShowAvatarUpload(true)}>Change Avatar</Button>
+              </div>
+            </div>
             <div className="account-section">
               <h2>STATS</h2>
               <div className="d-flex w-75 justify-content-between">
@@ -102,13 +113,6 @@ const MyAccount = () => {
               </div>
             </div>
             <div className="account-section">
-              <h2>AVATAR</h2>
-              <img className="avatar" alt="avatar" src={user.profilePicture} />
-              <div>
-                <Button onClick={() => setShowAvatarUpload(true)}>Change Avatar</Button>
-              </div>
-            </div>
-            <div className="account-section">
               <h2>AWARDS</h2>
               <div id="account-awards-shelf">
                 {userState.awards &&
@@ -129,15 +133,11 @@ const MyAccount = () => {
               <div className="account-info">
                 <div className="account-info-heading">Email</div>
                 <p>{userState.email}</p>
-              </div>
-              <div className="account-info">
                 <div className="account-info-heading">Username</div>
                 <p>{userState.username}</p>
-              </div>
-              <div className="account-info">
                 <div className="account-info-heading mb-2">Password</div>
-                <Button>Change Password</Button>
               </div>
+              <Button>Change Password</Button>
             </div>
           </div>
           <ImageUploader
