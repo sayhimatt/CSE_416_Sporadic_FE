@@ -76,18 +76,17 @@ const QuizComplete = () => {
   const makeComment = () => {
     putComment(params.platform, params.quiz, comment)
       .then((res) => {
-       getQuiz();
-    })
+        getQuiz();
+      })
       .catch((error) => {
         setShowAlert(true);
       });
   };
 
   const generateCommentCards = () => {
-    console.log("a");
-    console.log(quiz.comments);
     return quiz.comments.map((comment) => (
       <SmallCard
+        key={comment.user}
         profilePicture={userIcons[comment.user]}
         username={comment.user}
         rightCard={<div className="card-comment">{comment.text}</div>}
@@ -117,7 +116,7 @@ const QuizComplete = () => {
       </div>
       <div className="content d-flex m-4 flex-row">
         <div className="d-flex flex-column flex-md-fill color-secondary fw-bold fs-3">
-          Your Score is: 100/100
+          {`Your Score is: ${quiz.score}/${quiz.totalQuestions}`}
           {quiz.comments && userIcons && generateCommentCards()}
         </div>
         <div className="information d-flex flex-column m-4">
