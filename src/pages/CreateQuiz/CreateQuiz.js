@@ -315,10 +315,13 @@ const CreateQuiz = () => {
               </div>
             </div>
             <div className="mt-4">
-              <Button onClick={addQuestion}>Add Question</Button>
+              <Button buttonSize="btn--large" onClick={addQuestion}>
+                Add Question
+              </Button>
             </div>
             <div className="mt-4">
               <Button
+                buttonSize="btn--large"
                 onClick={() => setImageUploaders((prevState) => ({ ...prevState, icon: true }))}
               >
                 Upload Icon
