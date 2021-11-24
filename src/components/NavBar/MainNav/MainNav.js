@@ -71,7 +71,7 @@ const NavBar = () => {
           <div className="navText">{user.username}</div>
           {accountDropdownOpen && (
             <DropdownMenu proximity="navbar">
-              <DropdownItem to="/myAccount">My Account</DropdownItem>
+              <DropdownItem to={`/user/${user.username}`}>My Account</DropdownItem>
               <DropdownItem to="/friends">Friends</DropdownItem>
               <DropdownItem to="/nofitifcations">Notifications</DropdownItem>
               <DropdownItem onClick={logout}>Logout</DropdownItem>
