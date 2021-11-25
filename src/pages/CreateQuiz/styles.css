@@ -39,6 +39,16 @@
   width: 28px;
   height: 28px;
 }
+.add-choice {
+  margin-top: 100px;
+  width: 28px;
+  height: 28px;
+}
+.sub-choice {
+  margin-top: 10px;
+  width: 28px;
+  height: 28px;
+}
 
 .quiz-info-section {
   display: flex;

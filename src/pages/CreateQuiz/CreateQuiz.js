@@ -34,6 +34,10 @@ const CreateQuiz = () => {
     getImageMedia();
   }, [params]);
 
+  useEffect(() => {
+    renderCards();
+  }, [questions]);
+
   const getImageMedia = async () => {
     await getPlatformBanner(params.platform).then((banner) => {
       console.log(banner);
@@ -77,6 +81,25 @@ const CreateQuiz = () => {
       return;
     }
     setQuestions((prevState) => prevState.filter((question, index) => questionNumber !== index));
+  };
+
+  const addChoice = (questionNumber) => {
+    questions[questionNumber].answers.push("");
+    setQuestions((prevState) => [...prevState]);
+  };
+
+  const subChoice = (questionNumber) => {
+    if (questions[questionNumber].answers.length > 2) {
+      questions[questionNumber].answers.pop();
+    } else {
+      // Set an error message
+      setErrors((prevState) => ({
+        ...prevState,
+        messages: prevState.messages.concat(["All questions must have at least two choices"]),
+        show: true,
+      }));
+    }
+    setQuestions((prevState) => [...prevState]);
   };
 
   const setAnswerText = (questionNumber, answerNumber, text) => {
@@ -246,16 +269,42 @@ const CreateQuiz = () => {
             answerTextHandler={setAnswerText}
             correctAnswerHandler={setCorrectAnswer}
           />
-          <a
-            className="delete-question"
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              deleteQuestion(parseInt(e.target.id.charAt(e.target.id.length - 1)));
-            }}
-          >
-            <img id={`delete-question-${index}`} alt="delete question" src="/question_delete.svg" />
-          </a>
+          <div>
+            <a
+              className="delete-question"
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                deleteQuestion(parseInt(e.target.id.charAt(e.target.id.length - 1)));
+              }}
+            >
+              <img
+                id={`delete-question-${index}`}
+                alt="delete question"
+                src="/question_delete.svg"
+              />
+            </a>
+            <a
+              className="add-choice"
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                addChoice(parseInt(e.target.id.charAt(e.target.id.length - 1)));
+              }}
+            >
+              <img id={`add-choice-${index}`} alt="add choice" src="/addChoice.svg" />
+            </a>
+            <a
+              className="sub-choice"
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                subChoice(parseInt(e.target.id.charAt(e.target.id.length - 1)));
+              }}
+            >
+              <img id={`sub-choice-${index}`} alt="remove choice" src="/subChoice.svg" />
+            </a>
+          </div>
         </div>
       );
     });
