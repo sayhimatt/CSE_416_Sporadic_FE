@@ -85,28 +85,45 @@ const CreateQuiz = () => {
 
   const addChoice = (questionNumber) => {
     if (questions[questionNumber].answers.length < 10) {
-      questions[questionNumber].answers.push("");
+      console.log(questions[questionNumber].answers.length);
+      setQuestions((prevState) =>
+        prevState.map((question, index) =>
+          index === questionNumber
+            ? {
+                ...question,
+                answers: [...question.answers, ""],
+              }
+            : question,
+        ),
+      );
     } else {
       // Set an error message
-      setErrors((prevState) => ({
-        ...prevState,
-        messages: prevState.messages.concat(["Ten is too many choices for a single question"]),
+      setErrors({
+        messages: ["Ten is too many choices for a single question"],
         show: true,
-      }));
+      });
     }
     setQuestions((prevState) => [...prevState]);
   };
 
   const subChoice = (questionNumber) => {
     if (questions[questionNumber].answers.length > 2) {
-      questions[questionNumber].answers.pop();
+      setQuestions((prevState) =>
+        prevState.map((question, index) =>
+          index === questionNumber
+            ? {
+                ...question,
+                answers: question.answers.slice(0, question.answers.length - 1),
+              }
+            : question,
+        ),
+      );
     } else {
       // Set an error message
-      setErrors((prevState) => ({
-        ...prevState,
-        messages: prevState.messages.concat(["All questions must have at least two choices"]),
+      setErrors({
+        messages: ["All questions must have at least two choices"],
         show: true,
-      }));
+      });
     }
     setQuestions((prevState) => [...prevState]);
   };
@@ -205,10 +222,7 @@ const CreateQuiz = () => {
 
   const checkQuizTitle = () => {
     if (quizInfo.quizTitle.length === 0) {
-      setErrors((prevState) => ({
-        ...prevState,
-        messages: prevState.messages.concat(["Quiz title cannot be empty"]),
-      }));
+      addErrorMessage("Quiz title cannot be empty");
       return false;
     }
     return true;
@@ -216,10 +230,7 @@ const CreateQuiz = () => {
 
   const checkDescription = () => {
     if (quizInfo.description.length === 0) {
-      setErrors((prevState) => ({
-        ...prevState,
-        messages: prevState.messages.concat(["Description cannot be empty"]),
-      }));
+      addErrorMessage("Description cannot be empty");
       return false;
     }
     return true;
@@ -227,10 +238,7 @@ const CreateQuiz = () => {
 
   const checkTimer = () => {
     if (!parseInt(quizInfo.timeLimit) || quizInfo.timeLimit < 60 || quizInfo.timeLimit > 600) {
-      setErrors((prevState) => ({
-        ...prevState,
-        messages: prevState.messages.concat(["Quiz time must a number between 60 and 600"]),
-      }));
+      addErrorMessage("Quiz time must a number between 60 and 600");
       return false;
     }
     return true;
@@ -239,10 +247,7 @@ const CreateQuiz = () => {
   const checkQuestions = () => {
     for (let i = 0; i < questions.length; i++) {
       if (questions[i].body === "") {
-        setErrors((prevState) => ({
-          ...prevState,
-          messages: prevState.messages.concat(["All questions must have a title"]),
-        }));
+        addErrorMessage("All questions must have a title");
         return false;
       }
     }
@@ -252,14 +257,18 @@ const CreateQuiz = () => {
   const checkAnswers = () => {
     for (let i = 0; i < questions.length; i++) {
       if (questions[i].answers.includes("")) {
-        setErrors((prevState) => ({
-          ...prevState,
-          messages: prevState.messages.concat(["Answer choices cannot be left empty"]),
-        }));
+        addErrorMessage("Answer choices cannot be left empty");
         return false;
       }
       return true;
     }
+  };
+
+  const addErrorMessage = (message) => {
+    setErrors((prevState) => ({
+      ...prevState,
+      messages: prevState.messages.concat([message]),
+    }));
   };
 
   const renderCards = () => {
