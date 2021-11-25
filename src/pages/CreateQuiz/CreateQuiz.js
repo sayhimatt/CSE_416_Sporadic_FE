@@ -113,11 +113,15 @@ const CreateQuiz = () => {
       promises.push(
         generateSetQuizIconURL(params.platform, quizInfo.quizTitle)
           .then((putURL) => setImage(putURL, images.icon))
-          .catch((e) => console.log(e)),
+          .catch((e) => {
+            throw `Error Uploading: ${e}`;
+          }),
       );
     }
     // TODO: Add Award
-    return await Promise.all(promises).catch((e) => console.log(e));
+    return await Promise.all(promises).catch((e) => {
+      throw `Error Uploading: ${e}`;
+    });
   };
 
   const publishQuiz = () => {
@@ -139,7 +143,11 @@ const CreateQuiz = () => {
     setIsLoading(true);
     postCreateQuiz(quiz)
       .then(() => {
-        sendImagesToAWS();
+        try {
+          sendImagesToAWS();
+        } catch (e) {
+          alert(e);
+        }
         history.push(`/p/${params.platform}`);
       })
       .catch((error) => {
