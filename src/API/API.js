@@ -293,10 +293,39 @@ export const getPlatformBanner = async (platform) => {
   }
 };
 
+export const getQuizIcon = async (platform, quiz) => {
+  try {
+    const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/${quiz}/icon.png`);
+    if (resp.status != 200) {
+      return "/platformIcon.svg";
+    }
+    return `${AWS_ENDPOINT}/platforms/${platform}/${quiz}/icon.png`;
+  } catch {
+    return "/platformIcon.svg";
+  }
+};
+
 export const generateSetUserIconURL = async (username) => {
   try {
     const token = await getToken();
     const response = await axios.get(`${ENDPOINT}/users/${username}/set-avatar`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const generateSetQuizIconURL = async (platform, quiz) => {
+  try {
+    const token = await getToken();
+    const response = await axios.get(`${ENDPOINT}/quizzes/${platform}/${quiz}/set-icon`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (response.status == 200) {

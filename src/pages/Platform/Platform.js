@@ -12,6 +12,7 @@ import ImageUploader from "../../components/ImageUploader/ImageUploader";
 import {
   getPlatformIcon,
   getPlatformBanner,
+  getQuizIcon,
   patchSubscribe,
   patchUnsubscribe,
   deleteQuiz,
@@ -126,16 +127,17 @@ const Platform = () => {
       .catch((error) => alert("Could not delete quiz"));
   };
 
-  const renderCards = () => {
+  const renderCards = async () => {
     if (!platformIcon) {
       return;
     }
-    const cards = quizzes.map((quiz) => {
+    const cards = quizzes.map(async (quiz) => {
       const name = params.platform;
+      const quizImg = await getQuizIcon(params.platform, quiz.title);
       return (
         <LargeCard
           key={quiz._id}
-          iconSrc={platformIcon}
+          iconSrc={quizImg}
           cardInfo={{
             title: quiz.title,
             description: quiz.description,
@@ -153,7 +155,10 @@ const Platform = () => {
         />
       );
     });
-    setQuizCards(cards);
+    await Promise.all(cards).then((cards) => {
+      //console.log(cards);
+      setQuizCards(cards);
+    });
   };
 
   const bannedPage = () => {
