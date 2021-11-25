@@ -84,7 +84,16 @@ const CreateQuiz = () => {
   };
 
   const addChoice = (questionNumber) => {
-    questions[questionNumber].answers.push("");
+    if (questions[questionNumber].answers.length < 10) {
+      questions[questionNumber].answers.push("");
+    } else {
+      // Set an error message
+      setErrors((prevState) => ({
+        ...prevState,
+        messages: prevState.messages.concat(["Ten is too many choices for a single question"]),
+        show: true,
+      }));
+    }
     setQuestions((prevState) => [...prevState]);
   };
 
@@ -269,7 +278,7 @@ const CreateQuiz = () => {
             answerTextHandler={setAnswerText}
             correctAnswerHandler={setCorrectAnswer}
           />
-          <div>
+          <div className="mods mt-3 d-flex flex-column">
             <a
               className="delete-question"
               href="#"

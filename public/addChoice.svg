@@ -1,40 +1,8 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg width="28" height="28" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 60.364 60.364" style="enable-background:new 0 0 60.364 60.364;" xml:space="preserve">
-<g>
-	<path d="M54.454,23.18l-18.609-0.002L35.844,5.91C35.845,2.646,33.198,0,29.934,0c-3.263,0-5.909,2.646-5.909,5.91v17.269
-		L5.91,23.178C2.646,23.179,0,25.825,0,29.088c0.002,3.264,2.646,5.909,5.91,5.909h18.115v19.457c0,3.267,2.646,5.91,5.91,5.91
-		c3.264,0,5.909-2.646,5.91-5.908V34.997h18.611c3.262,0,5.908-2.645,5.908-5.907C60.367,25.824,57.718,23.178,54.454,23.18z"/>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 30 30">
+  <path fill="#189AB4" d="M0 5a5 5 0 015-5h20a5 5 0 015 5v20a5 5 0 01-5 5H5a5 5 0 01-5-5V5z"/>
+  <mask id="a" fill="#fff">
+    <path fill-rule="evenodd" d="M12.5 12.5H5v5h7.5V25h5v-7.5H25v-5h-7.5V5h-5v7.5z" clip-rule="evenodd"/>
+  </mask>
+  <path fill="#fff" fill-rule="evenodd" d="M12.5 12.5H5v5h7.5V25h5v-7.5H25v-5h-7.5V5h-5v7.5z" clip-rule="evenodd"/>
+  <path fill="#000" d="M5 12.5v-1H4v1h1zm7.5 0v1h1v-1h-1zm-7.5 5H4v1h1v-1zm7.5 0h1v-1h-1v1zm0 7.5h-1v1h1v-1zm5 0v1h1v-1h-1zm0-7.5v-1h-1v1h1zm7.5 0v1h1v-1h-1zm0-5h1v-1h-1v1zm-7.5 0h-1v1h1v-1zm0-7.5h1V4h-1v1zm-5 0V4h-1v1h1zM5 13.5h7.5v-2H5v2zm1 4v-5H4v5h2zm6.5-1H5v2h7.5v-2zm1 8.5v-7.5h-2V25h2zm4-1h-5v2h5v-2zm-1-6.5V25h2v-7.5h-2zm8.5-1h-7.5v2H25v-2zm-1-4v5h2v-5h-2zm-6.5 1H25v-2h-7.5v2zm-1-8.5v7.5h2V5h-2zm-4 1h5V4h-5v2zm1 6.5V5h-2v7.5h2z" mask="url(#a)"/>
 </svg>
