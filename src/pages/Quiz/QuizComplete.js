@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 
+import MainNav from "../../components/NavBar/MainNav/MainNav";
+import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
+import Button from "../../components/Buttons/Button/Button";
+import award from "../../award.svg";
+import SmallCard from "../../components/Card/SmallCard/SmallCard";
 import {
   getPlatform,
   getQuizByTitle,
@@ -9,13 +14,9 @@ import {
   getAllUserIcons,
   putComment,
 } from "./../../API/API";
-import MainNav from "../../components/NavBar/MainNav/MainNav";
-import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
-import Button from "../../components/Buttons/Button/Button";
-import award from "../../award.svg";
-import "./styles.scss";
-import SmallCard from "../../components/Card/SmallCard/SmallCard";
 import { Alert } from "react-bootstrap";
+
+import "./styles.scss";
 
 const QuizComplete = () => {
   const [platform, setPlatform] = useState({});
