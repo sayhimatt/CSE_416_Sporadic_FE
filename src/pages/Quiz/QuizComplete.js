@@ -101,35 +101,58 @@ const QuizComplete = () => {
       <Alert show={showAlert} variant="danger" onClose={() => setShowAlert(false)} dismissible>
         You can only make one comment per quiz
       </Alert>
-      <div className="flex-row input-box w-75">
-        <textarea
-          className="input"
-          placeholder="Enter a comment"
-          onChange={(e) => setComment(e.target.value)}
-        />
-        <input
-          type="submit"
-          value="Post"
-          className="btn btn-primary btn-block"
-          onClick={makeComment}
-        />
-      </div>
-      <div className="content d-flex m-4 flex-row">
-        <div className="d-flex flex-column flex-md-fill color-secondary fw-bold fs-3">
-          {`Your Score is: ${quiz.score}/${quiz.totalQuestions}`}
-          {quiz.comments && userIcons && generateCommentCards()}
+      <div className="page-content">
+        <div id="main-results">
+          <div id="score-bubble">{`${Math.round((quiz.score / quiz.totalQuestions) * 100)}%`}</div>
+          <div id="results-breakdown">
+            <div id="score-breakdown">
+              <div className="d-flex flex-column align-items-center">
+                <div id="questions-right">{quiz.score}</div>
+                <div className="score-divider" />
+                <div id="total-questions">{quiz.totalQuestions}</div>
+              </div>
+              <div className="d-flex flex-column align-items-start ms-4">
+                <div>Correct</div>
+                <div className="score-divider invisible" />
+                <div>Questions</div>
+              </div>
+            </div>
+            <div className="d-flex align-items-center">
+              <img id="trophy-earned" src={award} alt="Icon" />
+              <div className="ms-3">Trophy Name</div>
+            </div>
+          </div>
         </div>
-        <div className="information d-flex flex-column m-4">
-          <div className="searchBar searchBar--border">
-            <input className="search" placeholder="Search"></input>
+        <div className="flex-row input-box w-75">
+          <textarea
+            className="input"
+            placeholder="Enter a comment"
+            onChange={(e) => setComment(e.target.value)}
+          />
+          <input
+            type="submit"
+            value="Post"
+            className="btn btn-primary btn-block"
+            onClick={makeComment}
+          />
+        </div>
+        <div className="content d-flex m-4 flex-row">
+          <div className="d-flex flex-column flex-md-fill color-secondary fw-bold fs-3">
+            {`Your Score is: ${quiz.score}/${quiz.totalQuestions}`}
+            {quiz.comments && userIcons && generateCommentCards()}
           </div>
-          <div className="platform-text-block d-flex align-items-center justify-content-center mt-4 color-secondary fw-bold fs-3">
-            {quiz.description}
+          <div className="information d-flex flex-column m-4">
+            <div className="searchBar searchBar--border">
+              <input className="search" placeholder="Search"></input>
+            </div>
+            <div className="platform-text-block d-flex align-items-center justify-content-center mt-4 color-secondary fw-bold fs-3">
+              {quiz.description}
+            </div>
+            <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
+              <div className="color-secondary fw-bold fs-3"> Congratulations! </div>
+            </div>
+            <img src={award} alt="Icon" />
           </div>
-          <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
-            <div className="color-secondary fw-bold fs-3"> Congratulations! </div>
-          </div>
-          <img src={award} alt="Icon" />
         </div>
       </div>
     </div>
