@@ -11,6 +11,7 @@ import {
 } from "./../../API/API";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
+import Button from "../../components/Buttons/Button/Button";
 import award from "../../award.svg";
 import "./styles.scss";
 import SmallCard from "../../components/Card/SmallCard/SmallCard";
@@ -98,10 +99,12 @@ const QuizComplete = () => {
     <div>
       <MainNav />
       <PlatformSubNav platformName={"Quiz: " + params.quiz} iconSrc={platformIcon} />
-      <Alert show={showAlert} variant="danger" onClose={() => setShowAlert(false)} dismissible>
-        You can only make one comment per quiz
-      </Alert>
-      <div className="page-content">
+      <div className="quiz-alerts">
+        <Alert show={showAlert} variant="danger" onClose={() => setShowAlert(false)} dismissible>
+          You can only make one comment per quiz
+        </Alert>
+      </div>
+      <div className="page-content d-flex flex-column align-items-center">
         <div id="main-results">
           <div id="score-bubble">{`${Math.round((quiz.score / quiz.totalQuestions) * 100)}%`}</div>
           <div id="results-breakdown">
@@ -117,41 +120,34 @@ const QuizComplete = () => {
                 <div>Questions</div>
               </div>
             </div>
-            <div className="d-flex align-items-center">
+            <div id="award-section">
               <img id="trophy-earned" src={award} alt="Icon" />
               <div className="ms-3">Trophy Name</div>
             </div>
           </div>
         </div>
-        <div className="flex-row input-box w-75">
-          <textarea
-            className="input"
-            placeholder="Enter a comment"
-            onChange={(e) => setComment(e.target.value)}
-          />
-          <input
-            type="submit"
-            value="Post"
-            className="btn btn-primary btn-block"
-            onClick={makeComment}
-          />
-        </div>
-        <div className="content d-flex m-4 flex-row">
-          <div className="d-flex flex-column flex-md-fill color-secondary fw-bold fs-3">
-            {`Your Score is: ${quiz.score}/${quiz.totalQuestions}`}
-            {quiz.comments && userIcons && generateCommentCards()}
+        <div id="results-feedback">
+          <div id="feedback">
+            <div id="quiz-title">Title</div>
+            <div className="d-flex justify-content-around w-75 mt-3">
+              <img id="upvote" className="feedback-image" src="/like.png" alt="upvote" />
+              <img id="downvote" className="feedback-image" src="/dislike.png" alt="downvote" />
+            </div>
           </div>
-          <div className="information d-flex flex-column m-4">
-            <div className="searchBar searchBar--border">
-              <input className="search" placeholder="Search"></input>
+          <div id="comments-section">
+            <div id="make-comment">
+              <div className="comment-box flex-grow-1">
+                <textarea
+                  className="input"
+                  placeholder="Enter a comment"
+                  onChange={(e) => setComment(e.target.value)}
+                />
+              </div>
+              <div className="ms-3">
+                <Button onClick={makeComment}>Make Comment</Button>
+              </div>
             </div>
-            <div className="platform-text-block d-flex align-items-center justify-content-center mt-4 color-secondary fw-bold fs-3">
-              {quiz.description}
-            </div>
-            <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
-              <div className="color-secondary fw-bold fs-3"> Congratulations! </div>
-            </div>
-            <img src={award} alt="Icon" />
+            <div id="comments-list">{quiz.comments && userIcons && generateCommentCards()}</div>
           </div>
         </div>
       </div>
