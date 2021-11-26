@@ -128,10 +128,24 @@ const QuizComplete = () => {
         </div>
         <div id="results-feedback">
           <div id="feedback">
-            <div id="quiz-title">Title</div>
+            <div id="quiz-title">{quiz.title}</div>
             <div className="d-flex justify-content-around w-75 mt-3">
-              <img id="upvote" className="feedback-image" src="/like.png" alt="upvote" />
-              <img id="downvote" className="feedback-image" src="/dislike.png" alt="downvote" />
+              <img
+                id="upvote"
+                className="feedback-image"
+                src="/like.png"
+                alt="upvote"
+                onMouseEnter={(e) => (e.target.src = "/like_filled.png")}
+                onMouseLeave={(e) => (e.target.src = "/like.png")}
+              />
+              <img
+                id="downvote"
+                className="feedback-image"
+                src="/dislike.png"
+                alt="downvote"
+                onMouseEnter={(e) => (e.target.src = "/dislike_filled.png")}
+                onMouseLeave={(e) => (e.target.src = "/dislike.png")}
+              />
             </div>
           </div>
           <div id="comments-section">
