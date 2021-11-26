@@ -20,7 +20,7 @@ import "./styles.scss";
 
 const QuizComplete = () => {
   const [platform, setPlatform] = useState({});
-  const [quiz, setQuiz] = useState({});
+  const [quiz, setQuiz] = useState();
   const [banner, setBanner] = useState("/banner.svg");
   const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
   const [comment, setComment] = useState("");
@@ -96,7 +96,7 @@ const QuizComplete = () => {
     ));
   };
 
-  return (
+  return !quiz ? null : (
     <div>
       <MainNav />
       <PlatformSubNav platformName={"Quiz: " + params.quiz} iconSrc={platformIcon} />
@@ -162,7 +162,9 @@ const QuizComplete = () => {
                 <Button onClick={makeComment}>Make Comment</Button>
               </div>
             </div>
-            <div id="comments-list">{quiz.comments && userIcons && generateCommentCards()}</div>
+            <div id="comments-list" className="mb-5">
+              {quiz.comments && userIcons && generateCommentCards()}
+            </div>
           </div>
         </div>
       </div>
