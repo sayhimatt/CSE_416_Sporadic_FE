@@ -7,7 +7,7 @@ import "./styles.css";
  */
 const InfoModal = ({ title, body, buttonText, onButtonClicked, isVisible }) => {
   return (
-    <Modal show={isVisible} backdrop="static" keyboard={false}>
+    <Modal show={isVisible} backdrop="static" keyboard={false} style={{ top: "20%" }}>
       <Modal.Header>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
@@ -17,7 +17,7 @@ const InfoModal = ({ title, body, buttonText, onButtonClicked, isVisible }) => {
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant="primary" onClick={onButtonClicked}>
+        <Button variant="confirm" onClick={onButtonClicked}>
           {buttonText}
         </Button>
       </Modal.Footer>
