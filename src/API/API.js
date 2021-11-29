@@ -178,11 +178,15 @@ export const patchUserAbout = async (username, text) => {
 };
 
 /* Feed routing */
-export const getFeedQuizzes = async () => {
+export const getFeedQuizzes = async (page) => {
+  const AMOUNT_PER_PAGE = 10;
   const token = await getToken();
-  const response = await axios.get(`${ENDPOINT}/quizzes/feed`, {
-    headers: { authorization: `Bearer ${token}` },
-  });
+  const response = await axios.get(
+    `${ENDPOINT}/quizzes/feed?page=${page}&amountPerPage=${AMOUNT_PER_PAGE}`,
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
   return response.data;
 };
 
