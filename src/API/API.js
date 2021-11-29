@@ -32,11 +32,15 @@ export const postCreatePlatform = async (platformData) => {
   );
 };
 
-export const getQuizzesFromPlatform = async (platformName) => {
+export const getQuizzesFromPlatform = async (platformName, page) => {
+  const AMOUNT_PER_PAGE = 10;
   const token = await getToken();
-  const response = await axios.get(`${ENDPOINT}/quizzes?platform=${platformName}`, {
-    headers: { authorization: `Bearer ${token}` },
-  });
+  const response = await axios.get(
+    `${ENDPOINT}/quizzes?platform=${platformName}&page=${page}&amountPerPage=${AMOUNT_PER_PAGE}`,
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
   return response.data.items;
 };
 

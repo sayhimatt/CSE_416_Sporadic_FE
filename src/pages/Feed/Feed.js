@@ -9,6 +9,9 @@ import SubNav from "../../components/NavBar/SubNav/SubNav";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import Footer from "../../components/Footer/Footer";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
+import LoadingSpinner from "../../components/LoadingIndicators/LoadingSpinner";
+
+import "./styles.scss";
 
 const Feed = ({ children }) => {
   const { user } = useContext(UserContext);
@@ -71,14 +74,14 @@ const Feed = ({ children }) => {
       <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
         <div className="d-flex flex-column m-5 align-items-end">
           <div className="sort"></div>
-          <div className="quizzes d-flex flex-column mb-4">
+          <div id="feed-quizzes" className="quizzes d-flex flex-column mb-4">
             <InfiniteScroll
               next={getQuizzes}
               dataLength={quizzes.quizzes.length}
               hasMore={quizzes.hasMore}
               loader={
                 <div className="d-flex justify-content-center mt-4">
-                  <h4>Loading...</h4>
+                  <LoadingSpinner isVisible={true} />
                 </div>
               }
               endMessage={
@@ -87,7 +90,7 @@ const Feed = ({ children }) => {
                 </div>
               }
               className="pe-3"
-              scrollThreshold={0.7}
+              scrollThreshold={0.95}
             >
               {renderCards()}
             </InfiniteScroll>
