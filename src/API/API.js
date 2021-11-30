@@ -230,11 +230,15 @@ export const putComment = async (platform, quiz, text) => {
 };
 
 /* Search Routing */
-export const getSearchResults = async (type, query) => {
+export const getSearchResults = async (type, query, page) => {
+  const AMOUNT_PER_PAGE = 10;
   const token = await getToken();
-  const response = await axios.get(`${ENDPOINT}/search?scope=${type}&searchQuery=${query}`, {
-    headers: { authorization: `Bearer ${token}` },
-  });
+  const response = await axios.get(
+    `${ENDPOINT}/search?scope=${type}&searchQuery=${query}&page=${page}&amountPerPage=${AMOUNT_PER_PAGE}`,
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
   return response.data.items;
 };
 
