@@ -3,7 +3,8 @@ import { Link, useParams, useHistory } from "react-router-dom";
 
 import { getPlatform, getQuizzesFromPlatform } from "./../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
-import Button from "../../components/Button/Button";
+import Button from "../../components/Buttons/Button/Button";
+import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
@@ -11,6 +12,7 @@ import ImageUploader from "../../components/ImageUploader/ImageUploader";
 import {
   getPlatformIcon,
   getPlatformBanner,
+  getQuizIcon,
   patchSubscribe,
   patchUnsubscribe,
   deleteQuiz,
@@ -29,7 +31,7 @@ const Platform = () => {
   const [modView, setModView] = useState(false);
   const [isBanned, setIsBanned] = useState(false);
   const [banner, setBanner] = useState("/banner.svg");
-  const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
+  const [platformIcon, setPlatformIcon] = useState();
   const [uploadBanner, setUploadBanner] = useState(false);
   const [uploadIcon, setUploadIcon] = useState(false);
 
@@ -42,7 +44,7 @@ const Platform = () => {
 
   useEffect(() => {
     renderCards();
-  }, [quizzes, modView]);
+  }, [quizzes, modView, platformIcon]);
 
   const getImageMedia = async () => {
     await getPlatformBanner(params.platform).then((banner) => {
@@ -63,7 +65,7 @@ const Platform = () => {
       })
       .catch((error) => {
         if (error.response.status === 400) {
-          history.replace(`/search?=${name}`);
+          history.replace(`/search?searchQuery=${name}`);
         } else if (error.response.status === 403) {
           setIsBanned(true);
           setPlatform({});
@@ -125,12 +127,17 @@ const Platform = () => {
       .catch((error) => alert("Could not delete quiz"));
   };
 
-  const renderCards = () => {
-    const cards = quizzes.map((quiz) => {
+  const renderCards = async () => {
+    if (!platformIcon) {
+      return;
+    }
+    const cards = quizzes.map(async (quiz) => {
       const name = params.platform;
+      const quizImg = await getQuizIcon(params.platform, quiz.title);
       return (
         <LargeCard
           key={quiz._id}
+          iconSrc={quizImg}
           cardInfo={{
             title: quiz.title,
             description: quiz.description,
@@ -148,7 +155,10 @@ const Platform = () => {
         />
       );
     });
-    setQuizCards(cards);
+    await Promise.all(cards).then((cards) => {
+      //console.log(cards);
+      setQuizCards(cards);
+    });
   };
 
   const bannedPage = () => {
@@ -199,23 +209,17 @@ const Platform = () => {
           </div>
           {modView && (
             <div className="d-flex flex-column w-100">
-              <Button buttonSize="btn--large">
-                <Link
-                  className="link d-flex justify-content-center"
-                  to={`/p/${params.platform}/createQuiz`}
-                >
-                  Create Quiz
-                </Link>
-              </Button>
+              <LinkButton buttonSize="btn--large" to={`/p/${params.platform}/createQuiz`}>
+                Create Quiz
+              </LinkButton>
               <div className="p-1"></div>
-              <Button buttonStyle="btn--special" buttonSize="btn--large">
-                <Link
-                  className="link d-flex justify-content-center"
-                  to={`/p/${params.platform}/subscribers`}
-                >
-                  Manage Subscribers
-                </Link>
-              </Button>
+              <LinkButton
+                buttonStyle="btn--special"
+                buttonSize="btn--large"
+                to={`/p/${params.platform}/subscribers`}
+              >
+                Manage Subscribers
+              </LinkButton>
             </div>
           )}
           <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">

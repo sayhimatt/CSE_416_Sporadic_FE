@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Auth } from "aws-amplify";
 
-import Button from "../../../components/Button/Button";
-import ErrorMessage from  "../../../components/ErrorMessage/ErrorMessage";
+import Button from "../../../components/Buttons/Button/Button";
+import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
 import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay";
 
 import "../styles.css";
@@ -70,10 +70,7 @@ const MainForgotPassword = () => {
           </Link>
         </div>
       </div>
-      <ErrorMessage 
-        visible={showMsg} 
-        errorStyle="errorBox" 
-        text="Invalid Username"/>     
+      <ErrorMessage visible={showMsg} errorStyle="errorBox" text="Invalid Username" />
       <LoadingOverlay isVisible={isLoading} />
     </div>
   );

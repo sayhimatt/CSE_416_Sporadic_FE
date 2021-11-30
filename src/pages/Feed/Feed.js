@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { UserContext } from "../../contexts/UserContext/UserContext";
 import { getFeedQuizzes } from "../../API/API";
-import Button from "../../components/Button/Button";
+import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import Footer from "../../components/Footer/Footer";
@@ -13,7 +13,6 @@ const Feed = ({ children }) => {
   const { user, dispatch } = useContext(UserContext);
   const [quizCards, setQuizCards] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
-
 
   useEffect(() => {
     getQuizzes();
@@ -34,14 +33,14 @@ const Feed = ({ children }) => {
   };
 */
 
-const getQuizzes = async () => {
-  try {
-    const response = await getFeedQuizzes();
-    setQuizzes(response.items);
-  } catch (error) {
-    console.log(error);
-  }
-};
+  const getQuizzes = async () => {
+    try {
+      const response = await getFeedQuizzes();
+      setQuizzes(response.items);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const renderCards = () => {
     const cards = quizzes.map((quiz) => {
@@ -65,12 +64,8 @@ const getQuizzes = async () => {
     setQuizCards(cards);
   };
   const subNavButtons = [
-    <Link to="/createPlatform">
-      <Button>Create A Platform</Button>
-    </Link>,
-    <Link to="/Notifications">
-      <Button>Notifications</Button>
-    </Link>,
+    <LinkButton to="/createPlatform">Create A Platform</LinkButton>,
+    <LinkButton to="/notifications">Notifications</LinkButton>,
   ];
   return (
     <div>

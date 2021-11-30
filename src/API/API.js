@@ -144,6 +144,116 @@ export const postConfirmCode = async (username, confirmCode) => {
   });
 };
 
+/* User routing */
+
+export const getUser = async (username) => {
+  const token = await getToken();
+  const response = await axios.get(`${ENDPOINT}/users/${username}`, {
+    headers: { authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+
+export const manageFriend = async (username, action) => {
+  const token = await getToken();
+  const response = await axios.put(
+    `${ENDPOINT}/users/updateRelationship`,
+    {
+      targetUsername: username,
+      action: action,
+    },
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
+};
+
+export const patchUserAbout = async (username, text) => {
+  const token = await getToken();
+  const response = await axios.patch(
+    `${ENDPOINT}/users/about`,
+    { aboutSection: text },
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
+};
+
+/* Feed routing */
+export const getFeedQuizzes = async () => {
+  const token = await getToken();
+  const response = await axios.get(`${ENDPOINT}/quizzes/feed`, {
+    headers: { authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+
+/* Quiz Routing */
+export const postCreateQuiz = async (quiz) => {
+  const token = await getToken();
+  const response = await axios.post(
+    `${ENDPOINT}/quizzes/`,
+    {
+      ...quiz,
+    },
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  return response;
+};
+
+export const deleteQuiz = async (platform, quiz) => {
+  const token = await getToken();
+  const response = await axios.delete(`${ENDPOINT}/quizzes/${platform}/${quiz}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response;
+};
+
+export const putComment = async (platform, quiz, text) => {
+  const token = await getToken();
+  const response = await axios.put(
+    `${ENDPOINT}/quizzes/${platform}/${quiz}/comment`,
+    {
+      commentText: text,
+    },
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
+};
+
+/* Search Routing */
+export const getSearchResults = async (type, query) => {
+  const token = await getToken();
+  const response = await axios.get(`${ENDPOINT}/search?scope=${type}&searchQuery=${query}`, {
+    headers: { authorization: `Bearer ${token}` },
+  });
+  return response.data.items;
+};
+
+/* AWS S3 Routing */
+export const getUserIcon = async (username) => {
+  try {
+    const response = await axios.get(`${AWS_ENDPOINT}/users/${username}/avatar.png`);
+    return `${AWS_ENDPOINT}/users/${username}/avatar.png`;
+  } catch {
+    return "/propic.png";
+  }
+};
+
+export const getAllUserIcons = async (usernames) => {
+  const promises = [];
+  const icons = {};
+  usernames.forEach((username) =>
+    promises.push(
+      getUserIcon(username).then((link) => {
+        icons[username] = link;
+      }),
+    ),
+  );
+  await Promise.all(promises);
+  return icons;
+};
+
 // https://sporadic-development-bucket.s3.amazonaws.com/platforms/MattLand/banner.png
 export const getPlatformIcon = async (platform) => {
   try {
@@ -155,6 +265,20 @@ export const getPlatformIcon = async (platform) => {
   } catch {
     return "/platformIcon.svg";
   }
+};
+
+export const getAllPlatformIcons = async (platforms) => {
+  const promises = [];
+  const icons = {};
+  platforms.forEach((platform) =>
+    promises.push(
+      getPlatformIcon(platform).then((link) => {
+        icons[platform] = link;
+      }),
+    ),
+  );
+  await Promise.all(promises);
+  return icons;
 };
 
 export const getPlatformBanner = async (platform) => {
@@ -169,10 +293,39 @@ export const getPlatformBanner = async (platform) => {
   }
 };
 
+export const getQuizIcon = async (platform, quiz) => {
+  try {
+    const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/${quiz}/icon.png`);
+    if (resp.status != 200) {
+      return "/platformIcon.svg";
+    }
+    return `${AWS_ENDPOINT}/platforms/${platform}/${quiz}/icon.png`;
+  } catch {
+    return "/platformIcon.svg";
+  }
+};
+
 export const generateSetUserIconURL = async (username) => {
   try {
     const token = await getToken();
     const response = await axios.get(`${ENDPOINT}/users/${username}/set-avatar`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const generateSetQuizIconURL = async (platform, quiz) => {
+  try {
+    const token = await getToken();
+    const response = await axios.get(`${ENDPOINT}/quizzes/${platform}/${quiz}/set-icon`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (response.status == 200) {
@@ -231,106 +384,4 @@ export const setImage = async (url, file) => {
     console.log(e);
     return -1;
   }
-};
-
-/* User routing */
-
-export const getUser = async (username) => {
-  const token = await getToken();
-  const response = await axios.get(`${ENDPOINT}/users/${username}`, {
-    headers: { authorization: `Bearer ${token}` },
-  });
-  return response.data;
-};
-
-export const manageFriend = async (username, action) => {
-  const token = await getToken();
-  const response = await axios.put(
-    `${ENDPOINT}/users/updateRelationship`,
-    {
-      targetUsername: username,
-      action: action,
-    },
-    { headers: { authorization: `Bearer ${token}` } },
-  );
-  return response;
-};
-
-export const patchUserAbout = async (username, text) => {
-  const token = await getToken();
-  const response = await axios.patch(
-    `${ENDPOINT}/users/about`,
-    { aboutSection: text },
-    { headers: { authorization: `Bearer ${token}` } },
-  );
-  return response;
-};
-
-/* Feed routing */
-export const getFeedQuizzes = async () => {
-  const token = await getToken();
-  const response = await axios.get(
-    `${ENDPOINT}/quizzes/feed`,
-    { headers: { authorization: `Bearer ${token}` } },
-  );
-  return response.data;
-};
-
-/* Quiz Routing */
-export const postCreateQuiz = async (quiz) => {
-  const token = await getToken();
-  const response = await axios.post(
-    `${ENDPOINT}/quizzes/`,
-    {
-      ...quiz,
-    },
-    {
-      headers: { authorization: `Bearer ${token}` },
-    },
-  );
-  return response;
-};
-
-export const deleteQuiz = async (platform, quiz) => {
-  const token = await getToken();
-  const response = await axios.delete(`${ENDPOINT}/quizzes/${platform}/${quiz}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return response;
-};
-
-export const putComment = async (platform, quiz, text) => {
-  const token = await getToken();
-  const response = await axios.put(
-    `${ENDPOINT}/quizzes/${platform}/${quiz}/comment`,
-    {
-      commentText: text,
-    },
-    { headers: { authorization: `Bearer ${token}` } },
-  );
-  return response;
-};
-
-/* AWS S3 Routing */
-export const getUserIcon = async (username) => {
-  try {
-    const response = await axios.get(`${AWS_ENDPOINT}/users/${username}/avatar.png`);
-    return `${AWS_ENDPOINT}/users/${username}/avatar.png`;
-  } catch {
-    return "/propic.png";
-  }
-};
-
-export const getAllUserIcons = async (usernames) => {
-  const promises = [];
-  const icons = {};
-  usernames.forEach((username) =>
-    promises.push(
-      getUserIcon(username).then((link) => {
-        icons[username] = link;
-      }),
-    ),
-  );
-  await Promise.all(promises);
-  return icons;
 };

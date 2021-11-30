@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 30 30">
+  <path fill="#189AB4" d="M0 5a5 5 0 015-5h20a5 5 0 015 5v20a5 5 0 01-5 5H5a5 5 0 01-5-5V5z"/>
+  <mask id="a" fill="#fff">
+    <path fill-rule="evenodd" d="M12.5 12.5H5v5h7.5V25h5v-7.5H25v-5h-7.5V5h-5v7.5z" clip-rule="evenodd"/>
+  </mask>
+  <path fill="#fff" fill-rule="evenodd" d="M12.5 12.5H5v5h7.5V25h5v-7.5H25v-5h-7.5V5h-5v7.5z" clip-rule="evenodd"/>
+  <path fill="#000" d="M5 12.5v-1H4v1h1zm7.5 0v1h1v-1h-1zm-7.5 5H4v1h1v-1zm7.5 0h1v-1h-1v1zm0 7.5h-1v1h1v-1zm5 0v1h1v-1h-1zm0-7.5v-1h-1v1h1zm7.5 0v1h1v-1h-1zm0-5h1v-1h-1v1zm-7.5 0h-1v1h1v-1zm0-7.5h1V4h-1v1zm-5 0V4h-1v1h1zM5 13.5h7.5v-2H5v2zm1 4v-5H4v5h2zm6.5-1H5v2h7.5v-2zm1 8.5v-7.5h-2V25h2zm4-1h-5v2h5v-2zm-1-6.5V25h2v-7.5h-2zm8.5-1h-7.5v2H25v-2zm-1-4v5h2v-5h-2zm-6.5 1H25v-2h-7.5v2zm-1-8.5v7.5h2V5h-2zm-4 1h5V4h-5v2zm1 6.5V5h-2v7.5h2z" mask="url(#a)"/>
+</svg>

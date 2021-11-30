@@ -33,8 +33,7 @@
 #quiz-description-input {
   height: 8em;
 }
-
-.delete-question {
+.mods a {
   margin-top: 10px;
   width: 28px;
   height: 28px;
