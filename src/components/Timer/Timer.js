@@ -4,10 +4,10 @@ import "./style.css";
 const Timer = ({ timerMinutes, timerSeconds }) => {
   return (
     <Fragment>
-      <section>
-        <div className="color-special fw-bold fs-1">
-          {timerMinutes}:{timerSeconds}
-        </div>
+      <section className="d-flex flex-row align-items-center">
+        <div className="timer-box">{timerMinutes}</div>
+        <div className="timer-divider">:</div>
+        <div className="timer-box">{timerSeconds}</div>
       </section>
     </Fragment>
   );
