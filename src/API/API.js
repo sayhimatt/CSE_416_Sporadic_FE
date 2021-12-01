@@ -221,6 +221,16 @@ export const putComment = async (platform, quiz, text) => {
   return response;
 };
 
+export const patchVote = async (platform, quiz, vote) => {
+  const token = await getToken();
+  const response = await axios.patch(
+    `${ENDPOINT}/quizzes/${platform}/${quiz}/${vote}`,
+    {},
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
+};
+
 /* Search Routing */
 export const getSearchResults = async (type, query) => {
   const token = await getToken();

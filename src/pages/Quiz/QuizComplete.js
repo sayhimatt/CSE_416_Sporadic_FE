@@ -13,10 +13,16 @@ import {
   getPlatformBanner,
   getAllUserIcons,
   putComment,
+  patchVote,
 } from "./../../API/API";
 import { Alert } from "react-bootstrap";
 
 import "./styles.scss";
+
+const VOTE_IMAGES = {
+  like: { default: "/like.png", filled: "/like_filled.png" },
+  dislike: { default: "/dislike.png", filled: "/dislike_filled.png" },
+};
 
 const QuizComplete = () => {
   const [platform, setPlatform] = useState({});
@@ -24,8 +30,21 @@ const QuizComplete = () => {
   const [banner, setBanner] = useState("/banner.svg");
   const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
   const [comment, setComment] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState({ show: false, message: "" });
   const [userIcons, setUserIcons] = useState();
+  const [vote, setVote] = useState("none");
+  const [voteImages, setVoteImages] = useState({
+    upvote: {
+      src: VOTE_IMAGES.like.default,
+      enter: VOTE_IMAGES.like.filled,
+      leave: VOTE_IMAGES.like.default,
+    },
+    downvote: {
+      src: VOTE_IMAGES.dislike.default,
+      enter: VOTE_IMAGES.dislike.filled,
+      leave: VOTE_IMAGES.dislike.default,
+    },
+  });
   const history = useHistory();
   const params = useParams();
 
@@ -34,6 +53,10 @@ const QuizComplete = () => {
     getQuiz();
     getImageMedia();
   }, [params]);
+
+  useEffect(() => {
+    setAppropriateVoteImages();
+  }, [vote]);
 
   const getImageMedia = async () => {
     await getPlatformBanner(params.platform).then((banner) => {
@@ -62,16 +85,60 @@ const QuizComplete = () => {
   };
 
   const getQuiz = async () => {
-    const platform = params.platform;
-    const quiz = params.quiz;
+    const platformName = params.platform;
+    const quizName = params.quiz;
     try {
-      const response = await getQuizByTitle(platform, quiz);
-      setQuiz(response);
+      const response = await getQuizByTitle(platformName, quizName);
       console.log(response);
+      setQuiz(response);
       const pictures = await getAllUserIcons(response.comments.map((comment) => comment.user));
       setUserIcons(pictures);
+      setVote(response.score.vote);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const setAppropriateVoteImages = () => {
+    if (vote === "upvote") {
+      setVoteImages({
+        upvote: {
+          src: VOTE_IMAGES.like.filled,
+          enter: VOTE_IMAGES.like.filled,
+          leave: VOTE_IMAGES.like.filled,
+        },
+        downvote: {
+          src: VOTE_IMAGES.dislike.default,
+          enter: VOTE_IMAGES.dislike.filled,
+          leave: VOTE_IMAGES.dislike.default,
+        },
+      });
+    } else if (vote === "downvote") {
+      setVoteImages({
+        upvote: {
+          src: VOTE_IMAGES.like.default,
+          enter: VOTE_IMAGES.like.filled,
+          leave: VOTE_IMAGES.like.default,
+        },
+        downvote: {
+          src: VOTE_IMAGES.dislike.filled,
+          enter: VOTE_IMAGES.dislike.filled,
+          leave: VOTE_IMAGES.dislike.filled,
+        },
+      });
+    } else {
+      setVoteImages({
+        upvote: {
+          src: VOTE_IMAGES.like.default,
+          enter: VOTE_IMAGES.like.filled,
+          leave: VOTE_IMAGES.like.default,
+        },
+        downvote: {
+          src: VOTE_IMAGES.dislike.default,
+          enter: VOTE_IMAGES.dislike.filled,
+          leave: VOTE_IMAGES.dislike.default,
+        },
+      });
     }
   };
 
@@ -81,7 +148,7 @@ const QuizComplete = () => {
         getQuiz();
       })
       .catch((error) => {
-        setShowAlert(true);
+        setShowAlert({ show: true, message: "You can only make one comment per quiz" });
       });
   };
 
@@ -96,22 +163,42 @@ const QuizComplete = () => {
     ));
   };
 
-  return !quiz ? null : (
+  const makeVote = (newVote) => {
+    const platformName = params.platform;
+    const quizName = params.quiz;
+    if (vote === newVote) {
+      newVote = "none";
+    }
+    patchVote(platformName, quizName, newVote)
+      .then((res) => setVote(newVote))
+      .catch((e) => setShowAlert({ show: true, message: "Could not record your vote" }));
+  };
+
+  return !quiz ? (
+    <MainNav />
+  ) : (
     <div>
       <MainNav />
       <PlatformSubNav platformName={"Quiz: " + params.quiz} iconSrc={platformIcon} />
       <div className="quiz-alerts">
-        <Alert show={showAlert} variant="danger" onClose={() => setShowAlert(false)} dismissible>
-          You can only make one comment per quiz
+        <Alert
+          show={showAlert.show}
+          variant="danger"
+          onClose={() => setShowAlert({ show: false, message: "" })}
+          dismissible
+        >
+          {showAlert.message}
         </Alert>
       </div>
       <div className="page-content d-flex flex-column align-items-center">
         <div id="main-results">
-          <div id="score-bubble">{`${Math.round((quiz.score / quiz.totalQuestions) * 100)}%`}</div>
+          <div id="score-bubble">{`${Math.round(
+            (quiz.score.score / quiz.totalQuestions) * 100,
+          )}%`}</div>
           <div id="results-breakdown">
             <div id="score-breakdown">
               <div className="d-flex flex-column align-items-center">
-                <div id="questions-right">{quiz.score}</div>
+                <div id="questions-right">{quiz.score.score}</div>
                 <div className="score-divider" />
                 <div id="total-questions">{quiz.totalQuestions}</div>
               </div>
@@ -134,18 +221,20 @@ const QuizComplete = () => {
               <img
                 id="upvote"
                 className="feedback-image"
-                src="/like.png"
+                src={voteImages.upvote.src}
                 alt="upvote"
-                onMouseEnter={(e) => (e.target.src = "/like_filled.png")}
-                onMouseLeave={(e) => (e.target.src = "/like.png")}
+                onClick={() => makeVote("upvote")}
+                onMouseEnter={(e) => (e.target.src = voteImages.upvote.enter)}
+                onMouseLeave={(e) => (e.target.src = voteImages.upvote.leave)}
               />
               <img
                 id="downvote"
                 className="feedback-image"
-                src="/dislike.png"
+                src={voteImages.downvote.src}
                 alt="downvote"
-                onMouseEnter={(e) => (e.target.src = "/dislike_filled.png")}
-                onMouseLeave={(e) => (e.target.src = "/dislike.png")}
+                onClick={() => makeVote("downvote")}
+                onMouseEnter={(e) => (e.target.src = voteImages.downvote.enter)}
+                onMouseLeave={(e) => (e.target.src = voteImages.downvote.leave)}
               />
             </div>
           </div>
