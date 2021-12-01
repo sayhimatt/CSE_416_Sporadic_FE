@@ -227,7 +227,7 @@ const Platform = () => {
                 </div>
               }
               className="pe-3"
-              scrollThreshold={0.95}
+              scrollThreshold={0.8}
             >
               {quizCards}
             </InfiniteScroll>
