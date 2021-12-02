@@ -1,9 +1,11 @@
+$subNavHeight: 4em;
+
 .subNav {
   display: flex;
   flex-direction: row;
   background: #d4f1f4;
   position: relative;
-  height: 4em;
+  height: $subNavHeight;
   width: 100%;
   padding: 10px 20px;
   justify-content: space-between;
