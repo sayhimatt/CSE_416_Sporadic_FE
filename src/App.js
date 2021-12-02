@@ -23,6 +23,7 @@ import ContactUs from "./pages/ContactUs/ContactUs";
 import About from "./pages/About/About";
 import SearchResults from "./pages/SearchResults/SearchResults";
 import Profile from "./pages/Profile/Profile";
+import AdminPanel from "./pages/AdminPanel/AdminPanel";
 import { authenticate } from "./API/API";
 
 import "./App.scss";
@@ -143,6 +144,12 @@ const App = () => {
               exact
               path="/user/:username"
               component={Profile}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute
+              exact
+              path="/adminPanel"
+              component={AdminPanel}
               authenticated={auth.authenticated}
             />
             <GuardedRoute path="/" component={NotFound} authenticated={auth.authenticated} />

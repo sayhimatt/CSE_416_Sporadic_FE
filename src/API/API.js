@@ -154,6 +154,14 @@ export const getUser = async (username) => {
   return response.data;
 };
 
+export const getAllUsers = async (page) => {
+  //todo
+};
+
+export const patchGlobalBanStatus = async (username, action) => {
+  //todo
+};
+
 export const manageFriend = async (username, action) => {
   const token = await getToken();
   const response = await axios.put(
