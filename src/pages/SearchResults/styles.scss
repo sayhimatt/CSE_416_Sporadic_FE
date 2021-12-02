@@ -1,9 +1,11 @@
 @import "../../App.scss";
+@import "../../components/NavBar/MainNav/styles.scss";
+@import "../../components/NavBar/SubNav/styles.scss";
 
 .tab-bar {
   display: flex;
   flex-direction: column;
-  margin: 1.5em 0em 1em 0em;
+  margin-bottom: 1em;
 }
 
 .divider {
@@ -23,4 +25,17 @@
   align-items: center;
   width: 100%;
   height: 20em;
+}
+
+#results-list {
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+#results-content {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - $navHeight - $subNavHeight);
+  padding-top: 1em;
 }

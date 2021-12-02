@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 import { getPlatform, getQuizzesFromPlatform } from "./../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
@@ -17,6 +18,7 @@ import {
   patchUnsubscribe,
   deleteQuiz,
 } from "./../../API/API";
+import LoadingSpinner from "../../components/LoadingIndicators/LoadingSpinner";
 
 import "./styles.scss";
 
@@ -25,7 +27,7 @@ const Platform = () => {
   const params = useParams();
   const { user, dispatch } = useContext(UserContext);
   const [platform, setPlatform] = useState();
-  const [quizzes, setQuizzes] = useState([]);
+  const [quizzes, setQuizzes] = useState({ page: 0, hasMore: true, quizzes: [] });
   const [quizCards, setQuizCards] = useState([]);
   const [subscribed, setSubscribed] = useState(user.subscriptions.includes(params.platform));
   const [modView, setModView] = useState(false);
@@ -44,7 +46,7 @@ const Platform = () => {
 
   useEffect(() => {
     renderCards();
-  }, [quizzes, modView, platformIcon]);
+  }, [quizzes, modView]);
 
   const getImageMedia = async () => {
     await getPlatformBanner(params.platform).then((banner) => {
@@ -77,10 +79,20 @@ const Platform = () => {
 
   const getQuizzes = async () => {
     const name = params.platform;
+    const newPage = quizzes.page + 1;
     try {
-      const response = await getQuizzesFromPlatform(name);
-      setQuizzes(response);
+      const response = await getQuizzesFromPlatform(name, newPage);
+      if (response.length === 0) {
+        setQuizzes((prevState) => ({ ...prevState, page: newPage, hasMore: false }));
+      } else {
+        setQuizzes((prevState) => ({
+          ...prevState,
+          page: newPage,
+          quizzes: prevState.quizzes.concat(response),
+        }));
+      }
     } catch (error) {
+      setQuizzes((prevState) => ({ ...prevState, page: newPage, hasMore: false }));
       console.log(error);
     }
   };
@@ -122,16 +134,14 @@ const Platform = () => {
   const removeQuiz = (quiz) => {
     deleteQuiz(params.platform, quiz)
       .then((res) => {
+        setQuizzes({ page: 0, hasMore: true, quizzes: [] });
         getQuizzes();
       })
       .catch((error) => alert("Could not delete quiz"));
   };
 
   const renderCards = async () => {
-    if (!platformIcon) {
-      return;
-    }
-    const cards = quizzes.map(async (quiz) => {
+    const cards = quizzes.quizzes.map(async (quiz) => {
       const name = params.platform;
       const quizImg = await getQuizIcon(params.platform, quiz.title);
       return (
@@ -155,7 +165,7 @@ const Platform = () => {
         />
       );
     });
-    await Promise.all(cards).then((cards) => {
+    Promise.all(cards).then((cards) => {
       //console.log(cards);
       setQuizCards(cards);
     });
@@ -201,7 +211,27 @@ const Platform = () => {
       <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
         <div className="d-flex flex-column m-5 align-items-end">
           <div className="sort"></div>
-          <div className="quizzes d-flex flex-column m-10">{quizCards}</div>
+          <div id="platform-quizzes" className="quizzes d-flex flex-column m-10">
+            <InfiniteScroll
+              next={getQuizzes}
+              dataLength={quizCards.length}
+              hasMore={quizzes.hasMore}
+              loader={
+                <div className="d-flex justify-content-center mt-4">
+                  <LoadingSpinner isVisible={true} />
+                </div>
+              }
+              endMessage={
+                <div className="d-flex justify-content-center mt-4">
+                  <h4>No more quizzes</h4>
+                </div>
+              }
+              className="pe-3"
+              scrollThreshold={0.8}
+            >
+              {quizCards}
+            </InfiniteScroll>
+          </div>
         </div>
         <div className="information d-flex flex-column">
           <div className="searchBar searchBar--border">

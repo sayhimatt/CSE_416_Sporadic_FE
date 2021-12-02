@@ -32,11 +32,15 @@ export const postCreatePlatform = async (platformData) => {
   );
 };
 
-export const getQuizzesFromPlatform = async (platformName) => {
+export const getQuizzesFromPlatform = async (platformName, page) => {
+  const AMOUNT_PER_PAGE = 10;
   const token = await getToken();
-  const response = await axios.get(`${ENDPOINT}/quizzes?platform=${platformName}`, {
-    headers: { authorization: `Bearer ${token}` },
-  });
+  const response = await axios.get(
+    `${ENDPOINT}/quizzes?platform=${platformName}&page=${page}&amountPerPage=${AMOUNT_PER_PAGE}`,
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
   return response.data.items;
 };
 
@@ -178,11 +182,15 @@ export const patchUserAbout = async (username, text) => {
 };
 
 /* Feed routing */
-export const getFeedQuizzes = async () => {
+export const getFeedQuizzes = async (page) => {
+  const AMOUNT_PER_PAGE = 10;
   const token = await getToken();
-  const response = await axios.get(`${ENDPOINT}/quizzes/feed`, {
-    headers: { authorization: `Bearer ${token}` },
-  });
+  const response = await axios.get(
+    `${ENDPOINT}/quizzes/feed?page=${page}&amountPerPage=${AMOUNT_PER_PAGE}`,
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
   return response.data;
 };
 
@@ -222,11 +230,15 @@ export const putComment = async (platform, quiz, text) => {
 };
 
 /* Search Routing */
-export const getSearchResults = async (type, query) => {
+export const getSearchResults = async (type, query, page) => {
+  const AMOUNT_PER_PAGE = 10;
   const token = await getToken();
-  const response = await axios.get(`${ENDPOINT}/search?scope=${type}&searchQuery=${query}`, {
-    headers: { authorization: `Bearer ${token}` },
-  });
+  const response = await axios.get(
+    `${ENDPOINT}/search?scope=${type}&searchQuery=${query}&page=${page}&amountPerPage=${AMOUNT_PER_PAGE}`,
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
   return response.data.items;
 };
 
