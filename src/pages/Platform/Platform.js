@@ -39,12 +39,15 @@ const Platform = () => {
 
   useEffect(() => {
     getCurrentPlatform();
-    getQuizzes();
+    setQuizzes({ page: 0, hasMore: true, quizzes: [] });
     getImageMedia();
     setModView(false);
   }, [params]);
 
   useEffect(() => {
+    if (quizzes.page === 0) {
+      getQuizzes();
+    }
     renderCards();
   }, [quizzes, modView]);
 
@@ -83,7 +86,7 @@ const Platform = () => {
     try {
       const response = await getQuizzesFromPlatform(name, newPage);
       if (response.length === 0) {
-        setQuizzes((prevState) => ({ ...prevState, page: newPage, hasMore: false }));
+        setQuizzes((prevState) => ({ ...prevState, page: -1, hasMore: false }));
       } else {
         setQuizzes((prevState) => ({
           ...prevState,
@@ -92,7 +95,7 @@ const Platform = () => {
         }));
       }
     } catch (error) {
-      setQuizzes((prevState) => ({ ...prevState, page: newPage, hasMore: false }));
+      setQuizzes((prevState) => ({ ...prevState, page: -1, hasMore: false }));
       console.log(error);
     }
   };
