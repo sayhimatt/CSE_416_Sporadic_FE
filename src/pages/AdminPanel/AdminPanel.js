@@ -1,16 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams, Redirect } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { DropdownButton } from "react-bootstrap";
+import { Dropdown, Alert } from "react-bootstrap";
+import DropdownItem from "react-bootstrap/esm/DropdownItem";
 
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Buttons/Button/Button";
 import SmallCard from "../../components/Card/SmallCard/SmallCard";
-import { getUser, getAllUsers, getAllUserIcons, patchGlobalBanStatus } from "../../API/API";
+import { getUser, getSearchResults, getAllUserIcons, patchGlobalBanStatus } from "../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
-import { DropdownButton } from "react-bootstrap";
-import { Dropdown } from "react-bootstrap";
-import DropdownItem from "react-bootstrap/esm/DropdownItem";
-import { Alert } from "react-bootstrap";
+import LoadingSpinner from "../../components/LoadingIndicators/LoadingSpinner";
 
 import "./styles.scss";
 
@@ -42,29 +43,28 @@ const AdminPanel = () => {
   const retrieveUsers = () => {
     const newPage = users.page + 1;
     let retrievedUsers = [];
-    getAllUsers(newPage)
+    getSearchResults("users", "", newPage)
       .then((users) => {
+        console.log(users);
         retrievedUsers = users;
         const usernames = users.map((user) => user.username);
         return getAllUserIcons(usernames);
       })
-      .then((images) => {
-        if (retrievedUsers.length === 0) {
-          setUsers((prevState) => ({ ...prevState, hasMore: false, page: -1 }));
-        } else {
-          addNewUsers(retrievedUsers, images, newPage);
-        }
-      })
+      .then((images) => addNewUsers(retrievedUsers, images, newPage))
       .catch((e) => console.log(e));
   };
 
   const addNewUsers = (users, images, newPage) => {
-    setUsers((prevState) => ({
-      users: prevState.users.concat(users),
-      profilePictures: Object.assign(prevState.profilePictures, images),
-      page: newPage,
-      hasMore: true,
-    }));
+    if (users.length === 0) {
+      setUsers((prevState) => ({ ...prevState, hasMore: false, page: -1 }));
+    } else {
+      setUsers((prevState) => ({
+        users: prevState.users.concat(users),
+        profilePictures: Object.assign(prevState.profilePictures, images),
+        page: newPage,
+        hasMore: true,
+      }));
+    }
   };
 
   const manageBanStatus = (username, action) => {
@@ -102,10 +102,35 @@ const AdminPanel = () => {
 
   const loadUserList = () => {
     if (listType === "Users") {
-      return loadStandardUserList();
+      return loadStandardUserScroll();
     } else {
       return loadBannedUserList();
     }
+  };
+
+  const loadStandardUserScroll = () => {
+    return (
+      <InfiniteScroll
+        next={retrieveUsers}
+        dataLength={users.users.length}
+        hasMore={users.hasMore}
+        loader={
+          <div className="d-flex justify-content-center mt-4 mb-4">
+            <LoadingSpinner isVisible={true} />
+          </div>
+        }
+        endMessage={
+          <div className="d-flex justify-content-center mt-4 mb-4">
+            <h4>No more users</h4>
+          </div>
+        }
+        className="pe-3"
+        scrollableTarget="results-list"
+        scrollThreshold={0.7}
+      >
+        {loadStandardUserList()}
+      </InfiniteScroll>
+    );
   };
 
   const loadStandardUserList = () => {
@@ -142,7 +167,7 @@ const AdminPanel = () => {
         return (
           <SmallCard
             key={`ban-card-${username}`}
-            profilePicture={profilePictures[username]}
+            profilePicture={users.profilePictures[username]}
             username={username}
             rightCard={
               <Button onClick={(e) => manageBanStatus(username, "remove")}>Unban User</Button>
