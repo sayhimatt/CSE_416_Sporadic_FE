@@ -27,7 +27,7 @@ const Platform = () => {
   const params = useParams();
   const { user, dispatch } = useContext(UserContext);
   const [platform, setPlatform] = useState();
-  const [quizzes, setQuizzes] = useState({ page: 0, hasMore: true, quizzes: [] });
+  const [quizzes, setQuizzes] = useState();
   const [quizCards, setQuizCards] = useState([]);
   const [subscribed, setSubscribed] = useState(user.subscriptions.includes(params.platform));
   const [modView, setModView] = useState(false);
@@ -45,7 +45,7 @@ const Platform = () => {
   }, [params]);
 
   useEffect(() => {
-    if (quizzes.page === 0) {
+    if (quizzes && quizzes.page === 0) {
       getQuizzes();
     }
     renderCards();
@@ -144,6 +144,9 @@ const Platform = () => {
   };
 
   const renderCards = async () => {
+    if (!quizzes) {
+      return;
+    }
     const cards = quizzes.quizzes.map(async (quiz) => {
       const name = params.platform;
       const quizImg = await getQuizIcon(params.platform, quiz.title);
