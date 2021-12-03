@@ -27,7 +27,7 @@ const Platform = () => {
   const params = useParams();
   const { user, dispatch } = useContext(UserContext);
   const [platform, setPlatform] = useState();
-  const [quizzes, setQuizzes] = useState({ page: 0, hasMore: true, quizzes: [] });
+  const [quizzes, setQuizzes] = useState();
   const [quizCards, setQuizCards] = useState([]);
   const [subscribed, setSubscribed] = useState(user.subscriptions.includes(params.platform));
   const [modView, setModView] = useState(false);
@@ -39,12 +39,15 @@ const Platform = () => {
 
   useEffect(() => {
     getCurrentPlatform();
-    getQuizzes();
+    setQuizzes({ page: 0, hasMore: true, quizzes: [] });
     getImageMedia();
     setModView(false);
   }, [params]);
 
   useEffect(() => {
+    if (quizzes && quizzes.page === 0) {
+      getQuizzes();
+    }
     renderCards();
   }, [quizzes, modView]);
 
@@ -83,7 +86,7 @@ const Platform = () => {
     try {
       const response = await getQuizzesFromPlatform(name, newPage);
       if (response.length === 0) {
-        setQuizzes((prevState) => ({ ...prevState, page: newPage, hasMore: false }));
+        setQuizzes((prevState) => ({ ...prevState, page: -1, hasMore: false }));
       } else {
         setQuizzes((prevState) => ({
           ...prevState,
@@ -92,7 +95,7 @@ const Platform = () => {
         }));
       }
     } catch (error) {
-      setQuizzes((prevState) => ({ ...prevState, page: newPage, hasMore: false }));
+      setQuizzes((prevState) => ({ ...prevState, page: -1, hasMore: false }));
       console.log(error);
     }
   };
@@ -141,6 +144,9 @@ const Platform = () => {
   };
 
   const renderCards = async () => {
+    if (!quizzes) {
+      return;
+    }
     const cards = quizzes.quizzes.map(async (quiz) => {
       const name = params.platform;
       const quizImg = await getQuizIcon(params.platform, quiz.title);
