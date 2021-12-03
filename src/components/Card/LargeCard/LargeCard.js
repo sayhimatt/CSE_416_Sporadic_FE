@@ -7,7 +7,15 @@ import { Dropdown } from "react-bootstrap";
 import "../styles.css";
 import "./styles.css";
 
-const LargeCard = ({ children, iconSrc, modOptions, cardInfo, cardLink, dropdownHandlers }) => {
+const LargeCard = ({
+  children,
+  iconSrc,
+  modOptions,
+  cardInfo,
+  cardLink,
+  dropdownHandlers,
+  pin,
+}) => {
   const convertVotes = (votes) => {
     const votesNum = parseInt(votes);
     if (votes < 1000) {
@@ -65,6 +73,7 @@ const LargeCard = ({ children, iconSrc, modOptions, cardInfo, cardLink, dropdown
                 </Dropdown.Menu>
               </Dropdown>
             )}
+            {pin && <img className="pin" src="/pin.svg" alt="pin" />}
           </div>
         </div>
         <div className="bottomCard d-flex flex-row justify-content-between align-items-end">

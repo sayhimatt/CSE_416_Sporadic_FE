@@ -183,6 +183,7 @@ const Platform = () => {
           modOptions={modView}
           dropdownHandlers={{ removeQuiz }}
           cardLink={`${name}/${quiz.title}`} // Temporary fix prevents crash on redirect, use quiz page when done
+          pin={platform.pinnedQuizzes.map((quiz) => quiz.title).includes(quiz.title)}
         />
       );
     });
