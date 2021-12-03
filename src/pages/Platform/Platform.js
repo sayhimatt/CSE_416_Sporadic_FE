@@ -17,6 +17,7 @@ import {
   patchSubscribe,
   patchUnsubscribe,
   deleteQuiz,
+  putUpdatePinStatus,
 } from "./../../API/API";
 import LoadingSpinner from "../../components/LoadingIndicators/LoadingSpinner";
 
@@ -181,7 +182,7 @@ const Platform = () => {
             ),
           }}
           modOptions={modView}
-          dropdownHandlers={{ removeQuiz }}
+          dropdownHandlers={{ removeQuiz, updatePinStatus }}
           cardLink={`${name}/${quiz.title}`} // Temporary fix prevents crash on redirect, use quiz page when done
           pin={platform.pinnedQuizzes.map((quiz) => quiz.title).includes(quiz.title)}
         />
@@ -191,6 +192,12 @@ const Platform = () => {
       //console.log(cards);
       setQuizCards(cards);
     });
+  };
+
+  const updatePinStatus = (quizName, action) => {
+    putUpdatePinStatus(params.platform, quizName, action)
+      .then((res) => getCurrentPlatform())
+      .catch((e) => console.log(error));
   };
 
   const bannedPage = () => {

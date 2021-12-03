@@ -59,7 +59,17 @@ const LargeCard = ({
                   <img alt="dropdown" src="/three_dot_menu.svg" />
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="custom-dropdown-menu" align="start">
-                  <Dropdown.Item className="custom-dropdown-item">Pin Quiz</Dropdown.Item>
+                  <Dropdown.Item
+                    className="custom-dropdown-item"
+                    id={`pin-quiz-${cardInfo.title}`}
+                    onClick={(e) => {
+                      const action = pin ? "remove" : "add";
+                      e.preventDefault();
+                      dropdownHandlers.updatePinStatus(cardInfo.title, action);
+                    }}
+                  >
+                    {pin ? "Unpin Quiz" : "Pin Quiz"}
+                  </Dropdown.Item>
                   <Dropdown.Item
                     id={`delete-quiz-${cardInfo.title}`}
                     className="custom-dropdown-item"

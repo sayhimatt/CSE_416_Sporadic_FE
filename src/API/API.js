@@ -131,6 +131,22 @@ export const postSubmitQuiz = async (platform, quizTitle, answers) => {
   );
   return response.data;
 };
+
+export const putUpdatePinStatus = async (platform, quizTitle, action) => {
+  const token = await getToken();
+  const response = await axios.put(
+    `${ENDPOINT}/platforms/${platform}/updatePinnedQuizzes`,
+    {
+      targetQuiz: quizTitle,
+      action,
+    },
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  return response.data;
+};
+
 /* Login Routing */
 
 export const postCreateAccount = async (username, password, email) => {
