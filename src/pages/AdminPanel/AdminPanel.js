@@ -20,30 +20,37 @@ const AdminPanel = () => {
   const [adminStatus, setAdminStatus] = useState({ isGlobalAdmin: false, complete: false });
   const [listType, setListType] = useState("Users");
   const [search, setSearch] = useState("");
-  const [users, setUsers] = useState({ page: 0, users: [], hasMore: true, profilePictures: {} });
-  const [searchUsers, setSearchUsers] = useState({
-    page: 0,
-    users: [],
-    hasMore: true,
-    profilePictures: {},
-  });
+  const [users, setUsers] = useState();
+  const [timer, setTimer] = useState(3);
   const [alert, setAlert] = useState({ show: false, style: "danger", message: "" });
 
   useEffect(() => {
     getUser(user.username)
       .then((res) => {
         setAdminStatus({ isGlobalAdmin: res.isGlobalAdmin, complete: true });
-        if (res.isGlobalAdmin) {
-          retrieveUsers();
-        }
+        setInterval(() => {
+          setTimer((prevCount) => prevCount - 1);
+        }, 1000);
       })
       .catch((e) => setAdminStatus({ isGlobalAdmin: false, complete: true }));
   }, []);
 
+  useEffect(() => {
+    setTimer(1);
+    setUsers({ page: 0, users: [], hasMore: true, profilePictures: {} });
+  }, [search]);
+
+  useEffect(() => {
+    if (users && users.page === 0 && (search === "" || (search !== "" && timer <= 0))) {
+      console.log("retrieving users");
+      retrieveUsers();
+    }
+  }, [users, timer]);
+
   const retrieveUsers = () => {
     const newPage = users.page + 1;
     let retrievedUsers = [];
-    getSearchResults("users", "", newPage)
+    getSearchResults("users", search, newPage)
       .then((users) => {
         console.log(users);
         retrievedUsers = users;
@@ -73,7 +80,7 @@ const AdminPanel = () => {
     }
     patchGlobalBanStatus(username, action)
       .then((res) => {
-        //update user card list
+        updateUserList();
         setAlert({
           show: true,
           style: "sporadic-secondary",
@@ -100,6 +107,10 @@ const AdminPanel = () => {
     return valid;
   };
 
+  const updateUserList = () => {
+    //todo
+  };
+
   const loadUserList = () => {
     if (listType === "Users") {
       return loadStandardUserScroll();
@@ -124,7 +135,7 @@ const AdminPanel = () => {
             <h4>No more users</h4>
           </div>
         }
-        className="pe-3"
+        className="pe-3 pb-5"
         scrollableTarget="results-list"
         scrollThreshold={0.7}
       >
@@ -134,11 +145,11 @@ const AdminPanel = () => {
   };
 
   const loadStandardUserList = () => {
-    return users.users.map((user) => {
+    return users.users.map((user, index) => {
       const username = user.username;
       return (
         <SmallCard
-          key={`user-card-${username}`}
+          key={index}
           profilePicture={users.profilePictures[username]}
           username={username}
           userTag={user.isGlobalAdmin && <b className="color-special">(Admin)</b>}
@@ -209,7 +220,7 @@ const AdminPanel = () => {
             <DropdownItem onClick={() => setListType("Banned Users")}>Banned Users</DropdownItem>
           </DropdownButton>
         </div>
-        <div className="small-card-list w-50">{loadUserList()}</div>
+        <div className="small-card-list w-50 mb-4">{users && loadUserList()}</div>
       </div>
     </div>
   );
