@@ -158,12 +158,16 @@ export const getUser = async (username) => {
   return response.data;
 };
 
-export const getAllUsers = async (page) => {
-  //todo
-};
-
 export const patchGlobalBanStatus = async (username, action) => {
-  //todo
+  const token = await getToken();
+  const response = await axios.patch(
+    `${ENDPOINT}/users/updateGlobalBanStatus`,
+    { targetUsername: username, action },
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  return response;
 };
 
 export const manageFriend = async (username, action) => {

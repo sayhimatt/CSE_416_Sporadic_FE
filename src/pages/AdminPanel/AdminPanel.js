@@ -37,12 +37,11 @@ const AdminPanel = () => {
 
   useEffect(() => {
     setTimer(1);
-    setUsers({ page: 0, users: [], hasMore: true, profilePictures: {} });
+    resetUserList();
   }, [search]);
 
   useEffect(() => {
-    if (users && users.page === 0 && (search === "" || (search !== "" && timer <= 0))) {
-      console.log("retrieving users");
+    if (users && users.page === 0 && (search === "" || timer <= 0)) {
       retrieveUsers();
     }
   }, [users, timer]);
@@ -52,8 +51,7 @@ const AdminPanel = () => {
     let retrievedUsers = [];
     getSearchResults("users", search, newPage)
       .then((users) => {
-        console.log(users);
-        retrievedUsers = users;
+        retrievedUsers = users.filter((user) => !user.isGloballyBanned);
         const usernames = users.map((user) => user.username);
         return getAllUserIcons(usernames);
       })
@@ -80,15 +78,21 @@ const AdminPanel = () => {
     }
     patchGlobalBanStatus(username, action)
       .then((res) => {
-        updateUserList();
+        resetUserList();
         setAlert({
           show: true,
           style: "sporadic-secondary",
           message:
-            action === "add" ? `${username} has been banned` : `${username} has been unbanned`,
+            action === "ban" ? `${username} has been banned` : `${username} has been unbanned`,
         });
       })
-      .catch((e) => console.log(e));
+      .catch((e) =>
+        setAlert({
+          show: true,
+          style: "danger",
+          message: `Error ${action === "ban" ? "banning" : "unbanning"} ${username}`,
+        }),
+      );
   };
 
   const manageable = (username) => {
@@ -96,7 +100,7 @@ const AdminPanel = () => {
     if (user.username === username) {
       setAlert({ show: true, style: "danger", message: "You cannot manage yourself" });
       valid = false;
-    } else if (users.find((user) => user.username === username).isGlobalAdmin) {
+    } else if (users.users.find((user) => user.username === username).isGlobalAdmin) {
       setAlert({
         show: true,
         style: "danger",
@@ -107,8 +111,8 @@ const AdminPanel = () => {
     return valid;
   };
 
-  const updateUserList = () => {
-    //todo
+  const resetUserList = () => {
+    setUsers({ page: 0, users: [], hasMore: true, profilePictures: {} });
   };
 
   const loadUserList = () => {
@@ -158,7 +162,7 @@ const AdminPanel = () => {
               <Dropdown>
                 <Dropdown.Toggle size="sm" className="btn-sporadic" variant="sporadic-secondary" />
                 <Dropdown.Menu>
-                  <DropdownItem onClick={(e) => manageBanStatus(username, "add")}>
+                  <DropdownItem onClick={(e) => manageBanStatus(username, "ban")}>
                     Ban User
                   </DropdownItem>
                 </Dropdown.Menu>
@@ -181,7 +185,7 @@ const AdminPanel = () => {
             profilePicture={users.profilePictures[username]}
             username={username}
             rightCard={
-              <Button onClick={(e) => manageBanStatus(username, "remove")}>Unban User</Button>
+              <Button onClick={(e) => manageBanStatus(username, "unban")}>Unban User</Button>
             }
           ></SmallCard>
         );
