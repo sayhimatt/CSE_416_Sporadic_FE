@@ -44,10 +44,12 @@ const Platform = () => {
   }, [params]);
 
   useEffect(() => {
-    if (quizzes && quizzes.page === 0) {
-      getQuizzes();
+    if (quizzes) {
+      if (quizzes.page === 0) {
+        getQuizzes();
+      }
+      renderCards();
     }
-    renderCards();
   }, [quizzes, modView]);
 
   useEffect(() => {
