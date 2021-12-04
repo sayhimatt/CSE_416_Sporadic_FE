@@ -243,9 +243,9 @@ const Platform = () => {
       </PlatformSubNav>
 
       <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
-        <div className="d-flex flex-column m-5 align-items-end">
+        <div className="d-flex flex-column m-5 mt-0 align-items-end">
           <Dropdown>
-            <Dropdown.Toggle className="sort-dropdowns">Sort By</Dropdown.Toggle>
+            <Dropdown.Toggle className="sort-dropdowns mb-2 me-3">Sort By</Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.Item
                 onClick={() => {
