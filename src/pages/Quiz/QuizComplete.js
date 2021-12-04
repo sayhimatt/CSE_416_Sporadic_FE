@@ -7,10 +7,8 @@ import Button from "../../components/Buttons/Button/Button";
 import award from "../../award.svg";
 import SmallCard from "../../components/Card/SmallCard/SmallCard";
 import {
-  getPlatform,
   getQuizByTitle,
   getPlatformIcon,
-  getPlatformBanner,
   getAllUserIcons,
   putComment,
   patchVote,
@@ -25,10 +23,8 @@ const VOTE_IMAGES = {
 };
 
 const QuizComplete = () => {
-  const [platform, setPlatform] = useState({});
   const [quiz, setQuiz] = useState();
-  const [banner, setBanner] = useState("/banner.svg");
-  const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
+  const [platformIcon, setPlatformIcon] = useState("/platformIcon.png");
   const [comment, setComment] = useState("");
   const [showAlert, setShowAlert] = useState({ show: false, message: "" });
   const [userIcons, setUserIcons] = useState();
@@ -45,11 +41,9 @@ const QuizComplete = () => {
       leave: VOTE_IMAGES.dislike.default,
     },
   });
-  const history = useHistory();
   const params = useParams();
 
   useEffect(() => {
-    getCurrentPlatform();
     getQuiz();
     getImageMedia();
   }, [params]);
@@ -59,29 +53,10 @@ const QuizComplete = () => {
   }, [vote]);
 
   const getImageMedia = async () => {
-    await getPlatformBanner(params.platform).then((banner) => {
-      console.log(banner);
-      setBanner(banner);
-    });
     await getPlatformIcon(params.platform).then((icon) => {
       console.log(icon);
       setPlatformIcon(icon);
     });
-  };
-
-  const getCurrentPlatform = async () => {
-    const name = params.platform;
-    await getPlatform(name)
-      .then((platformData) => {
-        setPlatform(platformData);
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          history.replace(`/search?=${name}`);
-        } else {
-          history.replace("/error");
-        }
-      });
   };
 
   const getQuiz = async () => {

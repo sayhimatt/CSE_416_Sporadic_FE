@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
-import {
-  getPlatform,
-  postStartQuiz,
-  postSubmitQuiz,
-  getPlatformIcon,
-  getPlatformBanner,
-} from "./../../API/API";
+import { postStartQuiz, postSubmitQuiz, getPlatformIcon, getPlatformBanner } from "./../../API/API";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard.js";
@@ -19,16 +13,14 @@ import InfoModal from "../../components/Modals/InfoModal/InfoModal";
 import "./styles.scss";
 
 const Quiz = () => {
-  const [platform, setPlatform] = useState({});
   const [questions, setQuestions] = useState([]);
   const [questionsCards, setQuestionCards] = useState([]);
   const [answers, setAnswers] = useState([]);
-  const [quiz, setQuiz] = useState({});
   const [isAlreadySubmittedModalVisible, setIsAlreadySubmittedModalVisible] = useState(false);
   const [isSubmittedModalVisible, setIsSubmittedModalVisible] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
-  const [banner, setBanner] = useState("/banner.svg");
-  const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
+  const [banner, setBanner] = useState("/banner.jpg");
+  const [platformIcon, setPlatformIcon] = useState("/platformIcon.png");
   const history = useHistory();
   const params = useParams();
 
@@ -37,7 +29,6 @@ const Quiz = () => {
   let delay = 1000;
 
   useEffect(() => {
-    getCurrentPlatform();
     getQuestions();
     getImageMedia();
   }, [params]);
@@ -70,21 +61,6 @@ const Quiz = () => {
     });
   };
 
-  const getCurrentPlatform = async () => {
-    const name = params.platform;
-    await getPlatform(name)
-      .then((platformData) => {
-        setPlatform(platformData);
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          history.replace(`/search?=${name}`);
-        } else {
-          history.replace("/error");
-        }
-      });
-  };
-
   const getQuestions = async () => {
     const platform = params.platform;
     const quiz = params.quiz;
@@ -92,7 +68,6 @@ const Quiz = () => {
       const response = await postStartQuiz(platform, quiz);
       setQuestions(response.questions);
       initAnswers(response.questions);
-      setQuiz(response);
       setTimeLeft(response.timeLimit);
     } catch (error) {
       console.log(error);
