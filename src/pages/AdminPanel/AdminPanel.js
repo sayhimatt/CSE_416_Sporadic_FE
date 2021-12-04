@@ -41,13 +41,20 @@ const AdminPanel = () => {
   }, [search]);
 
   useEffect(() => {
-    if (users && users.page === 0 && (search === "" || timer <= 0)) {
-      retrieveUsers();
+    if (listType === "Users") {
+      if (users && users.standardUsers.page === 0 && (search === "" || timer <= 0)) {
+        console.log("retrieving users");
+        retrieveUsers();
+      }
+    } else {
+      if (users && users.bannedUsers.page === 0 && (search === "" || timer <= 0)) {
+        retrieveBannedUsers();
+      }
     }
   }, [users, timer]);
 
   const retrieveUsers = () => {
-    const newPage = users.page + 1;
+    const newPage = users.standardUsers.page + 1;
     let retrievedUsers = [];
     getSearchResults("users", search, newPage)
       .then((users) => {
@@ -60,16 +67,36 @@ const AdminPanel = () => {
   };
 
   const addNewUsers = (users, images, newPage) => {
+    const type = listType === "Users" ? "standardUsers" : "bannedUsers";
     if (users.length === 0) {
-      setUsers((prevState) => ({ ...prevState, hasMore: false, page: -1 }));
+      setUsers((prevState) => ({
+        ...prevState,
+        [type]: { ...prevState[type], hasMore: false, page: -1 },
+      }));
     } else {
       setUsers((prevState) => ({
-        users: prevState.users.concat(users),
-        profilePictures: Object.assign(prevState.profilePictures, images),
-        page: newPage,
-        hasMore: true,
+        ...prevState,
+        [type]: {
+          users: newPage === 1 ? users : prevState[type].users.concat(users),
+          profilePictures: Object.assign(prevState[type].profilePictures, images),
+          page: newPage,
+          hasMore: true,
+        },
       }));
     }
+  };
+
+  const retrieveBannedUsers = () => {
+    const newPage = users.bannedUsers.page + 1;
+    let retrievedUsers = [];
+    getSearchResults("users", search, newPage, "globallyBanned")
+      .then((users) => {
+        retrievedUsers = users;
+        const usernames = users.map((user) => user.username);
+        return getAllUserIcons(usernames);
+      })
+      .then((images) => addNewUsers(retrievedUsers, images, newPage))
+      .catch((e) => console.log(e));
   };
 
   const manageBanStatus = (username, action) => {
@@ -100,7 +127,10 @@ const AdminPanel = () => {
     if (user.username === username) {
       setAlert({ show: true, style: "danger", message: "You cannot manage yourself" });
       valid = false;
-    } else if (users.users.find((user) => user.username === username).isGlobalAdmin) {
+    } else if (
+      listType === "Users" &&
+      users.standardUsers.users.find((user) => user.username === username).isGlobalAdmin
+    ) {
       setAlert({
         show: true,
         style: "danger",
@@ -112,14 +142,17 @@ const AdminPanel = () => {
   };
 
   const resetUserList = () => {
-    setUsers({ page: 0, users: [], hasMore: true, profilePictures: {} });
+    setUsers({
+      standardUsers: { page: 0, users: [], hasMore: true, profilePictures: {} },
+      bannedUsers: { page: 0, users: [], hasMore: true, profilePictures: {} },
+    });
   };
 
   const loadUserList = () => {
     if (listType === "Users") {
       return loadStandardUserScroll();
     } else {
-      return loadBannedUserList();
+      return loadBannedUserScroll();
     }
   };
 
@@ -127,8 +160,8 @@ const AdminPanel = () => {
     return (
       <InfiniteScroll
         next={retrieveUsers}
-        dataLength={users.users.length}
-        hasMore={users.hasMore}
+        dataLength={users.standardUsers.users.length}
+        hasMore={users.standardUsers.hasMore}
         loader={
           <div className="d-flex justify-content-center mt-4 mb-4">
             <LoadingSpinner isVisible={true} />
@@ -149,12 +182,12 @@ const AdminPanel = () => {
   };
 
   const loadStandardUserList = () => {
-    return users.users.map((user, index) => {
+    return users.standardUsers.users.map((user, index) => {
       const username = user.username;
       return (
         <SmallCard
           key={index}
-          profilePicture={users.profilePictures[username]}
+          profilePicture={users.standardUsers.profilePictures[username]}
           username={username}
           userTag={user.isGlobalAdmin && <b className="color-special">(Admin)</b>}
           rightCard={
@@ -174,22 +207,45 @@ const AdminPanel = () => {
     });
   };
 
+  const loadBannedUserScroll = () => {
+    return (
+      <InfiniteScroll
+        next={retrieveBannedUsers}
+        dataLength={users.bannedUsers.users.length}
+        hasMore={users.bannedUsers.hasMore}
+        loader={
+          <div className="d-flex justify-content-center mt-4 mb-4">
+            <LoadingSpinner isVisible={true} />
+          </div>
+        }
+        endMessage={
+          <div className="d-flex justify-content-center mt-4 mb-4">
+            <h4>No more users</h4>
+          </div>
+        }
+        className="pe-3 pb-5"
+        scrollableTarget="results-list"
+        scrollThreshold={0.7}
+      >
+        {loadBannedUserList()}
+      </InfiniteScroll>
+    );
+  };
+
   const loadBannedUserList = () => {
-    return users.users
-      .filter((user) => user.isGloballyBanned)
-      .map((user) => {
-        const username = user.username;
-        return (
-          <SmallCard
-            key={`ban-card-${username}`}
-            profilePicture={users.profilePictures[username]}
-            username={username}
-            rightCard={
-              <Button onClick={(e) => manageBanStatus(username, "unban")}>Unban User</Button>
-            }
-          ></SmallCard>
-        );
-      });
+    return users.bannedUsers.users.map((user, index) => {
+      const username = user.username;
+      return (
+        <SmallCard
+          key={`banned-user-${index}`}
+          profilePicture={users.bannedUsers.profilePictures[username]}
+          username={username}
+          rightCard={
+            <Button onClick={(e) => manageBanStatus(username, "unban")}>Unban User</Button>
+          }
+        ></SmallCard>
+      );
+    });
   };
 
   return !adminStatus.complete ? (

@@ -242,11 +242,13 @@ export const putComment = async (platform, quiz, text) => {
 };
 
 /* Search Routing */
-export const getSearchResults = async (type, query, page) => {
+export const getSearchResults = async (type, query, page, userFilter = null) => {
   const AMOUNT_PER_PAGE = 10;
   const token = await getToken();
   const response = await axios.get(
-    `${ENDPOINT}/search?scope=${type}&searchQuery=${query}&page=${page}&amountPerPage=${AMOUNT_PER_PAGE}`,
+    `${ENDPOINT}/search?scope=${type}&searchQuery=${query}&page=${page}&amountPerPage=${AMOUNT_PER_PAGE}${
+      userFilter ? `&userFilter=${userFilter}` : ""
+    }`,
     {
       headers: { authorization: `Bearer ${token}` },
     },
