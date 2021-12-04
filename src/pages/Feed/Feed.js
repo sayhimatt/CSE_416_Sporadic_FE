@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import { UserContext } from "../../contexts/UserContext/UserContext";
-import { getFeedQuizzes, getUser } from "../../API/API";
+import { getFeedQuizzes, getQuizIcon, getUser } from "../../API/API";
 import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
@@ -17,6 +17,7 @@ const Feed = ({ children }) => {
   const { user } = useContext(UserContext);
   const [quizzes, setQuizzes] = useState({ page: 0, hasMore: true, quizzes: [] });
   const [isGlobalAdmin, setIsGlobalAdmin] = useState(false);
+  const [quizCards, setQuizCards] = useState([]);
 
   useEffect(() => {
     getQuizzes();
@@ -47,11 +48,12 @@ const Feed = ({ children }) => {
     }
   };
 
-  const renderCards = () => {
-    return quizzes.quizzes.map((quiz) => {
-      return (
+  const renderCards = async () => {
+    const cards = quizzes.quizzes.map(async (quiz) => {
+      return getQuizIcon(quiz.platform, quiz.title).then((quizImg) => (
         <LargeCard
           key={quiz._id}
+          iconSrc={quizImg}
           cardInfo={{
             title: quiz.title,
             description: quiz.description,
@@ -63,10 +65,15 @@ const Feed = ({ children }) => {
               </Link>
             ),
           }}
+          cardLink={`/p/${quiz.platform}/${quiz.title}`}
         />
-      );
+      ));
+    });
+    Promise.all(cards).then((cards) => {
+      setQuizCards(cards);
     });
   };
+
   const subNavButtons = [
     isGlobalAdmin ? (
       <LinkButton key="admin-panel" to="/adminPanel" buttonStyle="btn--special">
@@ -80,6 +87,7 @@ const Feed = ({ children }) => {
       Notifications
     </LinkButton>,
   ];
+
   return (
     <div>
       <MainNav />
@@ -105,7 +113,7 @@ const Feed = ({ children }) => {
               className="pe-3"
               scrollThreshold={0.8}
             >
-              {renderCards()}
+              {quizCards}
             </InfiniteScroll>
           </div>
         </div>

@@ -46,3 +46,10 @@
 .info {
   min-height: 3em;
 }
+
+.pin {
+  margin-top: 2px;
+  margin-left: 5px;
+  width: 24px;
+  height: 24px;
+}

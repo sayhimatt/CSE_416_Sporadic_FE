@@ -131,6 +131,22 @@ export const postSubmitQuiz = async (platform, quizTitle, answers) => {
   );
   return response.data;
 };
+
+export const putUpdatePinStatus = async (platform, quizTitle, action) => {
+  const token = await getToken();
+  const response = await axios.put(
+    `${ENDPOINT}/platforms/${platform}/updatePinnedQuizzes`,
+    {
+      targetQuiz: quizTitle,
+      action,
+    },
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  return response.data;
+};
+
 /* Login Routing */
 
 export const postCreateAccount = async (username, password, email) => {
@@ -241,6 +257,16 @@ export const putComment = async (platform, quiz, text) => {
   return response;
 };
 
+export const patchVote = async (platform, quiz, vote) => {
+  const token = await getToken();
+  const response = await axios.patch(
+    `${ENDPOINT}/quizzes/${platform}/${quiz}/${vote}`,
+    {},
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response;
+};
+
 /* Search Routing */
 export const getSearchResults = async (type, query, page, userFilter = null) => {
   const AMOUNT_PER_PAGE = 10;
@@ -285,11 +311,11 @@ export const getPlatformIcon = async (platform) => {
   try {
     const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/icon.png`);
     if (resp.status != 200) {
-      return "/platformIcon.svg";
+      return "/platformIcon.png";
     }
     return `${AWS_ENDPOINT}/platforms/${platform}/icon.png`;
   } catch {
-    return "/platformIcon.svg";
+    return "/platformIcon.png";
   }
 };
 
@@ -311,11 +337,11 @@ export const getPlatformBanner = async (platform) => {
   try {
     const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/banner.png`);
     if (resp.status != 200) {
-      return "/banner.svg";
+      return "/banner.jpg";
     }
     return `${AWS_ENDPOINT}/platforms/${platform}/banner.png`;
   } catch {
-    return "/banner.svg";
+    return "/banner.jpg";
   }
 };
 
@@ -323,11 +349,11 @@ export const getQuizIcon = async (platform, quiz) => {
   try {
     const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/${quiz}/icon.png`);
     if (resp.status != 200) {
-      return "/platformIcon.svg";
+      return "/quizIcon.svg";
     }
     return `${AWS_ENDPOINT}/platforms/${platform}/${quiz}/icon.png`;
   } catch {
-    return "/platformIcon.svg";
+    return "/quizIcon.png";
   }
 };
 

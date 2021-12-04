@@ -8,11 +8,13 @@ const SmallCard = ({ profilePicture, username, userTag, rightCard }) => {
     <div className="cardContainer cardContainer--small">
       <div className="card d-flex flex-row align-items-center">
         <img className="profilePicture" src={profilePicture} alt="icon" />
-        <Link to={`/user/${username}`} className="link fs-6">
-          {`${username} `}
-          {userTag}
-        </Link>
-        <div className="flex-grow-1 d-flex justify-content-end ps-3">{rightCard}</div>
+        <div className="small-card-username">
+          <Link to={`/user/${username}`} className="link">
+            {`${username} `}
+            {userTag}
+          </Link>
+        </div>
+        <div className="right-card">{rightCard}</div>
       </div>
     </div>
   );

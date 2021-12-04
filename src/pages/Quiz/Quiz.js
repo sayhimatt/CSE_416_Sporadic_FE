@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
-import {
-  getPlatform,
-  postStartQuiz,
-  postSubmitQuiz,
-  getPlatformIcon,
-  getPlatformBanner,
-} from "./../../API/API";
+import { postStartQuiz, postSubmitQuiz, getPlatformIcon, getPlatformBanner } from "./../../API/API";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard.js";
@@ -19,16 +13,14 @@ import InfoModal from "../../components/Modals/InfoModal/InfoModal";
 import "./styles.scss";
 
 const Quiz = () => {
-  const [platform, setPlatform] = useState({});
   const [questions, setQuestions] = useState([]);
   const [questionsCards, setQuestionCards] = useState([]);
   const [answers, setAnswers] = useState([]);
-  const [quiz, setQuiz] = useState({});
   const [isAlreadySubmittedModalVisible, setIsAlreadySubmittedModalVisible] = useState(false);
   const [isSubmittedModalVisible, setIsSubmittedModalVisible] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
-  const [banner, setBanner] = useState("/banner.svg");
-  const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
+  const [banner, setBanner] = useState("/banner.jpg");
+  const [platformIcon, setPlatformIcon] = useState("/platformIcon.png");
   const history = useHistory();
   const params = useParams();
 
@@ -37,7 +29,6 @@ const Quiz = () => {
   let delay = 1000;
 
   useEffect(() => {
-    getCurrentPlatform();
     getQuestions();
     getImageMedia();
   }, [params]);
@@ -70,21 +61,6 @@ const Quiz = () => {
     });
   };
 
-  const getCurrentPlatform = async () => {
-    const name = params.platform;
-    await getPlatform(name)
-      .then((platformData) => {
-        setPlatform(platformData);
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          history.replace(`/search?=${name}`);
-        } else {
-          history.replace("/error");
-        }
-      });
-  };
-
   const getQuestions = async () => {
     const platform = params.platform;
     const quiz = params.quiz;
@@ -92,7 +68,6 @@ const Quiz = () => {
       const response = await postStartQuiz(platform, quiz);
       setQuestions(response.questions);
       initAnswers(response.questions);
-      setQuiz(response);
       setTimeLeft(response.timeLimit);
     } catch (error) {
       console.log(error);
@@ -158,20 +133,11 @@ const Quiz = () => {
       />
       <div className="content d-flex m-4 flex-row align-items-start">
         <div className="d-flex flex-column flex-md-fill">{questionsCards}</div>
-        <div className="information d-flex flex-column">
-          <div className="searchBar searchBar--border">
-            <input className="search" placeholder="Search"></input>
-          </div>
-          <div className="platform-text-block d-flex align-items-center justify-content-center mt-4 fs-1 color-secondary">
-            {quiz.description}
-          </div>
-          <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
-            <div className="color-special fw-bold fs-1">Time Left: </div>
-            <Timer
-              timerSeconds={String(Math.trunc(timeLeft % 60)).padStart(2, "0")}
-              timerMinutes={String(Math.trunc(timeLeft / 60)).padStart(2, "0")}
-            />
-          </div>
+        <div className="information d-flex flex-column align-items-center">
+          <Timer
+            timerSeconds={String(Math.trunc(timeLeft % 60)).padStart(2, "0")}
+            timerMinutes={String(Math.trunc(timeLeft / 60)).padStart(2, "0")}
+          />
           <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
             <div className="color-secondary fw-bold fs-1">Star Trophy</div>
             <img src={award} alt="Icon" />
@@ -187,7 +153,7 @@ const Quiz = () => {
         body="You will now be redirected to the quiz completed page."
         buttonText="Take me there!"
         onButtonClicked={() => {
-          history.push(`/p/movies/${params.quiz}/complete`);
+          history.push(`/p/${params.platform}/${params.quiz}/complete`);
         }}
         isVisible={isAlreadySubmittedModalVisible}
       />
@@ -196,7 +162,7 @@ const Quiz = () => {
         body="You will now be redirected to the quiz completed page."
         buttonText="Take me there!"
         onButtonClicked={() => {
-          history.push(`/p/movies/${params.quiz}/complete`);
+          history.push(`/p/${params.platform}/${params.quiz}/complete`);
         }}
         isVisible={isSubmittedModalVisible}
       />
