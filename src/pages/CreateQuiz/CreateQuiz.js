@@ -317,7 +317,6 @@ const CreateQuiz = () => {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                console.log(e.target.getAttribute('id').split("-"));
                 subChoice(parseInt(e.target.id.split("-")[2]));
               }}
             >
