@@ -293,7 +293,7 @@ const CreateQuiz = () => {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                deleteQuestion(parseInt(e.target.id.charAt(e.target.id.length - 1)));
+                deleteQuestion(parseInt(e.target.id.split("-")[2]));
               }}
             >
               <img
@@ -307,7 +307,7 @@ const CreateQuiz = () => {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                addChoice(parseInt(e.target.id.charAt(e.target.id.length - 1)));
+                addChoice(parseInt(e.target.id.split("-")[2]));
               }}
             >
               <img id={`add-choice-${index}`} alt="add choice" src="/addChoice.svg" />
@@ -317,7 +317,7 @@ const CreateQuiz = () => {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                subChoice(parseInt(e.target.id.charAt(e.target.id.length - 1)));
+                subChoice(parseInt(e.target.id.split("-")[2]));
               }}
             >
               <img id={`sub-choice-${index}`} alt="remove choice" src="/subChoice.svg" />

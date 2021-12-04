@@ -18,11 +18,11 @@ const Question = ({
               className="input me-2"
               value={answer}
               placeholder="Answer Choice"
-              id={`Q${information.questionIndex}A${index}`}
+              id={`Q-${information.questionIndex}-A-${index}`}
               onChange={(e) =>
                 answerTextHandler(
-                  parseInt(e.target.id.charAt(1)),
-                  parseInt(e.target.id.charAt(3)),
+                  parseInt(e.target.id.split("-")[1]),
+                  parseInt(e.target.id.split("-")[3]),
                   e.target.value,
                 )
               }
@@ -35,13 +35,13 @@ const Question = ({
         <label className="custom-radio-btn align-self-center">
           <input
             type="radio"
-            value={"Q" + information.questionIndex + "C" + index}
+            value={"Q-" + information.questionIndex + "-C-" + index}
             checked={create ? information.choice === index : null}
             name={"answer" + information.questionIndex}
             onChange={(e) =>
               correctAnswerHandler(
-                parseInt(e.target.value.charAt(1)),
-                parseInt(e.target.value.charAt(3)),
+                parseInt(e.target.value.split("-")[1]),
+                parseInt(e.target.value.split("-")[3]),
               )
             }
           />
@@ -59,8 +59,8 @@ const Question = ({
             className="input text-center bg-transparent"
             value={information.question}
             placeholder="Question Title"
-            id={`Q${information.questionIndex}title`}
-            onChange={(e) => titleHandler(parseInt(e.target.id.charAt(1)), e.target.value)}
+            id={`Q-${information.questionIndex}-title`}
+            onChange={(e) => titleHandler(parseInt(e.target.id.split("-")[1]), e.target.value)}
             maxLength={500}
           ></textarea>
         ) : (
