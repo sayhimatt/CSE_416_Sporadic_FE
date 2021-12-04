@@ -178,7 +178,7 @@ const Quiz = () => {
         body="You will now be redirected to the quiz completed page."
         buttonText="Take me there!"
         onButtonClicked={() => {
-          history.push(`/p/movies/${params.quiz}/complete`);
+          history.push(`/p/${params.platform}/${params.quiz}/complete`);
         }}
         isVisible={isAlreadySubmittedModalVisible}
       />
@@ -187,7 +187,7 @@ const Quiz = () => {
         body="You will now be redirected to the quiz completed page."
         buttonText="Take me there!"
         onButtonClicked={() => {
-          history.push(`/p/movies/${params.quiz}/complete`);
+          history.push(`/p/${params.platform}/${params.quiz}/complete`);
         }}
         isVisible={isSubmittedModalVisible}
       />
