@@ -158,20 +158,11 @@ const Quiz = () => {
       />
       <div className="content d-flex m-4 flex-row align-items-start">
         <div className="d-flex flex-column flex-md-fill">{questionsCards}</div>
-        <div className="information d-flex flex-column">
-          <div className="searchBar searchBar--border">
-            <input className="search" placeholder="Search"></input>
-          </div>
-          <div className="platform-text-block d-flex align-items-center justify-content-center mt-4 fs-1 color-secondary">
-            {quiz.description}
-          </div>
-          <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
-            <div className="color-special fw-bold fs-1">Time Left: </div>
-            <Timer
-              timerSeconds={String(Math.trunc(timeLeft % 60)).padStart(2, "0")}
-              timerMinutes={String(Math.trunc(timeLeft / 60)).padStart(2, "0")}
-            />
-          </div>
+        <div className="information d-flex flex-column align-items-center">
+          <Timer
+            timerSeconds={String(Math.trunc(timeLeft % 60)).padStart(2, "0")}
+            timerMinutes={String(Math.trunc(timeLeft / 60)).padStart(2, "0")}
+          />
           <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
             <div className="color-secondary fw-bold fs-1">Star Trophy</div>
             <img src={award} alt="Icon" />
