@@ -339,7 +339,7 @@ export const getQuizIcon = async (platform, quiz) => {
     }
     return `${AWS_ENDPOINT}/platforms/${platform}/${quiz}/icon.png`;
   } catch {
-    return "/platformIcon.svg";
+    return "/quizIcon.png";
   }
 };
 
