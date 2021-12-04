@@ -317,9 +317,6 @@ const Platform = () => {
           </div>
         </div>
         <div className="information d-flex flex-column">
-          <div className="searchBar searchBar--border">
-            <input className="search" placeholder="Search"></input>
-          </div>
           {modView && (
             <div className="d-flex flex-column w-100">
               <LinkButton buttonSize="btn--large" to={`/p/${params.platform}/createQuiz`}>
