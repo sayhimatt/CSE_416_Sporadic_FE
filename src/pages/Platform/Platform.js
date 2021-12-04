@@ -91,7 +91,7 @@ const Platform = () => {
     const name = params.platform;
     const newPage = quizzes.page + 1;
     try {
-      const response = await getQuizzesFromPlatform(name, newPage);
+      const response = await getQuizzesFromPlatform(name, newPage, "upvotes", "ascending");
       if (response.length === 0) {
         setQuizzes((prevState) => ({ ...prevState, page: -1, hasMore: false }));
       } else {
