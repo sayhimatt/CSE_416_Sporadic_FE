@@ -147,6 +147,14 @@ export const putUpdatePinStatus = async (platform, quizTitle, action) => {
   return response.data;
 };
 
+export const getScores = async (platform) => {
+  const token = await getToken();
+  const response = await axios.get(`${ENDPOINT}/platforms/${platform}/scores`, {
+    headers: { authorization: `Bearer ${token}` },
+  });
+  return response.data;
+}
+
 /* Login Routing */
 
 export const postCreateAccount = async (username, password, email) => {

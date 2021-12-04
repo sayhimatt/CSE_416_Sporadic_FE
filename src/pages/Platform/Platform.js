@@ -57,6 +57,7 @@ const Platform = () => {
     setQuizzes({ page: 0, hasMore: true, quizzes: [] }); // wait before platform loads before getting quizzes
   }, [platform]);
 
+
   const getImageMedia = async () => {
     await getPlatformBanner(params.platform).then((banner) => {
       console.log(banner);
@@ -72,7 +73,7 @@ const Platform = () => {
     const name = params.platform;
     getPlatform(name)
       .then((platformData) => {
-        console.log(platformData);
+        //console.log(platformData);
         setPlatform(platformData);
       })
       .catch((error) => {
@@ -214,6 +215,10 @@ const Platform = () => {
     );
   };
 
+  const getUserIQ = () => {
+
+  }
+
   return !platform ? (
     <MainNav />
   ) : isBanned ? (
@@ -287,6 +292,7 @@ const Platform = () => {
           <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
             <div>Your Platform IQ</div>
             <div className="color-special fw-bold fs-1">100</div>
+            
           </div>
         </div>
       </div>
