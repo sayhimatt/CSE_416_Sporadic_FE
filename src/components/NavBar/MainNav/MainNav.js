@@ -41,7 +41,7 @@ const NavBar = () => {
       <div className="navbar-dropdowns ms-auto">
         <Dropdown>
           <Dropdown.Toggle as={CustomToggle}>
-            <div className="navText">Subscriptions</div>
+            <div className="sort-categories">Subscriptions</div>
           </Dropdown.Toggle>
           <Dropdown.Menu className="custom-dropdown-menu" align="end">
             {user.subscriptions &&
