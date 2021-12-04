@@ -33,6 +33,7 @@ export const postCreatePlatform = async (platformData) => {
 };
 
 export const getQuizzesFromPlatform = async (platformName, page, sortBy, sortDirection) => {
+  const AMOUNT_PER_PAGE = 10;
   const token = await getToken();
   const response = await axios.get(
     `${ENDPOINT}/quizzes?platform=${platformName}&sortBy=${sortBy}&sortDirection=${sortDirection}&page=${page}&amountPerPage=${AMOUNT_PER_PAGE}`,

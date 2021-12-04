@@ -25,3 +25,39 @@
 #platform-quizzes {
   min-height: 70vh;
 }
+
+
+.sort-dropdowns  {
+  font-size: 18px;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  background-color: var(--primary) !important;
+}
+.sort-dropdowns button {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+.sort-dropdowns:hover {
+  background-color: var(--primary) !important;
+}
+.sort-dropdowns:click {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+.btn-primary.focus, .btn-primary:focus {
+  -webkit-box-shadow: none!important;
+  box-shadow: none!important;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary) !important;
+}
+.sort-categories {
+  font-size: 0.9em;
+}

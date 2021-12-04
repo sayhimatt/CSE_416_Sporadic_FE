@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
-
+import { Dropdown } from "react-bootstrap";
 import { getPlatform, getQuizzesFromPlatform } from "./../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
 import Button from "../../components/Buttons/Button/Button";
@@ -10,6 +10,7 @@ import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
 import ImageUploader from "../../components/ImageUploader/ImageUploader";
+import CustomToggle from "../../components/CustomToggle/CustomToggle";
 import {
   getPlatformIcon,
   getPlatformBanner,
@@ -37,6 +38,8 @@ const Platform = () => {
   const [platformIcon, setPlatformIcon] = useState();
   const [uploadBanner, setUploadBanner] = useState(false);
   const [uploadIcon, setUploadIcon] = useState(false);
+  const [sortBy, setSortBy] = useState("title");
+  const [sortDirection, setSortDirection] = useState("ascending");
 
   useEffect(() => {
     getCurrentPlatform();
@@ -46,12 +49,14 @@ const Platform = () => {
 
   useEffect(() => {
     if (quizzes) {
+      console.log(`Great ${quizzes.page}`);
+
       if (quizzes.page === 0) {
         getQuizzes();
       }
       renderCards();
     }
-  }, [quizzes, modView]);
+  }, [quizzes, modView, sortBy, sortDirection]);
 
   useEffect(() => {
     setQuizzes({ page: 0, hasMore: true, quizzes: [] }); // wait before platform loads before getting quizzes
@@ -59,11 +64,9 @@ const Platform = () => {
 
   const getImageMedia = async () => {
     await getPlatformBanner(params.platform).then((banner) => {
-      console.log(banner);
       setBanner(banner);
     });
     await getPlatformIcon(params.platform).then((icon) => {
-      console.log(icon);
       setPlatformIcon(icon);
     });
   };
@@ -72,7 +75,6 @@ const Platform = () => {
     const name = params.platform;
     getPlatform(name)
       .then((platformData) => {
-        console.log(platformData);
         setPlatform(platformData);
       })
       .catch((error) => {
@@ -91,7 +93,7 @@ const Platform = () => {
     const name = params.platform;
     const newPage = quizzes.page + 1;
     try {
-      const response = await getQuizzesFromPlatform(name, newPage, "upvotes", "ascending");
+      const response = await getQuizzesFromPlatform(name, 1, sortBy, sortDirection); // HARDCODE to 1 newPage is bugged
       if (response.length === 0) {
         setQuizzes((prevState) => ({ ...prevState, page: -1, hasMore: false }));
       } else {
@@ -197,7 +199,7 @@ const Platform = () => {
   const updatePinStatus = (quizName, action) => {
     putUpdatePinStatus(params.platform, quizName, action)
       .then((res) => getCurrentPlatform())
-      .catch((e) => console.log(error));
+      .catch((e) => console.log(e));
   };
 
   const bannedPage = () => {
@@ -237,9 +239,43 @@ const Platform = () => {
           {subscribed ? "Unsubscribe" : "Subscribe"}
         </Button>
       </PlatformSubNav>
+
       <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
         <div className="d-flex flex-column m-5 align-items-end">
-          <div className="sort"></div>
+          <Dropdown>
+            <Dropdown.Toggle className="sort-dropdowns">Sort By</Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item
+                onClick={() => {
+                  setSortBy("title");
+                }}
+              >
+                Title
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => {
+                  setSortBy("upvotes");
+                }}
+              >
+                Upvotes
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => {
+                  setSortBy("downvotes");
+                }}
+              >
+                Downvotes
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => {
+                  setSortBy("timeLimit");
+                }}
+              >
+                Time Limit
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+
           <div id="platform-quizzes" className="quizzes d-flex flex-column m-10">
             <InfiniteScroll
               next={getQuizzes}
