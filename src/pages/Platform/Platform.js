@@ -49,18 +49,19 @@ const Platform = () => {
 
   useEffect(() => {
     if (quizzes) {
-      console.log(`Great ${quizzes.page}`);
-
+      console.log(`I am in quizzes conditional block ${quizzes.quizzes}`);
       if (quizzes.page === 0) {
         getQuizzes();
       }
       renderCards();
     }
-  }, [quizzes, modView, sortBy, sortDirection]);
+  }, [quizzes, modView]);
 
   useEffect(() => {
-    setQuizzes({ page: 0, hasMore: true, quizzes: [] }); // wait before platform loads before getting quizzes
-  }, [platform]);
+    if(platform){
+      setQuizzes({ page: 0, hasMore: true, quizzes: [] }); // wait before platform loads before getting quizzes
+    }
+  }, [platform, sortBy, sortDirection]);
 
   const getImageMedia = async () => {
     await getPlatformBanner(params.platform).then((banner) => {
@@ -75,6 +76,7 @@ const Platform = () => {
     const name = params.platform;
     getPlatform(name)
       .then((platformData) => {
+        console.log("Set the platform data");
         setPlatform(platformData);
       })
       .catch((error) => {
@@ -93,7 +95,7 @@ const Platform = () => {
     const name = params.platform;
     const newPage = quizzes.page + 1;
     try {
-      const response = await getQuizzesFromPlatform(name, 1, sortBy, sortDirection); // HARDCODE to 1 newPage is bugged
+      const response = await getQuizzesFromPlatform(name, newPage, sortBy, sortDirection);
       if (response.length === 0) {
         setQuizzes((prevState) => ({ ...prevState, page: -1, hasMore: false }));
       } else {

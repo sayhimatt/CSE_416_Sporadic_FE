@@ -37,6 +37,7 @@
   text-align: center;
   background-color: var(--primary) !important;
 }
+
 .sort-dropdowns button {
   background-color: var(--primary) !important;
   border-color: var(--primary) !important;
@@ -49,7 +50,10 @@
   background-color: var(--primary) !important;
   border-color: var(--primary) !important;
 }
-
+.btn-primary {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
 .btn-primary.focus, .btn-primary:focus {
   -webkit-box-shadow: none!important;
   box-shadow: none!important;
