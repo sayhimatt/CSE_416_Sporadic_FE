@@ -49,7 +49,6 @@ const Platform = () => {
 
   useEffect(() => {
     if (quizzes) {
-      console.log(`I am in quizzes conditional block ${quizzes.quizzes}`);
       if (quizzes.page === 0) {
         getQuizzes();
       }
@@ -76,7 +75,6 @@ const Platform = () => {
     const name = params.platform;
     getPlatform(name)
       .then((platformData) => {
-        console.log("Set the platform data");
         setPlatform(platformData);
       })
       .catch((error) => {
@@ -244,39 +242,43 @@ const Platform = () => {
 
       <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
         <div className="d-flex flex-column m-5 align-items-end">
-          <Dropdown>
-            <Dropdown.Toggle className="sort-dropdowns">Sort By</Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item
-                onClick={() => {
-                  setSortBy("title");
-                }}
-              >
-                Title
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={() => {
-                  setSortBy("upvotes");
-                }}
-              >
-                Upvotes
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={() => {
-                  setSortBy("downvotes");
-                }}
-              >
-                Downvotes
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={() => {
-                  setSortBy("timeLimit");
-                }}
-              >
-                Time Limit
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <div className="d-flex flex-row">
+            <Dropdown>
+              <Dropdown.Toggle className="sort-dropdowns">Sort By</Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  onClick={() => {
+                    setSortBy("title");
+                  }}
+                >
+                  Title
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    setSortBy("upvotes");
+                  }}
+                >
+                  Upvotes
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    setSortBy("downvotes");
+                  }}
+                >
+                  Downvotes
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    setSortBy("timeLimit");
+                  }}
+                >
+                  Time Limit
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+            <img alt="ascending" src="/ascending.svg" />
+            <img alt="descending" src="/descending.svg" />
+          </div>
 
           <div id="platform-quizzes" className="quizzes d-flex flex-column m-10">
             <InfiniteScroll
