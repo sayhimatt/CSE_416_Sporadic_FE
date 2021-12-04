@@ -174,6 +174,18 @@ export const getUser = async (username) => {
   return response.data;
 };
 
+export const patchGlobalBanStatus = async (username, action) => {
+  const token = await getToken();
+  const response = await axios.patch(
+    `${ENDPOINT}/users/updateGlobalBanStatus`,
+    { targetUsername: username, action },
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  return response;
+};
+
 export const manageFriend = async (username, action) => {
   const token = await getToken();
   const response = await axios.put(
@@ -256,11 +268,13 @@ export const patchVote = async (platform, quiz, vote) => {
 };
 
 /* Search Routing */
-export const getSearchResults = async (type, query, page) => {
+export const getSearchResults = async (type, query, page, userFilter = null) => {
   const AMOUNT_PER_PAGE = 10;
   const token = await getToken();
   const response = await axios.get(
-    `${ENDPOINT}/search?scope=${type}&searchQuery=${query}&page=${page}&amountPerPage=${AMOUNT_PER_PAGE}`,
+    `${ENDPOINT}/search?scope=${type}&searchQuery=${query}&page=${page}&amountPerPage=${AMOUNT_PER_PAGE}${
+      userFilter ? `&userFilter=${userFilter}` : ""
+    }`,
     {
       headers: { authorization: `Bearer ${token}` },
     },
