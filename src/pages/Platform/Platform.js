@@ -277,6 +277,7 @@ const Platform = () => {
               </Dropdown.Menu>
             </Dropdown>
             <img
+              style={{ cursor: "pointer" }}
               alt="ascending"
               src="/ascending.svg"
               onClick={() => {
@@ -284,6 +285,7 @@ const Platform = () => {
               }}
             />
             <img
+              style={{ cursor: "pointer" }}
               alt="descending"
               src="/descending.svg"
               onClick={() => {
