@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 
+import MainNav from "../../components/NavBar/MainNav/MainNav";
+import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
+import Button from "../../components/Buttons/Button/Button";
+import award from "../../award.svg";
+import SmallCard from "../../components/Card/SmallCard/SmallCard";
 import {
   getPlatform,
   getQuizByTitle,
@@ -8,22 +13,38 @@ import {
   getPlatformBanner,
   getAllUserIcons,
   putComment,
+  patchVote,
 } from "./../../API/API";
-import MainNav from "../../components/NavBar/MainNav/MainNav";
-import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
-import award from "../../award.svg";
-import "./styles.scss";
-import SmallCard from "../../components/Card/SmallCard/SmallCard";
 import { Alert } from "react-bootstrap";
+
+import "./styles.scss";
+
+const VOTE_IMAGES = {
+  like: { default: "/like.png", filled: "/like_filled.png" },
+  dislike: { default: "/dislike.png", filled: "/dislike_filled.png" },
+};
 
 const QuizComplete = () => {
   const [platform, setPlatform] = useState({});
-  const [quiz, setQuiz] = useState({});
+  const [quiz, setQuiz] = useState();
   const [banner, setBanner] = useState("/banner.svg");
   const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
   const [comment, setComment] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState({ show: false, message: "" });
   const [userIcons, setUserIcons] = useState();
+  const [vote, setVote] = useState("none");
+  const [voteImages, setVoteImages] = useState({
+    upvote: {
+      src: VOTE_IMAGES.like.default,
+      enter: VOTE_IMAGES.like.filled,
+      leave: VOTE_IMAGES.like.default,
+    },
+    downvote: {
+      src: VOTE_IMAGES.dislike.default,
+      enter: VOTE_IMAGES.dislike.filled,
+      leave: VOTE_IMAGES.dislike.default,
+    },
+  });
   const history = useHistory();
   const params = useParams();
 
@@ -32,6 +53,10 @@ const QuizComplete = () => {
     getQuiz();
     getImageMedia();
   }, [params]);
+
+  useEffect(() => {
+    setAppropriateVoteImages();
+  }, [vote]);
 
   const getImageMedia = async () => {
     await getPlatformBanner(params.platform).then((banner) => {
@@ -60,16 +85,60 @@ const QuizComplete = () => {
   };
 
   const getQuiz = async () => {
-    const platform = params.platform;
-    const quiz = params.quiz;
+    const platformName = params.platform;
+    const quizName = params.quiz;
     try {
-      const response = await getQuizByTitle(platform, quiz);
-      setQuiz(response);
+      const response = await getQuizByTitle(platformName, quizName);
       console.log(response);
+      setQuiz(response);
       const pictures = await getAllUserIcons(response.comments.map((comment) => comment.user));
       setUserIcons(pictures);
+      setVote(response.score.vote);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const setAppropriateVoteImages = () => {
+    if (vote === "upvote") {
+      setVoteImages({
+        upvote: {
+          src: VOTE_IMAGES.like.filled,
+          enter: VOTE_IMAGES.like.filled,
+          leave: VOTE_IMAGES.like.filled,
+        },
+        downvote: {
+          src: VOTE_IMAGES.dislike.default,
+          enter: VOTE_IMAGES.dislike.filled,
+          leave: VOTE_IMAGES.dislike.default,
+        },
+      });
+    } else if (vote === "downvote") {
+      setVoteImages({
+        upvote: {
+          src: VOTE_IMAGES.like.default,
+          enter: VOTE_IMAGES.like.filled,
+          leave: VOTE_IMAGES.like.default,
+        },
+        downvote: {
+          src: VOTE_IMAGES.dislike.filled,
+          enter: VOTE_IMAGES.dislike.filled,
+          leave: VOTE_IMAGES.dislike.filled,
+        },
+      });
+    } else {
+      setVoteImages({
+        upvote: {
+          src: VOTE_IMAGES.like.default,
+          enter: VOTE_IMAGES.like.filled,
+          leave: VOTE_IMAGES.like.default,
+        },
+        downvote: {
+          src: VOTE_IMAGES.dislike.default,
+          enter: VOTE_IMAGES.dislike.filled,
+          leave: VOTE_IMAGES.dislike.default,
+        },
+      });
     }
   };
 
@@ -79,7 +148,7 @@ const QuizComplete = () => {
         getQuiz();
       })
       .catch((error) => {
-        setShowAlert(true);
+        setShowAlert({ show: true, message: "You can only make one comment per quiz" });
       });
   };
 
@@ -94,42 +163,98 @@ const QuizComplete = () => {
     ));
   };
 
-  return (
+  const makeVote = (newVote) => {
+    const platformName = params.platform;
+    const quizName = params.quiz;
+    if (vote === newVote) {
+      newVote = "none";
+    }
+    patchVote(platformName, quizName, newVote)
+      .then((res) => setVote(newVote))
+      .catch((e) => setShowAlert({ show: true, message: "Could not record your vote" }));
+  };
+
+  return !quiz ? (
+    <MainNav />
+  ) : (
     <div>
       <MainNav />
       <PlatformSubNav platformName={"Quiz: " + params.quiz} iconSrc={platformIcon} />
-      <Alert show={showAlert} variant="danger" onClose={() => setShowAlert(false)} dismissible>
-        You can only make one comment per quiz
-      </Alert>
-      <div className="flex-row input-box w-75">
-        <textarea
-          className="input"
-          placeholder="Enter a comment"
-          onChange={(e) => setComment(e.target.value)}
-        />
-        <input
-          type="submit"
-          value="Post"
-          className="btn btn-primary btn-block"
-          onClick={makeComment}
-        />
+      <div className="quiz-alerts">
+        <Alert
+          show={showAlert.show}
+          variant="danger"
+          onClose={() => setShowAlert({ show: false, message: "" })}
+          dismissible
+        >
+          {showAlert.message}
+        </Alert>
       </div>
-      <div className="content d-flex m-4 flex-row">
-        <div className="d-flex flex-column flex-md-fill color-secondary fw-bold fs-3">
-          {`Your Score is: ${quiz.score}/${quiz.totalQuestions}`}
-          {quiz.comments && userIcons && generateCommentCards()}
+      <div className="page-content d-flex flex-column align-items-center">
+        <div id="main-results">
+          <div id="score-bubble">{`${Math.round(
+            (quiz.score.score / quiz.totalQuestions) * 100,
+          )}%`}</div>
+          <div id="results-breakdown">
+            <div id="score-breakdown">
+              <div className="d-flex flex-column align-items-center">
+                <div id="questions-right">{quiz.score.score}</div>
+                <div className="score-divider" />
+                <div id="total-questions">{quiz.totalQuestions}</div>
+              </div>
+              <div className="d-flex flex-column align-items-start ms-4">
+                <div>Correct</div>
+                <div className="score-divider invisible" />
+                <div>Questions</div>
+              </div>
+            </div>
+            <div id="award-section">
+              <img id="trophy-earned" src={award} alt="Icon" />
+              <div className="ms-3">Trophy Name</div>
+            </div>
+          </div>
         </div>
-        <div className="information d-flex flex-column m-4">
-          <div className="searchBar searchBar--border">
-            <input className="search" placeholder="Search"></input>
+        <div id="results-feedback">
+          <div id="feedback">
+            <div id="quiz-title">{quiz.title}</div>
+            <div className="d-flex justify-content-around w-75 mt-3">
+              <img
+                id="upvote"
+                className="feedback-image"
+                src={voteImages.upvote.src}
+                alt="upvote"
+                onClick={() => makeVote("upvote")}
+                onMouseEnter={(e) => (e.target.src = voteImages.upvote.enter)}
+                onMouseLeave={(e) => (e.target.src = voteImages.upvote.leave)}
+              />
+              <img
+                id="downvote"
+                className="feedback-image"
+                src={voteImages.downvote.src}
+                alt="downvote"
+                onClick={() => makeVote("downvote")}
+                onMouseEnter={(e) => (e.target.src = voteImages.downvote.enter)}
+                onMouseLeave={(e) => (e.target.src = voteImages.downvote.leave)}
+              />
+            </div>
           </div>
-          <div className="platform-text-block d-flex align-items-center justify-content-center mt-4 color-secondary fw-bold fs-3">
-            {quiz.description}
+          <div id="comments-section">
+            <div id="make-comment">
+              <div className="comment-box flex-grow-1">
+                <textarea
+                  className="input"
+                  placeholder="Enter a comment"
+                  onChange={(e) => setComment(e.target.value)}
+                />
+              </div>
+              <div className="ms-3">
+                <Button onClick={makeComment}>Make Comment</Button>
+              </div>
+            </div>
+            <div id="comments-list" className="mb-5">
+              {quiz.comments && userIcons && generateCommentCards()}
+            </div>
           </div>
-          <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
-            <div className="color-secondary fw-bold fs-3"> Congratulations! </div>
-          </div>
-          <img src={award} alt="Icon" />
         </div>
       </div>
     </div>
