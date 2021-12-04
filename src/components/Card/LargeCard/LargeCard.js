@@ -7,7 +7,15 @@ import { Dropdown } from "react-bootstrap";
 import "../styles.css";
 import "./styles.css";
 
-const LargeCard = ({ children, iconSrc, modOptions, cardInfo, cardLink, dropdownHandlers }) => {
+const LargeCard = ({
+  children,
+  iconSrc,
+  modOptions,
+  cardInfo,
+  cardLink,
+  dropdownHandlers,
+  pin,
+}) => {
   const convertVotes = (votes) => {
     const votesNum = parseInt(votes);
     if (votes < 1000) {
@@ -51,7 +59,17 @@ const LargeCard = ({ children, iconSrc, modOptions, cardInfo, cardLink, dropdown
                   <img alt="dropdown" src="/three_dot_menu.svg" />
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="custom-dropdown-menu" align="start">
-                  <Dropdown.Item className="custom-dropdown-item">Pin Quiz</Dropdown.Item>
+                  <Dropdown.Item
+                    className="custom-dropdown-item"
+                    id={`pin-quiz-${cardInfo.title}`}
+                    onClick={(e) => {
+                      const action = pin ? "remove" : "add";
+                      e.preventDefault();
+                      dropdownHandlers.updatePinStatus(cardInfo.title, action);
+                    }}
+                  >
+                    {pin ? "Unpin Quiz" : "Pin Quiz"}
+                  </Dropdown.Item>
                   <Dropdown.Item
                     id={`delete-quiz-${cardInfo.title}`}
                     className="custom-dropdown-item"
@@ -65,6 +83,7 @@ const LargeCard = ({ children, iconSrc, modOptions, cardInfo, cardLink, dropdown
                 </Dropdown.Menu>
               </Dropdown>
             )}
+            {pin && <img className="pin" src="/pin.svg" alt="pin" />}
           </div>
         </div>
         <div className="bottomCard d-flex flex-row justify-content-between align-items-end">

@@ -17,6 +17,7 @@ import {
   patchSubscribe,
   patchUnsubscribe,
   deleteQuiz,
+  putUpdatePinStatus,
 } from "./../../API/API";
 import LoadingSpinner from "../../components/LoadingIndicators/LoadingSpinner";
 
@@ -39,17 +40,22 @@ const Platform = () => {
 
   useEffect(() => {
     getCurrentPlatform();
-    setQuizzes({ page: 0, hasMore: true, quizzes: [] });
     getImageMedia();
     setModView(false);
   }, [params]);
 
   useEffect(() => {
-    if (quizzes && quizzes.page === 0) {
-      getQuizzes();
+    if (quizzes) {
+      if (quizzes.page === 0) {
+        getQuizzes();
+      }
+      renderCards();
     }
-    renderCards();
   }, [quizzes, modView]);
+
+  useEffect(() => {
+    setQuizzes({ page: 0, hasMore: true, quizzes: [] }); // wait before platform loads before getting quizzes
+  }, [platform]);
 
   const getImageMedia = async () => {
     await getPlatformBanner(params.platform).then((banner) => {
@@ -66,6 +72,7 @@ const Platform = () => {
     const name = params.platform;
     getPlatform(name)
       .then((platformData) => {
+        console.log(platformData);
         setPlatform(platformData);
       })
       .catch((error) => {
@@ -88,16 +95,25 @@ const Platform = () => {
       if (response.length === 0) {
         setQuizzes((prevState) => ({ ...prevState, page: -1, hasMore: false }));
       } else {
+        const quizzesWithoutPinned = removePinnedQuizzesFromQuizzes(response);
         setQuizzes((prevState) => ({
           ...prevState,
           page: newPage,
-          quizzes: prevState.quizzes.concat(response),
+          quizzes: prevState.quizzes.concat(quizzesWithoutPinned),
         }));
       }
     } catch (error) {
       setQuizzes((prevState) => ({ ...prevState, page: -1, hasMore: false }));
       console.log(error);
     }
+  };
+
+  const removePinnedQuizzesFromQuizzes = (quizzes) => {
+    let newQuizzes = quizzes;
+    platform.pinnedQuizzes.forEach((pinnedQuiz) => {
+      newQuizzes = newQuizzes.filter((quiz) => quiz.title !== pinnedQuiz.title);
+    });
+    return newQuizzes;
   };
 
   const subscribe = async () => {
@@ -138,21 +154,21 @@ const Platform = () => {
     deleteQuiz(params.platform, quiz)
       .then((res) => {
         setQuizzes({ page: 0, hasMore: true, quizzes: [] });
-        getQuizzes();
       })
       .catch((error) => alert("Could not delete quiz"));
   };
 
   const renderCards = async () => {
-    if (!quizzes) {
+    if (!quizzes || !platform) {
       return;
     }
-    const cards = quizzes.quizzes.map(async (quiz) => {
+    const allQuizzes = platform.pinnedQuizzes.concat(quizzes.quizzes);
+    const cards = allQuizzes.map(async (quiz, index) => {
       const name = params.platform;
       const quizImg = await getQuizIcon(params.platform, quiz.title);
       return (
         <LargeCard
-          key={quiz._id}
+          key={index}
           iconSrc={quizImg}
           cardInfo={{
             title: quiz.title,
@@ -166,8 +182,9 @@ const Platform = () => {
             ),
           }}
           modOptions={modView}
-          dropdownHandlers={{ removeQuiz }}
+          dropdownHandlers={{ removeQuiz, updatePinStatus }}
           cardLink={`${name}/${quiz.title}`} // Temporary fix prevents crash on redirect, use quiz page when done
+          pin={platform.pinnedQuizzes.map((quiz) => quiz.title).includes(quiz.title)}
         />
       );
     });
@@ -175,6 +192,12 @@ const Platform = () => {
       //console.log(cards);
       setQuizCards(cards);
     });
+  };
+
+  const updatePinStatus = (quizName, action) => {
+    putUpdatePinStatus(params.platform, quizName, action)
+      .then((res) => getCurrentPlatform())
+      .catch((e) => console.log(error));
   };
 
   const bannedPage = () => {
