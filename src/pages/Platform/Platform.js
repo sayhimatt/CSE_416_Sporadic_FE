@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-import { getPlatform, getQuizzesFromPlatform } from "./../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
 import Button from "../../components/Buttons/Button/Button";
 import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
@@ -18,6 +17,9 @@ import {
   patchUnsubscribe,
   deleteQuiz,
   putUpdatePinStatus,
+  getPlatform,
+  getQuizzesFromPlatform,
+  getScores
 } from "./../../API/API";
 import LoadingSpinner from "../../components/LoadingIndicators/LoadingSpinner";
 
@@ -37,6 +39,7 @@ const Platform = () => {
   const [platformIcon, setPlatformIcon] = useState();
   const [uploadBanner, setUploadBanner] = useState(false);
   const [uploadIcon, setUploadIcon] = useState(false);
+  const [userIQ, setUserIQ] = useState();
 
   useEffect(() => {
     getCurrentPlatform();
@@ -55,6 +58,7 @@ const Platform = () => {
 
   useEffect(() => {
     setQuizzes({ page: 0, hasMore: true, quizzes: [] }); // wait before platform loads before getting quizzes
+    getUserIQ();
   }, [platform]);
 
 
@@ -159,6 +163,22 @@ const Platform = () => {
       .catch((error) => alert("Could not delete quiz"));
   };
 
+  const getUserIQ = () => {
+    getScores(params.platform)
+      .then((res) => {
+        console.log(res);
+        const scores = res;
+        console.log(scores);
+
+        const userScore = scores.find( (score) => {
+          return score.username == user.username;
+        }).totalCorrect;
+        console.log(userScore);
+        setUserIQ(userScore);
+      })
+      .catch((error) => alert("Could not calculate IQ"));
+  }
+
   const renderCards = async () => {
     if (!quizzes || !platform) {
       return;
@@ -215,9 +235,6 @@ const Platform = () => {
     );
   };
 
-  const getUserIQ = () => {
-
-  }
 
   return !platform ? (
     <MainNav />
@@ -291,7 +308,7 @@ const Platform = () => {
           </div>
           <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
             <div>Your Platform IQ</div>
-            <div className="color-special fw-bold fs-1">100</div>
+            <div className="color-special fw-bold fs-1">100{userIQ}</div>
             
           </div>
         </div>
