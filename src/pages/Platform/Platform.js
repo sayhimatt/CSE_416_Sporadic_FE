@@ -58,7 +58,7 @@ const Platform = () => {
   }, [quizzes, modView]);
 
   useEffect(() => {
-    if(platform){
+    if (platform) {
       setQuizzes({ page: 0, hasMore: true, quizzes: [] }); // wait before platform loads before getting quizzes
     }
   }, [platform, sortBy, sortDirection]);
@@ -218,7 +218,7 @@ const Platform = () => {
     );
   };
 
-  return !platform ? (
+  return !platform || !quizzes ? (
     <MainNav />
   ) : isBanned ? (
     bannedPage()
