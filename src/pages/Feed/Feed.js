@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import { UserContext } from "../../contexts/UserContext/UserContext";
-import { getFeedQuizzes } from "../../API/API";
+import { getFeedQuizzes, getUser } from "../../API/API";
 import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
@@ -16,9 +16,13 @@ import "./styles.scss";
 const Feed = ({ children }) => {
   const { user } = useContext(UserContext);
   const [quizzes, setQuizzes] = useState({ page: 0, hasMore: true, quizzes: [] });
+  const [isGlobalAdmin, setIsGlobalAdmin] = useState(false);
 
   useEffect(() => {
     getQuizzes();
+    getUser(user.username)
+      .then((res) => setIsGlobalAdmin(res.isGlobalAdmin))
+      .catch((e) => console.log(e));
   }, []);
 
   useEffect(() => {
@@ -64,8 +68,17 @@ const Feed = ({ children }) => {
     });
   };
   const subNavButtons = [
-    <LinkButton to="/createPlatform">Create A Platform</LinkButton>,
-    <LinkButton to="/notifications">Notifications</LinkButton>,
+    isGlobalAdmin ? (
+      <LinkButton key="admin-panel" to="/adminPanel" buttonStyle="btn--special">
+        Admin Panel
+      </LinkButton>
+    ) : null,
+    <LinkButton key="create-platform" to="/createPlatform">
+      Create A Platform
+    </LinkButton>,
+    <LinkButton key="notifications" to="/notifications">
+      Notifications
+    </LinkButton>,
   ];
   return (
     <div>
