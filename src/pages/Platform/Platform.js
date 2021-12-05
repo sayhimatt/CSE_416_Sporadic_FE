@@ -165,18 +165,32 @@ const Platform = () => {
 
   const getUserIQ = () => {
     getScores(params.platform)
-      .then((res) => {
-        console.log(res);
-        const scores = res;
-        console.log(scores);
-
+      .then((scores) => {
+        // find users score
         const userScore = scores.find( (score) => {
           return score.username == user.username;
         }).totalCorrect;
         console.log(userScore);
-        setUserIQ(userScore);
+        // get array of just scores, no usernames
+        const scoresSet = scores.map(score => score.totalCorrect);
+        console.log(scoresSet);
+        // calculate standard deviation of scores set
+        const n = scoresSet.length
+        if (n == 0) throw 'No users have taken a quiz in this platform';
+        const mean = scoresSet.reduce((a, b) => a + b) / n
+        var sd = Math.sqrt(scoresSet.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
+        if (sd == 0) sd = 1;
+        console.log(`n: ` + n + ` mean: ` + mean + ` sd: ` + sd);
+        // calculate z score
+        const z = ((userScore - mean) / sd);
+        // iq = a + bz, where a = baseline and b = weight of z score
+        const a = 100;
+        const b = 15;
+        const IQ = Math.round(a + (b*z)); 
+
+        setUserIQ(IQ);
       })
-      .catch((error) => alert("Could not calculate IQ"));
+      .catch((error) => setUserIQ(0));
   }
 
   const renderCards = async () => {
@@ -308,7 +322,7 @@ const Platform = () => {
           </div>
           <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
             <div>Your Platform IQ</div>
-            <div className="color-special fw-bold fs-1">100{userIQ}</div>
+            <div className="color-special fw-bold fs-1">{userIQ}</div>
             
           </div>
         </div>
