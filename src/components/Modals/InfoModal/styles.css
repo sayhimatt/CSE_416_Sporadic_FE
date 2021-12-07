@@ -1,0 +1,12 @@
+.btn-confirm {
+  background-color: var(--primary) !important;
+  color: var(--secondary) !important;
+}
+
+.btn-confirm:hover {
+  filter: brightness(120%);
+}
+
+.modal-title {
+  color: var(--primary);
+}

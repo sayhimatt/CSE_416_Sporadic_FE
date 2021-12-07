@@ -1,5 +1,5 @@
 import React from "react";
-import "./styles.css";
+import "./styles.scss";
 
 const SubNav = ({ children, heading, buttons }) => {
   return (
@@ -7,7 +7,7 @@ const SubNav = ({ children, heading, buttons }) => {
       {children}
       <div className="d-flex justify-content-between align-items-center flex-grow-1">
         <div className="heading">{heading}</div>
-        <div className="buttons">{buttons}</div>
+        <div className="buttons d-flex">{buttons}</div>
       </div>
     </div>
   );

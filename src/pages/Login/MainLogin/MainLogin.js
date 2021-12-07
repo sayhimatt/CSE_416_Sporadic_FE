@@ -3,7 +3,7 @@ import { Link, useHistory, Redirect } from "react-router-dom";
 import { Auth } from "aws-amplify";
 
 import { UserContext } from "../../../contexts/UserContext/UserContext";
-import Button from "../../../components/Button/Button";
+import Button from "../../../components/Buttons/Button/Button";
 import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
 import { getUser, getUserIcon } from "../../../API/API";
 
@@ -13,7 +13,7 @@ import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay
 const MainLogin = ({ auth, authHandler }) => {
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
-  const [showMsg, setShowMsg] = useState(false);
+  const [showMsg, setShowMsg] = useState({ show: false, message: "" });
   const { user, dispatch } = useContext(UserContext);
   const [credentials, setCredentials] = useState({
     username: "",
@@ -40,8 +40,13 @@ const MainLogin = ({ auth, authHandler }) => {
       });
       authHandler(true);
     } catch (error) {
-      setShowMsg(true);
-      console.log("error signing in", error);
+      console.log(error);
+      const errorMessage = error.toString();
+      if (errorMessage.includes("User is disabled")) {
+        setShowMsg({ show: true, message: `${username} is banned` });
+      } else {
+        setShowMsg({ show: true, message: "Invalid Login" });
+      }
       setIsLoading(false);
     }
   };
@@ -100,7 +105,7 @@ const MainLogin = ({ auth, authHandler }) => {
           </Link>
         </div>
       </div>
-      <ErrorMessage visible={showMsg} errorStyle="errorBox" text="Invalid Login" />
+      <ErrorMessage visible={showMsg.show} errorStyle="errorBox" text={showMsg.message} />
       <LoadingOverlay isVisible={isLoading} />
     </div>
   );

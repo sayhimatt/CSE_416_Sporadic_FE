@@ -1,12 +1,12 @@
 import React from "react";
 import "./styles.css";
 
-const ErrorText = ({text}) => {
+const ErrorText = ({ text }) => {
   return (
-      <div className= {`errorText`}>
-        <p> {text} </p>
-      </div>
-    );
+    <div className={`errorText`}>
+      <p> {text} </p>
+    </div>
+  );
 };
 
 export default ErrorText;

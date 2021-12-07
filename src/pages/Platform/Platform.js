@@ -1,20 +1,26 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
-
+import InfiniteScroll from "react-infinite-scroll-component";
+import { Dropdown } from "react-bootstrap";
 import { getPlatform, getQuizzesFromPlatform } from "./../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
-import Button from "../../components/Button/Button";
+import Button from "../../components/Buttons/Button/Button";
+import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
 import ImageUploader from "../../components/ImageUploader/ImageUploader";
+import CustomToggle from "../../components/CustomToggle/CustomToggle";
 import {
   getPlatformIcon,
   getPlatformBanner,
+  getQuizIcon,
   patchSubscribe,
   patchUnsubscribe,
   deleteQuiz,
+  putUpdatePinStatus,
 } from "./../../API/API";
+import LoadingSpinner from "../../components/LoadingIndicators/LoadingSpinner";
 
 import "./styles.scss";
 
@@ -23,34 +29,44 @@ const Platform = () => {
   const params = useParams();
   const { user, dispatch } = useContext(UserContext);
   const [platform, setPlatform] = useState();
-  const [quizzes, setQuizzes] = useState([]);
+  const [quizzes, setQuizzes] = useState();
   const [quizCards, setQuizCards] = useState([]);
   const [subscribed, setSubscribed] = useState(user.subscriptions.includes(params.platform));
   const [modView, setModView] = useState(false);
   const [isBanned, setIsBanned] = useState(false);
   const [banner, setBanner] = useState("/banner.svg");
-  const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
+  const [platformIcon, setPlatformIcon] = useState();
   const [uploadBanner, setUploadBanner] = useState(false);
   const [uploadIcon, setUploadIcon] = useState(false);
+  const [sortBy, setSortBy] = useState("title");
+  const [sortDirection, setSortDirection] = useState("ascending");
 
   useEffect(() => {
     getCurrentPlatform();
-    getQuizzes();
     getImageMedia();
     setModView(false);
   }, [params]);
 
   useEffect(() => {
-    renderCards();
+    if (quizzes) {
+      if (quizzes.page === 0) {
+        getQuizzes();
+      }
+      renderCards();
+    }
   }, [quizzes, modView]);
+
+  useEffect(() => {
+    if (platform) {
+      setQuizzes({ page: 0, hasMore: true, quizzes: [] }); // wait before platform loads before getting quizzes
+    }
+  }, [platform, sortBy, sortDirection]);
 
   const getImageMedia = async () => {
     await getPlatformBanner(params.platform).then((banner) => {
-      console.log(banner);
       setBanner(banner);
     });
     await getPlatformIcon(params.platform).then((icon) => {
-      console.log(icon);
       setPlatformIcon(icon);
     });
   };
@@ -63,7 +79,7 @@ const Platform = () => {
       })
       .catch((error) => {
         if (error.response.status === 400) {
-          history.replace(`/search?=${name}`);
+          history.replace(`/search?searchQuery=${name}`);
         } else if (error.response.status === 403) {
           setIsBanned(true);
           setPlatform({});
@@ -75,12 +91,31 @@ const Platform = () => {
 
   const getQuizzes = async () => {
     const name = params.platform;
+    const newPage = quizzes.page + 1;
     try {
-      const response = await getQuizzesFromPlatform(name);
-      setQuizzes(response);
+      const response = await getQuizzesFromPlatform(name, newPage, sortBy, sortDirection);
+      if (response.length === 0) {
+        setQuizzes((prevState) => ({ ...prevState, page: -1, hasMore: false }));
+      } else {
+        const quizzesWithoutPinned = removePinnedQuizzesFromQuizzes(response);
+        setQuizzes((prevState) => ({
+          ...prevState,
+          page: newPage,
+          quizzes: prevState.quizzes.concat(quizzesWithoutPinned),
+        }));
+      }
     } catch (error) {
+      setQuizzes((prevState) => ({ ...prevState, page: -1, hasMore: false }));
       console.log(error);
     }
+  };
+
+  const removePinnedQuizzesFromQuizzes = (quizzes) => {
+    let newQuizzes = quizzes;
+    platform.pinnedQuizzes.forEach((pinnedQuiz) => {
+      newQuizzes = newQuizzes.filter((quiz) => quiz.title !== pinnedQuiz.title);
+    });
+    return newQuizzes;
   };
 
   const subscribe = async () => {
@@ -120,17 +155,23 @@ const Platform = () => {
   const removeQuiz = (quiz) => {
     deleteQuiz(params.platform, quiz)
       .then((res) => {
-        getQuizzes();
+        setQuizzes({ page: 0, hasMore: true, quizzes: [] });
       })
       .catch((error) => alert("Could not delete quiz"));
   };
 
-  const renderCards = () => {
-    const cards = quizzes.map((quiz) => {
+  const renderCards = async () => {
+    if (!quizzes || !platform) {
+      return;
+    }
+    const allQuizzes = platform.pinnedQuizzes.concat(quizzes.quizzes);
+    const cards = allQuizzes.map(async (quiz, index) => {
       const name = params.platform;
+      const quizImg = await getQuizIcon(params.platform, quiz.title);
       return (
         <LargeCard
-          key={quiz._id}
+          key={index}
+          iconSrc={quizImg}
           cardInfo={{
             title: quiz.title,
             description: quiz.description,
@@ -143,12 +184,22 @@ const Platform = () => {
             ),
           }}
           modOptions={modView}
-          dropdownHandlers={{ removeQuiz }}
+          dropdownHandlers={{ removeQuiz, updatePinStatus }}
           cardLink={`${name}/${quiz.title}`} // Temporary fix prevents crash on redirect, use quiz page when done
+          pin={platform.pinnedQuizzes.map((quiz) => quiz.title).includes(quiz.title)}
         />
       );
     });
-    setQuizCards(cards);
+    Promise.all(cards).then((cards) => {
+      //console.log(cards);
+      setQuizCards(cards);
+    });
+  };
+
+  const updatePinStatus = (quizName, action) => {
+    putUpdatePinStatus(params.platform, quizName, action)
+      .then((res) => getCurrentPlatform())
+      .catch((e) => console.log(e));
   };
 
   const bannedPage = () => {
@@ -165,7 +216,7 @@ const Platform = () => {
     );
   };
 
-  return !platform ? (
+  return !platform || !quizzes ? (
     <MainNav />
   ) : isBanned ? (
     bannedPage()
@@ -188,34 +239,97 @@ const Platform = () => {
           {subscribed ? "Unsubscribe" : "Subscribe"}
         </Button>
       </PlatformSubNav>
+
       <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
-        <div className="d-flex flex-column m-5 align-items-end">
-          <div className="sort"></div>
-          <div className="quizzes d-flex flex-column m-10">{quizCards}</div>
+        <div className="d-flex flex-column m-5 mt-0 align-items-end">
+          <div className="d-flex flex-row sort">
+            <Dropdown>
+              <Dropdown.Toggle className="sort-dropdowns mb-2 me-3">Sort By</Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  onClick={() => {
+                    setSortBy("title");
+                  }}
+                >
+                  Title
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    setSortBy("upvotes");
+                  }}
+                >
+                  Upvotes
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    setSortBy("downvotes");
+                  }}
+                >
+                  Downvotes
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    setSortBy("timeLimit");
+                  }}
+                >
+                  Time Limit
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+            <img
+              style={{ cursor: "pointer" }}
+              alt="ascending"
+              src="/ascending.svg"
+              onClick={() => {
+                setSortDirection("ascending");
+              }}
+            />
+            <img
+              style={{ cursor: "pointer" }}
+              alt="descending"
+              src="/descending.svg"
+              onClick={() => {
+                setSortDirection("descending");
+              }}
+            />
+          </div>
+
+          <div id="platform-quizzes" className="quizzes d-flex flex-column m-10">
+            <InfiniteScroll
+              next={getQuizzes}
+              dataLength={quizCards.length}
+              hasMore={quizzes.hasMore}
+              loader={
+                <div className="d-flex justify-content-center mt-4">
+                  <LoadingSpinner isVisible={true} />
+                </div>
+              }
+              endMessage={
+                <div className="d-flex justify-content-center mt-4">
+                  <h4>No more quizzes</h4>
+                </div>
+              }
+              className="pe-3"
+              scrollThreshold={0.8}
+            >
+              {quizCards}
+            </InfiniteScroll>
+          </div>
         </div>
         <div className="information d-flex flex-column">
-          <div className="searchBar searchBar--border">
-            <input className="search" placeholder="Search"></input>
-          </div>
           {modView && (
             <div className="d-flex flex-column w-100">
-              <Button buttonSize="btn--large">
-                <Link
-                  className="link d-flex justify-content-center"
-                  to={`/p/${params.platform}/createQuiz`}
-                >
-                  Create Quiz
-                </Link>
-              </Button>
+              <LinkButton buttonSize="btn--large" to={`/p/${params.platform}/createQuiz`}>
+                Create Quiz
+              </LinkButton>
               <div className="p-1"></div>
-              <Button buttonStyle="btn--special" buttonSize="btn--large">
-                <Link
-                  className="link d-flex justify-content-center"
-                  to={`/p/${params.platform}/subscribers`}
-                >
-                  Manage Subscribers
-                </Link>
-              </Button>
+              <LinkButton
+                buttonStyle="btn--special"
+                buttonSize="btn--large"
+                to={`/p/${params.platform}/subscribers`}
+              >
+                Manage Subscribers
+              </LinkButton>
             </div>
           )}
           <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">

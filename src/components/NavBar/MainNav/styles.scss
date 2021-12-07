@@ -1,0 +1,95 @@
+@import "../../../App.scss";
+
+$navHeight: 66px;
+
+.navBar {
+  /* Auto Layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px 25px;
+
+  top: 0;
+  position: sticky;
+  width: 100%;
+  height: $navHeight;
+  background: #d4f1f4;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+
+  z-index: 1;
+}
+
+.navBar > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.navItem {
+  /* Auto Layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px 10px;
+  font-size: 14px;
+  text-decoration: none;
+  color: black;
+}
+
+.logo.logo {
+  margin: 0px;
+  padding-bottom: 2px;
+}
+
+.logo img {
+  width: 200px;
+}
+
+.profilePicture {
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.searchBar {
+  /* Auto Layout */
+  padding: 4px 22px;
+  min-width: 15vw;
+
+  background: #ffffff;
+  border-radius: 30px;
+
+  /* Inside Auto Layout */
+  margin: 0px 30px;
+}
+
+.searchBar--border {
+  border-style: solid;
+  border-color: #cdcdcd;
+  border-width: 1px;
+}
+
+.search {
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 25px;
+  border: none;
+
+  width: 100%;
+
+  /* identical to box height */
+  display: flex;
+  align-items: center;
+  text-align: left;
+}
+
+.search:focus {
+  outline: none;
+}
+
+.navText {
+  font-size: 0.9em;
+}

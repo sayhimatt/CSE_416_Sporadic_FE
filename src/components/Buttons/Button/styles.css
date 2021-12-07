@@ -1,0 +1,55 @@
+:root {
+  --primary: #189ab4;
+  --secondary: #d4f1f4;
+  --special: #ff6c6c;
+}
+
+.custombtn {
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  border: none;
+  margin: 0px 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* Button Styles */
+
+.btn--primary {
+  background-color: var(--primary);
+}
+
+.btn--primary:hover {
+  background-color: #138096;
+}
+
+.btn--special {
+  background-color: var(--special);
+}
+
+.btn--special:hover {
+  background-color: #e76161;
+}
+
+.btn--secondary {
+  background-color: var(--secondary);
+  color: black;
+}
+
+.btn--secondary:hover {
+  background-color: #c0dadd;
+}
+
+/* Button Sizes */
+.btn--small {
+  font-size: 11px;
+}
+
+.btn--medium {
+  font-size: 14px;
+}
+
+.btn--large {
+  font-size: 18px;
+}

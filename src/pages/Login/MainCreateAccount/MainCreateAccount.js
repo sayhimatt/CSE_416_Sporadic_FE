@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
-import ReactDOM from 'react-dom'
+import ReactDOM from "react-dom";
 import { postCreateAccount } from "../../../API/API";
-import Button from "../../../components/Button/Button";
-import ErrorMessage from  "../../../components/ErrorMessage/ErrorMessage";
-import ErrorText from  "../../../components/ErrorMessage/ErrorText";
+import Button from "../../../components/Buttons/Button/Button";
+import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
+import ErrorText from "../../../components/ErrorMessage/ErrorText";
 import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay";
 import "../styles.css";
 import { resolveConfig } from "prettier";
@@ -26,30 +26,30 @@ const MainCreateAccount = () => {
     errorBox: false,
   });
 
-  const lengthTextContainer = document.querySelector('#lengthTextDiv');
+  const lengthTextContainer = document.querySelector("#lengthTextDiv");
 
-  const matchTextContainer = document.querySelector('#matchTextDiv');
+  const matchTextContainer = document.querySelector("#matchTextDiv");
 
-  const checkPasswordInput = (input) => {    
+  const checkPasswordInput = (input) => {
     if (input.length > 0 && input.length < 8)
-      ReactDOM.render( <ErrorText text="Password must be at least 8 characters long"/>, lengthTextContainer );
-    else 
-      ReactDOM.unmountComponentAtNode(lengthTextContainer);
+      ReactDOM.render(
+        <ErrorText text="Password must be at least 8 characters long" />,
+        lengthTextContainer,
+      );
+    else ReactDOM.unmountComponentAtNode(lengthTextContainer);
 
     if (credentials.passwordConfirm.length > 0 && credentials.passwordConfirm !== input)
-      ReactDOM.render( <ErrorText text="Passwords do not match"/>, matchTextContainer);
-    else 
-      ReactDOM.unmountComponentAtNode(matchTextContainer);
-  }
+      ReactDOM.render(<ErrorText text="Passwords do not match" />, matchTextContainer);
+    else ReactDOM.unmountComponentAtNode(matchTextContainer);
+  };
 
   const checkConfirmInput = (input) => {
     if (input.length > 0 && credentials.password !== input)
-      ReactDOM.render( <ErrorText text="Passwords do not match"/>, matchTextContainer);
-    else
-      ReactDOM.unmountComponentAtNode(matchTextContainer);
-  }
+      ReactDOM.render(<ErrorText text="Passwords do not match" />, matchTextContainer);
+    else ReactDOM.unmountComponentAtNode(matchTextContainer);
+  };
 
-  const createAccount = async () => {      
+  const createAccount = async () => {
     setShowMsg((prevState) => {
       return { ...prevState, errorBox: false };
     });
@@ -64,9 +64,9 @@ const MainCreateAccount = () => {
 
     console.log(showMsg.errorBox, showMsg.lengthBox, showMsg.matchBox);
 
-    if ((credentials.password.length < 8) || (credentials.password !== credentials.passwordConfirm)) return;
-    
-    
+    if (credentials.password.length < 8 || credentials.password !== credentials.passwordConfirm)
+      return;
+
     setIsLoading(true);
 
     await postCreateAccount(credentials.username, credentials.password, credentials.email)
@@ -134,7 +134,7 @@ const MainCreateAccount = () => {
                 }}
               ></input>
             </div>
-            <div id="lengthTextDiv"/>               
+            <div id="lengthTextDiv" />
             <div className="inputBox">
               <input
                 id="passwordConfirm"
@@ -149,7 +149,7 @@ const MainCreateAccount = () => {
                 }}
               ></input>
             </div>
-            <div id='matchTextDiv'/>
+            <div id="matchTextDiv" />
           </div>
           <Button type="button" onClick={createAccount}>
             Create Account
@@ -161,18 +161,21 @@ const MainCreateAccount = () => {
           </Link>
         </div>
       </div>
-      <ErrorMessage 
-        visible={showMsg.errorBox} 
-        errorStyle="errorBox" 
-        text="Could not create account"/>      
-      <ErrorMessage 
-        visible={showMsg.lengthBox} 
-        errorStyle="errorBox" 
-        text="Password is not long enough"/>      
-      <ErrorMessage 
-        visible={showMsg.matchBox} 
-        errorStyle="errorBox" 
-        text="Passwords do not match"/>      
+      <ErrorMessage
+        visible={showMsg.errorBox}
+        errorStyle="errorBox"
+        text="Could not create account"
+      />
+      <ErrorMessage
+        visible={showMsg.lengthBox}
+        errorStyle="errorBox"
+        text="Password is not long enough"
+      />
+      <ErrorMessage
+        visible={showMsg.matchBox}
+        errorStyle="errorBox"
+        text="Passwords do not match"
+      />
       <LoadingOverlay isVisible={isLoading} />
     </div>
   );

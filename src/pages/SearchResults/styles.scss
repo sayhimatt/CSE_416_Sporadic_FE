@@ -1,0 +1,41 @@
+@import "../../App.scss";
+@import "../../components/NavBar/MainNav/styles.scss";
+@import "../../components/NavBar/SubNav/styles.scss";
+
+.tab-bar {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1em;
+}
+
+.divider {
+  width: 100%;
+  height: 0.5em;
+  background-color: $primaryColor;
+}
+
+.result-error {
+  font-size: 1.5em;
+  font-weight: 400;
+}
+
+.results-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 20em;
+}
+
+#results-list {
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+#results-content {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - $navHeight - $subNavHeight);
+  padding-top: 1em;
+}

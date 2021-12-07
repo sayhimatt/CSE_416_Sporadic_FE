@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
 
 import { postConfirmCode } from "../../API/API";
-import Button from "../../components/Button/Button";
-import ErrorMessage from  "../../components/ErrorMessage/ErrorMessage";
+import Button from "../../components/Buttons/Button/Button";
+import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 import LoadingOverlay from "../../components/LoadingIndicators/LoadingOverlay";
 
 import "./styles.css";
@@ -18,8 +18,8 @@ const ConfirmEmail = () => {
     setIsLoading(true);
     await postConfirmCode(history.location.state.username, confirmation)
       .then((res) => history.push("/login"))
-      .catch((e) => { 
-        setShowMsg(true); 
+      .catch((e) => {
+        setShowMsg(true);
         setIsLoading(false);
       });
   };
@@ -60,10 +60,7 @@ const ConfirmEmail = () => {
           </div>
         </div>
       </div>
-      <ErrorMessage 
-        visible={showMsg} 
-        errorStyle="errorBox" 
-        text="Invalid Code"/>     
+      <ErrorMessage visible={showMsg} errorStyle="errorBox" text="Invalid Code" />
       <LoadingOverlay isVisible={isLoading} />
     </div>
   );

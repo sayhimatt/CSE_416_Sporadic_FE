@@ -1,5 +1,6 @@
 .cardContainer--large .card {
   width: 60vw;
+  height: 7.5em;
   margin: 6px 0px;
   color: black;
 }
@@ -7,6 +8,8 @@
 .icon {
   margin-right: 5px;
   margin-top: 3px;
+  border-radius: 50%;
+  border: 1px solid white;
   height: 40px;
   width: 40px;
 }
@@ -26,11 +29,27 @@
 }
 
 .feedbackItem {
-  margin: 5px 10px;
+  margin: 5px 8px;
+  width: 5em;
 }
 
 .feedbackImage {
   height: 32px;
   width: 32px;
   margin-right: 5px;
+}
+
+.bottomCard {
+  min-height: 3em;
+}
+
+.info {
+  min-height: 3em;
+}
+
+.pin {
+  margin-top: 2px;
+  margin-left: 5px;
+  width: 24px;
+  height: 24px;
 }

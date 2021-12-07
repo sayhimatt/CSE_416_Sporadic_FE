@@ -1,11 +1,31 @@
 .timer {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #189ab4;
-    text-shadow: 1px 1px 7px;
-    border-radius: 10%;
-    border: 0.1em solid silver;
-    box-shadow: 0 0 0.3em 0.1em;
-  }
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #189ab4;
+  text-shadow: 1px 1px 7px;
+  border-radius: 10%;
+  border: 0.1em solid silver;
+  box-shadow: 0 0 0.3em 0.1em;
+}
+
+.timer-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2em;
+  width: 2em;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 5px 5px 3px 4px #189ab44b;
+  color: #ff6c6c;
+  font-size: 4em;
+}
+
+.timer-divider {
+  margin: 0px 0.3em;
+  font-size: 4em;
+  color: #ff6c6c;
+  font-weight: 600;
+}

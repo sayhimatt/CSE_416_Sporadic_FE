@@ -3,7 +3,7 @@ import { Link, useParams, Redirect } from "react-router-dom";
 
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
-import Button from "../../components/Button/Button";
+import Button from "../../components/Buttons/Button/Button";
 import SmallCard from "../../components/Card/SmallCard/SmallCard";
 import { getPlatform, putBanStatus, putModeratorStatus, getPlatformIcon } from "../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
