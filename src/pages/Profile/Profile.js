@@ -6,6 +6,7 @@ import { getUser, getUserIcon, manageFriend } from "../../API/API";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import Button from "../../components/Buttons/Button/Button";
 import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
+import AwardCarousel from "../../components/AwardCarousel/AwardCarousel";
 import { Alert } from "react-bootstrap";
 
 import "./styles.scss";
@@ -140,16 +141,12 @@ const Profile = () => {
             </div>
             <div className="profile-section">
               <h3>AWARDS</h3>
-              <div id="account-awards-shelf">
-                {userState.awards &&
-                  userState.awards
-                    .filter((award) => award.isShowcased)
-                    .map((award, index) => (
-                      <div key={`award-${index}`} className="account-award">
-                        <img alt="award" src="award.url" />
-                      </div>
-                    ))}
-              </div>
+              <AwardCarousel
+                awards={[
+                  { title: "Award", quiz: "Quiz", image: "/quizIcon.png" },
+                  { title: "Award 2", quiz: "Quiz", image: "/platformIcon.png" },
+                ]}
+              />
             </div>
           </div>
         </div>

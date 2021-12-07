@@ -1,6 +1,31 @@
+@import "../../App.scss";
+
+.award-carousel {
+  width: 80%;
+  border: 2px solid $secondaryColor;
+  border-radius: 20px;
+}
+.award-carousel-item {
+  height: 18em;
+}
+
+.award-carousel h5,
+.award-carousel p {
+  color: black;
+}
+
+.award-carousel-image-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1.5em;
+}
+
 .award-carousel-image {
-  width: 64px;
-  height: 64px;
+  align-self: center;
+  justify-self: center;
+  width: 128px;
+  height: 128px;
   border-radius: 50%;
-  border: 2px solid white;
+  border: 2px solid black;
 }
