@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 
 import { UserContext } from "../../contexts/UserContext/UserContext";
-import { getUser, getUserIcon, manageFriend } from "../../API/API";
+import { getUser, getUserIcon, manageFriend, getAllAwardIcons } from "../../API/API";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import Button from "../../components/Buttons/Button/Button";
 import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
@@ -17,6 +17,7 @@ const Profile = () => {
   const [friends, setFriends] = useState();
   const [avatar, setAvatar] = useState();
   const [alert, setAlert] = useState({ show: false, message: "", style: "danger" });
+  const [awards, setAwards] = useState();
   const params = useParams();
   const history = useHistory();
 
@@ -27,6 +28,7 @@ const Profile = () => {
           setAvatar(link);
           setuserState(user);
         });
+        //setAwards(getAllAwardIcons(user.showcasedAwards));
       })
       .catch((e) => history.push(`/search?searchQuery=${params.username}`));
     getUser(user.username)
@@ -141,12 +143,7 @@ const Profile = () => {
             </div>
             <div className="profile-section">
               <h3>AWARDS</h3>
-              <AwardCarousel
-                awards={[
-                  { title: "Award", quiz: "Quiz", image: "/quizIcon.png" },
-                  { title: "Award 2", quiz: "Quiz", image: "/platformIcon.png" },
-                ]}
-              />
+              <AwardCarousel awards={awards} />
             </div>
           </div>
         </div>

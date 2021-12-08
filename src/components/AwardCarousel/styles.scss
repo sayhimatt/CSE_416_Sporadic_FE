@@ -2,8 +2,9 @@
 
 .award-carousel {
   width: 80%;
-  border: 2px solid $secondaryColor;
+  border: 1px solid $secondaryColor;
   border-radius: 20px;
+  min-height: 18em;
 }
 .award-carousel-item {
   height: 18em;
