@@ -1,12 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
-<<<<<<< HEAD
-
-=======
 import { Dropdown } from "react-bootstrap";
-import { getPlatform, getQuizzesFromPlatform } from "./../../API/API";
->>>>>>> main
 import { UserContext } from "../../contexts/UserContext/UserContext";
 import Button from "../../components/Buttons/Button/Button";
 import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
@@ -23,12 +18,9 @@ import {
   patchUnsubscribe,
   deleteQuiz,
   putUpdatePinStatus,
-<<<<<<< HEAD
   getPlatform,
   getQuizzesFromPlatform,
   getScores
-=======
->>>>>>> main
 } from "./../../API/API";
 import LoadingSpinner from "../../components/LoadingIndicators/LoadingSpinner";
 
@@ -48,12 +40,9 @@ const Platform = () => {
   const [platformIcon, setPlatformIcon] = useState();
   const [uploadBanner, setUploadBanner] = useState(false);
   const [uploadIcon, setUploadIcon] = useState(false);
-<<<<<<< HEAD
   const [userIQ, setUserIQ] = useState();
-=======
   const [sortBy, setSortBy] = useState("title");
   const [sortDirection, setSortDirection] = useState("ascending");
->>>>>>> main
 
   useEffect(() => {
     getCurrentPlatform();
@@ -71,17 +60,10 @@ const Platform = () => {
   }, [quizzes, modView]);
 
   useEffect(() => {
-<<<<<<< HEAD
-    setQuizzes({ page: 0, hasMore: true, quizzes: [] }); // wait before platform loads before getting quizzes
-    getUserIQ();
-  }, [platform]);
-
-=======
     if (platform) {
       setQuizzes({ page: 0, hasMore: true, quizzes: [] }); // wait before platform loads before getting quizzes
     }
   }, [platform, sortBy, sortDirection]);
->>>>>>> main
 
   const getImageMedia = async () => {
     await getPlatformBanner(params.platform).then((banner) => {
@@ -115,11 +97,7 @@ const Platform = () => {
     const name = params.platform;
     const newPage = quizzes.page + 1;
     try {
-<<<<<<< HEAD
-      const response = await getQuizzesFromPlatform(name, newPage);
-=======
       const response = await getQuizzesFromPlatform(name, newPage, sortBy, sortDirection);
->>>>>>> main
       if (response.length === 0) {
         setQuizzes((prevState) => ({ ...prevState, page: -1, hasMore: false }));
       } else {
@@ -255,11 +233,7 @@ const Platform = () => {
   const updatePinStatus = (quizName, action) => {
     putUpdatePinStatus(params.platform, quizName, action)
       .then((res) => getCurrentPlatform())
-<<<<<<< HEAD
-      .catch((e) => console.log(error));
-=======
       .catch((e) => console.log(e));
->>>>>>> main
   };
 
   const bannedPage = () => {
@@ -276,12 +250,7 @@ const Platform = () => {
     );
   };
 
-<<<<<<< HEAD
-
-  return !platform ? (
-=======
   return !platform || !quizzes ? (
->>>>>>> main
     <MainNav />
   ) : isBanned ? (
     bannedPage()
@@ -306,10 +275,6 @@ const Platform = () => {
       </PlatformSubNav>
 
       <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
-<<<<<<< HEAD
-        <div className="d-flex flex-column m-5 align-items-end">
-          <div className="sort"></div>
-=======
         <div className="d-flex flex-column m-5 mt-0 align-items-end">
           <div className="d-flex flex-row sort">
             <Dropdown>
@@ -363,7 +328,6 @@ const Platform = () => {
             />
           </div>
 
->>>>>>> main
           <div id="platform-quizzes" className="quizzes d-flex flex-column m-10">
             <InfiniteScroll
               next={getQuizzes}
