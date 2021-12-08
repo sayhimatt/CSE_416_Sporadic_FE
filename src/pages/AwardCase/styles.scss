@@ -1,0 +1,21 @@
+@import "../../App.scss";
+
+#display-shelf {
+  width: 50%;
+  margin-bottom: 3em;
+  margin-top: 2.5em;
+}
+
+.shelf {
+  height: 1em;
+  background-color: $secondaryColor;
+  box-shadow: 2px 3px 4px 1px rgba(0, 0, 0, 0.25);
+}
+
+#award-case {
+  width: 60%;
+  height: 25em;
+  background-color: $primaryColor;
+  border-radius: 20px;
+  overflow-y: auto;
+}

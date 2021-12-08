@@ -24,6 +24,7 @@ import About from "./pages/About/About";
 import SearchResults from "./pages/SearchResults/SearchResults";
 import Profile from "./pages/Profile/Profile";
 import AdminPanel from "./pages/AdminPanel/AdminPanel";
+import AwardCase from "./pages/AwardCase/AwardCase";
 import { authenticate } from "./API/API";
 
 import "./App.scss";
@@ -77,6 +78,12 @@ const App = () => {
               exact
               path="/myAccount"
               component={MyAccount}
+              authenticated={auth.authenticated}
+            />
+            <GuardedRoute
+              exact
+              path="/awardCase"
+              component={AwardCase}
               authenticated={auth.authenticated}
             />
             <GuardedRoute
