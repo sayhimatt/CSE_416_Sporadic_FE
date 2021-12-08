@@ -3,6 +3,7 @@ import React, { useState, useContext, useEffect } from "react";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
+import AwardPopup from "../../components/AwardPopup/AwardPopup";
 import { getUser } from "../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
 
@@ -11,6 +12,11 @@ import "./styles.scss";
 const AwardCase = () => {
   const { user, dispatch } = useContext(UserContext);
   const [awards, setAwards] = useState();
+  const [awardPopup, setAwardPopup] = useState({
+    visible: false,
+    award: null,
+    displayHandler: null,
+  });
 
   useEffect(() => {
     getUser(user.username)
@@ -29,12 +35,21 @@ const AwardCase = () => {
     const awardRows = splitAwardsIntoRows();
     return (
       <div id="award-case">
-        {awardRows.map((row) => (
-          <div className="case-row">
+        {awardRows.map((row, rowIndex) => (
+          <div key={`row-${rowIndex}`} className="case-row">
             <div className="cased-awards">
-              {row.map((award) => (
-                <div className="award-container">
-                  <img className="award-image cased-award" src={award.image} alt="award" />
+              {row.map((award, awardIndex) => (
+                <div key={`row-${rowIndex}-award-${awardIndex}`} className="award-container">
+                  <img
+                    id={`${award.platform}-${award.quiz}-${award.title}`}
+                    className="award-image cased-award"
+                    src={award.image}
+                    alt="award"
+                    onClick={(e) => {
+                      const fields = parseIdForAwardFields(e.target.id);
+                      showNotDisplayedPopup(fields.platform, fields.quiz, fields.title);
+                    }}
+                  />
                 </div>
               ))}
             </div>
@@ -64,6 +79,24 @@ const AwardCase = () => {
     return { platform: fields[0], quiz: fields[1], title: fields[2] };
   };
 
+  const showDisplayedPopup = (platform, quiz, awardTitle) => {
+    const award = awards.onDisplay.find(
+      (award) => award.platform === platform && award.quiz === quiz && award.title === awardTitle,
+    );
+    setAwardPopup({ award: award, visible: true, displayHandler: null });
+  };
+
+  const showNotDisplayedPopup = (platform, quiz, awardTitle) => {
+    const award = awards.notOnDisplay.find(
+      (award) => award.platform === platform && award.quiz === quiz && award.title === awardTitle,
+    );
+    setAwardPopup({ award: award, visible: true, displayHandler: removeFromDisplay });
+  };
+
+  const closePopup = () => {
+    setAwardPopup((prevState) => ({ ...prevState, visible: false }));
+  };
+
   return !awards ? (
     <NavBar />
   ) : (
@@ -77,12 +110,21 @@ const AwardCase = () => {
         <div className="d-flex flex-column align-items-center">
           <div id="display-shelf">
             <div id="displayed-awards">
-              {awards.onDisplay.map((award) => (
-                <div className="award-container">
-                  <img className="award-image displayed-award" src={award.image} alt="award" />
+              {awards.onDisplay.map((award, index) => (
+                <div key={`showcased-award-${index}`} className="award-container">
+                  <img
+                    id={`${award.platform}-${award.quiz}-${award.title}`}
+                    className="award-image displayed-award"
+                    src={award.image}
+                    alt="award"
+                    onClick={(e) => {
+                      const fields = parseIdForAwardFields(e.target.id);
+                      showDisplayedPopup(fields.platform, fields.quiz, fields.title);
+                    }}
+                  />
                   <div className="d-flex">
                     <img
-                      id={`${award.platform}-${award.quiz}-${award.title}`}
+                      id={`${award.platform}-${award.quiz}-${award.title}-delete`}
                       className="delete-award"
                       src="/question_delete.svg"
                       alt="delete"
@@ -100,6 +142,12 @@ const AwardCase = () => {
           {renderCase()}
         </div>
       </div>
+      <AwardPopup
+        visible={awardPopup.visible}
+        displayHandler={awardPopup.displayHandler}
+        award={awardPopup.award}
+        visibilityHandler={closePopup}
+      />
     </div>
   );
 };
