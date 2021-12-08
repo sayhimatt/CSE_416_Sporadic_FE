@@ -125,7 +125,7 @@ const MyAccount = () => {
                     ))}
               </div>
               <div id="manage-awards-button-container" className="align-self-center">
-                <Button>Manage Awards</Button>
+                <LinkButton to="/awardCase">Manage Awards</LinkButton>
               </div>
             </div>
             <div className="account-section">
