@@ -55,6 +55,15 @@ const AwardCase = () => {
     return awardRows;
   };
 
+  const removeFromDisplay = (platform, quiz, awardTitle) => {
+    //todo
+  };
+
+  const parseIdForAwardFields = (id) => {
+    const fields = id.split("-");
+    return { platform: fields[0], quiz: fields[1], title: fields[2] };
+  };
+
   return !awards ? (
     <NavBar />
   ) : (
@@ -72,7 +81,16 @@ const AwardCase = () => {
                 <div className="award-container">
                   <img className="award-image displayed-award" src={award.image} alt="award" />
                   <div className="d-flex">
-                    <img className="delete-award" src="/question_delete.svg" alt="delete" />
+                    <img
+                      id={`${award.platform}-${award.quiz}-${award.title}`}
+                      className="delete-award"
+                      src="/question_delete.svg"
+                      alt="delete"
+                      onClick={(e) => {
+                        const fields = parseIdForAwardFields(e.target.id);
+                        removeFromDisplay(fields.platform, fields.quiz, fields.title);
+                      }}
+                    />
                   </div>
                 </div>
               ))}
