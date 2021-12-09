@@ -70,3 +70,12 @@
   height: 32px;
   width: 32px;
 }
+
+.sort-direction-btn {
+  color: var(--primary);
+  padding-left: .1em;
+  cursor: pointer;
+}
+.sort-direction-btn:hover {
+  filter: brightness(70%);
+}
