@@ -244,8 +244,9 @@ const Platform = () => {
         <div className="d-flex flex-column m-5 mt-0 align-items-end">
           <div className="d-flex flex-row sort">
             <Dropdown>
-              <Dropdown.Toggle className="sort-dropdowns mb-2 me-3">Sort By</Dropdown.Toggle>
+              <Dropdown.Toggle className="sort-dropdowns mb-2 me-3">{sortBy}</Dropdown.Toggle>
               <Dropdown.Menu>
+                <Dropdown.Header>sort by</Dropdown.Header>
                 <Dropdown.Item
                   onClick={() => {
                     setSortBy("title");
