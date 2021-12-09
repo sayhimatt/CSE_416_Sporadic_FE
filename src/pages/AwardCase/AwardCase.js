@@ -4,19 +4,21 @@ import NavBar from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
 import AwardPopup from "../../components/AwardPopup/AwardPopup";
-import { getUser } from "../../API/API";
+import { getUser, putUpdateAwardDisplayStatus } from "../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
+import { Alert } from "react-bootstrap";
 
 import "./styles.scss";
 
 const AwardCase = () => {
-  const { user, dispatch } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [awards, setAwards] = useState();
   const [awardPopup, setAwardPopup] = useState({
     visible: false,
     award: null,
     displayHandler: null,
   });
+  const [alerts, setAlerts] = useState({ show: false, style: "danger", message: "" });
 
   useEffect(() => {
     getUser(user.username)
@@ -70,8 +72,57 @@ const AwardCase = () => {
     return awardRows;
   };
 
-  const removeFromDisplay = (platform, quiz, awardTitle) => {
-    //todo
+  const updateDisplay = (platform, quiz, awardTitle, action) => {
+    putUpdateAwardDisplayStatus(platform, quiz, awardTitle, action)
+      .then((res) => {
+        if (action === "remove") {
+          const award = findAward(platform, quiz, awardTitle, "onDisplay");
+          removeFromAwardDisplayState(award);
+        } else {
+          const award = findAward(platform, quiz, awardTitle, "notOnDisplay");
+          addToAwardDisplayState(award);
+          closePopup();
+        }
+      })
+      .catch((e) => showAlert(`Could not ${action} award`));
+  };
+
+  const findAward = (platform, quiz, awardTitle, type) => {
+    return awards[type].find(
+      (award) => award.platform === platform && award.quiz === quiz && award.title === awardTitle,
+    );
+  };
+
+  const addToAwardDisplayState = (award) => {
+    setAwards((prevState) => ({
+      onDisplay: [...prevState.onDisplay, award],
+      notOnDisplay: prevState.notOnDisplay.filter(
+        (listAward) =>
+          !(
+            listAward.platform === award.platform &&
+            listAward.quiz === award.quiz &&
+            listAward.title === award.title
+          ),
+      ),
+    }));
+  };
+
+  const removeFromAwardDisplayState = (award) => {
+    setAwards((prevState) => ({
+      onDisplay: prevState.onDisplay.filter(
+        (listAward) =>
+          !(
+            listAward.platform === award.platform &&
+            listAward.quiz === award.quiz &&
+            listAward.title === award.title
+          ),
+      ),
+      notOnDisplay: [...prevState.notOnDisplay, award],
+    }));
+  };
+
+  const showAlert = (message) => {
+    setAlerts((prevState) => ({ ...prevState, show: true, message }));
   };
 
   const parseIdForAwardFields = (id) => {
@@ -80,17 +131,13 @@ const AwardCase = () => {
   };
 
   const showDisplayedPopup = (platform, quiz, awardTitle) => {
-    const award = awards.onDisplay.find(
-      (award) => award.platform === platform && award.quiz === quiz && award.title === awardTitle,
-    );
+    const award = findAward(platform, quiz, awardTitle, "onDisplay");
     setAwardPopup({ award: award, visible: true, displayHandler: null });
   };
 
   const showNotDisplayedPopup = (platform, quiz, awardTitle) => {
-    const award = awards.notOnDisplay.find(
-      (award) => award.platform === platform && award.quiz === quiz && award.title === awardTitle,
-    );
-    setAwardPopup({ award: award, visible: true, displayHandler: removeFromDisplay });
+    const award = findAward(platform, quiz, awardTitle, "notOnDisplay");
+    setAwardPopup({ award: award, visible: true, displayHandler: updateDisplay });
   };
 
   const closePopup = () => {
@@ -106,6 +153,14 @@ const AwardCase = () => {
         heading="Award Case"
         buttons={[<LinkButton to="/myAccount">Back to My Account</LinkButton>]}
       />
+      <Alert
+        variant={alerts.style}
+        show={alerts.show}
+        onClose={() => setAlerts((prevState) => ({ ...prevState, show: false }))}
+        dismissible
+      >
+        {alerts.message}
+      </Alert>
       <div className="page-content">
         <div className="d-flex flex-column align-items-center">
           <div id="display-shelf">
@@ -130,7 +185,7 @@ const AwardCase = () => {
                       alt="delete"
                       onClick={(e) => {
                         const fields = parseIdForAwardFields(e.target.id);
-                        removeFromDisplay(fields.platform, fields.quiz, fields.title);
+                        updateDisplay(fields.platform, fields.quiz, fields.title, "remove");
                       }}
                     />
                   </div>

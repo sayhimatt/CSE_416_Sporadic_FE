@@ -10,8 +10,13 @@ const AwardPopup = ({ award, displayHandler, visible, visibilityHandler }) => {
         <img src={"/question_delete.svg"} alt="remove" />
       </div>
       <img src={award.image} alt="award" />
+      <h3>{award.title}</h3>
       <h5 className="mb-3">{`Earned from ${award.quiz} on /p/${award.platform}`}</h5>
-      {displayHandler && <Button onClick={displayHandler}>Display Trophy</Button>}
+      {displayHandler && (
+        <Button onClick={() => displayHandler(award.platform, award.quiz, award.title, "add")}>
+          Display Trophy
+        </Button>
+      )}
     </div>
   );
 };
