@@ -249,7 +249,7 @@ const Platform = () => {
           <div className="d-flex flex-row sort">
             <div className="d-flex align-items-center justify-content-center pe-3">
               <Dropdown>
-                <Dropdown.Toggle className="sort-dropdowns me-3">{sortBy}</Dropdown.Toggle>
+                <Dropdown.Toggle className="sort-dropdowns me-3">{ sortBy === "timeLimit" ? "Time Limit" : sortBy }</Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Header>sort by</Dropdown.Header>
                   <Dropdown.Item
