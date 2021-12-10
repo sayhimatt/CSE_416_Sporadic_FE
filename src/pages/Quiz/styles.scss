@@ -5,9 +5,10 @@
 }
 
 .platform-text-block {
+  /*
   background: $primaryColor;
   border-radius: 20px;
-  padding: 15px;
+  padding: 15px; */
   text-align: center;
 }
 
@@ -154,8 +155,31 @@
 }
 
 .submit-button {
-  position: fixed;
-  bottom: 1.1em;
-  width: 20%;
+  margin-top: 30px;
+  width: 200px;
 }
 
+#quiz-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: sticky;
+  width: 40%;
+  top: 20%;
+}
+
+#quiz-award-image {
+  height: 100px;
+  width: 100px;
+  border: 2px solid $secondaryColor;
+  border-radius: 50%;
+  background-color: white;
+  margin-bottom: 25px;
+}
+
+.award-box {
+  border: 2px solid rgb(204, 204, 204);
+  padding: 10px 40px;
+  border-radius: 20px;
+  margin-top: 40px;
+}
