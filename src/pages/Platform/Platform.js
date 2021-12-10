@@ -11,12 +11,6 @@ import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNa
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
 import ImageUploader from "../../components/ImageUploader/ImageUploader";
 import {
-  ArrowDownSquare,
-  ArrowUpSquare,
-  ArrowUpSquareFill,
-  ArrowDownSquareFill,
-} from "react-bootstrap-icons";
-import {
   getPlatformIcon,
   getPlatformBanner,
   getQuizIcon,
@@ -28,6 +22,7 @@ import {
 import LoadingSpinner from "../../components/LoadingIndicators/LoadingSpinner";
 
 import "./styles.scss";
+import SortDirectionButtons from "../../components/Buttons/SortDirection/SortDirectionButtons";
 
 const Platform = () => {
   const history = useHistory();
@@ -249,7 +244,9 @@ const Platform = () => {
           <div className="d-flex flex-row sort">
             <div className="d-flex align-items-center justify-content-center pe-3">
               <Dropdown>
-                <Dropdown.Toggle className="sort-dropdowns me-3">{ sortBy === "timeLimit" ? "Time Limit" : sortBy }</Dropdown.Toggle>
+                <Dropdown.Toggle className="sort-dropdowns me-3">
+                  {sortBy === "timeLimit" ? "Time Limit" : sortBy}
+                </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Header>sort by</Dropdown.Header>
                   <Dropdown.Item
@@ -282,40 +279,11 @@ const Platform = () => {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-              {sortDirection === "ascending" ? (
-                <ArrowUpSquareFill
-                  size={38}
-                  className="sort-direction-btn pe-.1"
-                  onClick={() => {
-                    setSortDirection("ascending");
-                  }}
-                />
-              ) : (
-                <ArrowUpSquare
-                  size={38}
-                  className="sort-direction-btn"
-                  onClick={() => {
-                    setSortDirection("ascending");
-                  }}
-                />
-              )}
-              {sortDirection === "descending" ? (
-                <ArrowDownSquareFill
-                  size={38}
-                  className="sort-direction-btn"
-                  onClick={() => {
-                    setSortDirection("descending");
-                  }}
-                />
-              ) : (
-                <ArrowDownSquare
-                  size={38}
-                  className="sort-direction-btn"
-                  onClick={() => {
-                    setSortDirection("descending");
-                  }}
-                />
-              )}
+              <SortDirectionButtons
+                sortDirection={sortDirection}
+                onAscendingClick={() => setSortDirection("ascending")}
+                onDescendingClick={() => setSortDirection("descending")}
+              />
             </div>
           </div>
 
