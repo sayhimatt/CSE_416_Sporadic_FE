@@ -357,13 +357,13 @@ export const getQuizIcon = async (platform, quiz) => {
   }
 };
 
-export const getAwardIcon = async (platform, quiz, award) => {
+export const getAwardIcon = async (platform, quiz) => {
   try {
-    const resp = await axios.get(`${AWS_ENDPOINT}/` /* finish endpoint */);
+    const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/${quiz}/award.png`);
     if (resp.status != 200) {
       return "/award.svg";
     }
-    return `${AWS_ENDPOINT}/` /* finish endpoint */;
+    return `${AWS_ENDPOINT}/platforms/${platform}/${quiz}/award.png`;
   } catch {
     return "/award.svg";
   }
@@ -374,7 +374,7 @@ export const getAllAwardIcons = async (awards) => {
   const newAwards = [];
   awards.forEach((award) =>
     promises.push(
-      getAwardIcon(award.platform, award.quiz, award.title).then((link) => {
+      getAwardIcon(award.platform, award.quiz).then((link) => {
         newAwards.push({ ...award, image: link });
       }),
     ),

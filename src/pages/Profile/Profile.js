@@ -28,7 +28,7 @@ const Profile = () => {
           setAvatar(link);
           setuserState(user);
         });
-        //setAwards(getAllAwardIcons(user.showcasedAwards));
+        getAllAwardIcons(user.showcasedAwards).then((awards) => setAwards(awards));
       })
       .catch((e) => history.push(`/search?searchQuery=${params.username}`));
     getUser(user.username)
