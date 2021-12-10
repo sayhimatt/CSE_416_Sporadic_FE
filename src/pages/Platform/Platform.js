@@ -62,6 +62,7 @@ const Platform = () => {
   useEffect(() => {
     if (platform) {
       setQuizzes({ page: 0, hasMore: true, quizzes: [] }); // wait before platform loads before getting quizzes
+      getUserIQ();
     }
   }, [platform, sortBy, sortDirection]);
 
@@ -165,13 +166,16 @@ const Platform = () => {
   };
 
   const getUserIQ = () => {
-    getScores(params.platform)
-      .then((scores) => {
+//    getScores(params.platform)
+//      .then((scores) => {
         // find users score
+        try {
+        const scores = platform.scores;
+
         const userScore = scores.find( (score) => {
           return score.username == user.username;
         }).totalCorrect;
-        console.log(userScore);
+
         // get array of just scores, no usernames
         const scoresSet = scores.map(score => score.totalCorrect);
         console.log(scoresSet);
@@ -181,7 +185,7 @@ const Platform = () => {
         const mean = scoresSet.reduce((a, b) => a + b) / n
         var sd = Math.sqrt(scoresSet.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
         if (sd == 0) sd = 1;
-        console.log(`n: ` + n + ` mean: ` + mean + ` sd: ` + sd);
+        //console.log(`n: ` + n + ` mean: ` + mean + ` sd: ` + sd);
         // calculate z score
         const z = ((userScore - mean) / sd);
         // iq = a + bz, where a = baseline and b = weight of z score
@@ -190,8 +194,8 @@ const Platform = () => {
         const IQ = Math.round(a + (b*z)); 
 
         setUserIQ(IQ);
-      })
-      .catch((error) => setUserIQ(0));
+  //    })
+        } catch(error){ setUserIQ(0) };
   }
 
   const renderCards = async () => {
