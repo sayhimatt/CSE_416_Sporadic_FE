@@ -17,7 +17,7 @@ import Quiz from "./pages/Quiz/Quiz";
 import CreateQuiz from "./pages/CreateQuiz/CreateQuiz";
 import MyAccount from "./pages/MyAccount/MyAccount";
 import QuizComplete from "./pages/Quiz/QuizComplete";
-import Friends from "./pages/Friends/Friends";
+import Following from "./pages/Following/Following";
 import ManageSubscribers from "./pages/ManageSubscribers/ManageSubscribers";
 import ContactUs from "./pages/ContactUs/ContactUs";
 import About from "./pages/About/About";
@@ -100,8 +100,8 @@ const App = () => {
             />
             <GuardedRoute
               exact
-              path="/friends"
-              component={Friends}
+              path="/followedUsers"
+              component={Following}
               authenticated={auth.authenticated}
             />
             <GuardedRoute
