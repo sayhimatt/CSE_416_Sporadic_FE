@@ -241,7 +241,7 @@ const Platform = () => {
 
       <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
         <div className="d-flex flex-column m-5 mt-0 align-items-end">
-          <div className="d-flex flex-row sort">
+          <div className="d-flex flex-row sort mb-2">
             <div className="d-flex align-items-center justify-content-center pe-3">
               <Dropdown>
                 <Dropdown.Toggle className="sort-dropdowns me-3">
@@ -303,7 +303,7 @@ const Platform = () => {
                 </div>
               }
               className="pe-3"
-              scrollThreshold={0.8}
+              scrollThreshold={0.7}
             >
               {quizCards}
             </InfiniteScroll>
