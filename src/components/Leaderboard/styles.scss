@@ -16,6 +16,11 @@
   border-top-right-radius: 10px;
 }
 
+#leaderboard-user-list {
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
 .leaderboard-cell {
   border-top: 1px solid black;
   padding: 3px 10px;
