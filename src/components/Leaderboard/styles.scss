@@ -1,0 +1,38 @@
+@import "../../App.scss";
+
+#leaderboard {
+  border: 2px solid $secondaryColor;
+  width: 100%;
+  border-radius: 10px;
+}
+
+#leaderboard-heading {
+  padding: 10px 20px;
+  background-color: $primaryColor;
+  color: black;
+  font-size: 1.5em;
+  text-align: center;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.leaderboard-cell {
+  border-top: 1px solid black;
+  padding: 3px 10px;
+  text-align: center;
+}
+
+.board-position {
+  width: 15%;
+  border-right: 1px solid black;
+}
+
+.board-name {
+  width: 55%;
+  border-right: 1px solid black;
+  overflow-x: scroll;
+}
+
+.board-score {
+  width: 30%;
+}

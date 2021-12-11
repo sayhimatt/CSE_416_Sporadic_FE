@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Dropdown } from "react-bootstrap";
+
 import { getPlatform, getQuizzesFromPlatform } from "./../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
 import Button from "../../components/Buttons/Button/Button";
@@ -20,6 +21,7 @@ import {
   putUpdatePinStatus,
 } from "./../../API/API";
 import LoadingSpinner from "../../components/LoadingIndicators/LoadingSpinner";
+import Leaderboard from "../../components/Leaderboard/Leaderboard";
 
 import "./styles.scss";
 import SortDirectionButtons from "../../components/Buttons/SortDirection/SortDirectionButtons";
@@ -328,6 +330,15 @@ const Platform = () => {
           <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">
             {platform.description}
           </div>
+          <Leaderboard
+            className="mt-3"
+            scores={[
+              { username: "matt", score: 10, position: 1 },
+              { username: "jackson", score: 15, position: 2 },
+              { username: "sayhimatt", score: 11, position: 3 },
+              { username: "luke", score: 13, position: 4 },
+            ]}
+          />
           <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
             <div>Your Platform IQ</div>
             <div className="color-special fw-bold fs-1">100</div>
