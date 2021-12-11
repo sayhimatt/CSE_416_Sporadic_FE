@@ -47,10 +47,7 @@ const Friends = () => {
       <NavBar />
       <SubNav
         heading="Manage Friends"
-        buttons={[
-          <LinkButton to="/createPlatform">Create A Platform</LinkButton>,
-          <LinkButton to="/notifications">Notifications</LinkButton>,
-        ]}
+        buttons={[<LinkButton to="/createPlatform">Create A Platform</LinkButton>]}
       />
       <div className="page-content d-flex flex-column align-items-center">
         <div className="d-flex flex-row mb-3 mt-3">

@@ -246,9 +246,6 @@ const SearchResults = ({ location }) => {
           <Link to="/createPlatform">
             <Button>Create A Platform</Button>
           </Link>,
-          <Link to="/notifications">
-            <Button>Notifications</Button>
-          </Link>,
         ]}
       />
       <div id="results-content" className="ms-5 me-5">

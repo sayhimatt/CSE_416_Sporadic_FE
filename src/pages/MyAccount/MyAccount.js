@@ -61,9 +61,6 @@ const MyAccount = () => {
           <LinkButton key="navCreatePlatB" to="/createPlatform">
             Create A Platform
           </LinkButton>,
-          <LinkButton key="navNotificationB" to="/notifications">
-            Notifications
-          </LinkButton>,
         ]}
       />
       <Alert
