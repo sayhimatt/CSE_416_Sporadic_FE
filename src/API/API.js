@@ -186,7 +186,7 @@ export const patchGlobalBanStatus = async (username, action) => {
   return response;
 };
 
-export const manageFriend = async (username, action) => {
+export const manageFollow = async (username, action) => {
   const token = await getToken();
   const response = await axios.put(
     `${ENDPOINT}/users/updateRelationship`,

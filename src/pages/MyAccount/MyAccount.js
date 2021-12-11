@@ -48,10 +48,6 @@ const MyAccount = () => {
       );
   };
 
-  const changePassword = () => {
-    // implement change password functionality
-  };
-
   return (
     <div>
       <NavBar />
@@ -94,7 +90,7 @@ const MyAccount = () => {
                   Awards
                 </h3>
                 <h3>
-                  <b className="color-secondary">{userState.friends.length}</b> Friends
+                  <b className="color-secondary">{userState.followedUsers.length}</b> Following
                 </h3>
                 <h3>
                   <b className="color-secondary">{userState.subscriptions.length}</b> Subscriptions
@@ -129,9 +125,7 @@ const MyAccount = () => {
                 <p>{userState.email}</p>
                 <div className="account-info-heading">Username</div>
                 <p>{userState.username}</p>
-                <div className="account-info-heading mb-2">Password</div>
               </div>
-              <Button>Change Password</Button>
             </div>
           </div>
           <ImageUploader
