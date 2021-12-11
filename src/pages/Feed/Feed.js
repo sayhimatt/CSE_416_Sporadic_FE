@@ -83,9 +83,6 @@ const Feed = ({ children }) => {
     <LinkButton key="create-platform" to="/createPlatform">
       Create A Platform
     </LinkButton>,
-    <LinkButton key="notifications" to="/notifications">
-      Notifications
-    </LinkButton>,
   ];
 
   return (
