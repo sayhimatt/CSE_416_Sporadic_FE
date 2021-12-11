@@ -5,48 +5,48 @@ import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Buttons/Button/Button";
 import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
 import SmallCard from "../../components/Card/SmallCard/SmallCard";
-import { getUser, manageFriend, getAllUserIcons } from "../../API/API";
+import { getUser, manageFollow, getAllUserIcons } from "../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
 
 import "./styles.scss";
 
-const Friends = () => {
+const Following = () => {
   const { user } = useContext(UserContext);
-  const [friends, setFriends] = useState([]);
+  const [following, setFollowing] = useState([]);
   const [profilePictures, setProfilePictures] = useState();
   const [search, setSearch] = useState("");
 
   useEffect(() => {
     getUser(user.username)
       .then((res) => {
-        setFriends(res.friends);
-        getAllUserIcons(res.friends).then((icons) => setProfilePictures(icons));
+        setFollowing(res.followedUsers);
+        getAllUserIcons(res.followedUsers).then((icons) => setProfilePictures(icons));
       })
       .catch((e) => console.log("Could not get user"));
   }, []);
 
-  const addFriend = () => {
+  const followUser = () => {
     const username = search;
-    if (friends.includes(username)) {
-      alert(`You are already friends with ${username}`);
+    if (following.includes(username)) {
+      alert(`You are already following ${username}`);
       return;
     }
-    manageFriend(username, "add")
-      .then((res) => setFriends((prevState) => [...prevState, username]))
+    manageFollow(username, "add")
+      .then((res) => setFollowing((prevState) => [...prevState, username]))
       .catch((e) => alert("User does not exist"));
   };
 
-  const removeFriend = (username) => {
-    manageFriend(username, "remove")
-      .then((res) => setFriends((prevState) => prevState.filter((user) => user !== username)))
-      .catch((e) => alert("Could not remove friend"));
+  const unfollowUser = (username) => {
+    manageFollow(username, "remove")
+      .then((res) => setFollowing((prevState) => prevState.filter((user) => user !== username)))
+      .catch((e) => alert("Could not unfollow user"));
   };
 
   return (
     <div>
       <NavBar />
       <SubNav
-        heading="Manage Friends"
+        heading="Users Followed"
         buttons={[
           <LinkButton to="/createPlatform">Create A Platform</LinkButton>,
           <LinkButton to="/notifications">Notifications</LinkButton>,
@@ -61,19 +61,19 @@ const Friends = () => {
               onChange={(e) => setSearch(e.target.value)}
             ></input>
           </div>
-          <Button buttonStyle="btn--secondary" onClick={addFriend}>
-            Add Friend
+          <Button buttonStyle="btn--secondary" onClick={followUser}>
+            Follow User
           </Button>
         </div>
         <div className="small-card-list w-50">
-          {friends &&
+          {following &&
             profilePictures &&
-            friends.map((friend) => (
+            following.map((user) => (
               <SmallCard
-                key={friend}
-                profilePicture={profilePictures[friend]}
-                username={friend}
-                rightCard={<Button onClick={(e) => removeFriend(friend)}>Remove Friend</Button>}
+                key={user}
+                profilePicture={profilePictures[user]}
+                username={user}
+                rightCard={<Button onClick={(e) => unfollowUser(user)}>Unfollow</Button>}
               ></SmallCard>
             ))}
         </div>
@@ -82,4 +82,4 @@ const Friends = () => {
   );
 };
 
-export default Friends;
+export default Following;
