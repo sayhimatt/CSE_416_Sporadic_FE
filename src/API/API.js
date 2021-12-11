@@ -283,7 +283,7 @@ export const getSearchResults = async (type, query, page, userFilter = null) => 
 };
 
 /* Award Routing */
-export const putUpdateAwardDisplayStatus = async (platform, quiz, awardTitle, action) => {
+export const putUpdateAwardDisplayStatus = async (platform, quiz, action) => {
   const token = await getToken();
   const response = await axios.put(
     `${ENDPOINT}/` /* finish endpoint */,

@@ -4,7 +4,7 @@ import NavBar from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
 import AwardPopup from "../../components/AwardPopup/AwardPopup";
-import { getUser, putUpdateAwardDisplayStatus } from "../../API/API";
+import { getUser, putUpdateAwardDisplayStatus, getAllAwardIcons } from "../../API/API";
 import { UserContext } from "../../contexts/UserContext/UserContext";
 import { Alert } from "react-bootstrap";
 
@@ -23,11 +23,13 @@ const AwardCase = () => {
   useEffect(() => {
     getUser(user.username)
       .then((res) => {
-        const showCased = res.showCasedAwards ? res.showCasedAwards : [];
-        const awards = res.awards ? res.awards : [];
-        setAwards({
-          onDisplay: showCased,
-          notOnDisplay: awards,
+        const showCased = getAllAwardIcons(res.showCasedAwards ? res.showCasedAwards : []);
+        const awards = getAllAwardIcons(res.awards ? res.awards : []);
+        Promise.all([showCased, awards]).then(([showCased, awards]) => {
+          setAwards({
+            onDisplay: showCased,
+            notOnDisplay: awards,
+          });
         });
       })
       .catch((e) => console.log(e));
@@ -73,7 +75,7 @@ const AwardCase = () => {
   };
 
   const updateDisplay = (platform, quiz, awardTitle, action) => {
-    putUpdateAwardDisplayStatus(platform, quiz, awardTitle, action)
+    putUpdateAwardDisplayStatus(platform, quiz, action)
       .then((res) => {
         if (action === "remove") {
           const award = findAward(platform, quiz, awardTitle, "onDisplay");
