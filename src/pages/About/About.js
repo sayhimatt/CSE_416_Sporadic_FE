@@ -6,10 +6,7 @@ import Footer from "../../components/Footer/Footer";
 import "./styles.scss";
 
 const About = () => {
-  const subNavButtons = [
-    <LinkButton to="/createPlatform">Create A Platform</LinkButton>,
-    <LinkButton to="/notifications">Notifications</LinkButton>,
-  ];
+  const subNavButtons = [<LinkButton to="/createPlatform">Create A Platform</LinkButton>];
   return (
     <div>
       <MainNav />
