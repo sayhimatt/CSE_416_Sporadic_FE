@@ -357,6 +357,32 @@ export const getQuizIcon = async (platform, quiz) => {
   }
 };
 
+export const getAwardIcon = async (platform, quiz) => {
+  try {
+    const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/${quiz}/award.png`);
+    if (resp.status != 200) {
+      return "/award.svg";
+    }
+    return `${AWS_ENDPOINT}/platforms/${platform}/${quiz}/award.png`;
+  } catch {
+    return "/award.svg";
+  }
+};
+
+export const getAllAwardIcons = async (awards) => {
+  const promises = [];
+  const newAwards = [];
+  awards.forEach((award) =>
+    promises.push(
+      getAwardIcon(award.platform, award.quiz).then((link) => {
+        newAwards.push({ ...award, image: link });
+      }),
+    ),
+  );
+  await Promise.all(promises);
+  return newAwards;
+};
+
 export const generateSetUserIconURL = async (username) => {
   try {
     const token = await getToken();

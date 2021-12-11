@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 
 import { UserContext } from "../../contexts/UserContext/UserContext";
-import { getUser, getUserIcon, manageFriend } from "../../API/API";
+import { getUser, getUserIcon, manageFriend, getAllAwardIcons } from "../../API/API";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import Button from "../../components/Buttons/Button/Button";
 import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
+import AwardCarousel from "../../components/AwardCarousel/AwardCarousel";
 import { Alert } from "react-bootstrap";
 
 import "./styles.scss";
@@ -16,6 +17,7 @@ const Profile = () => {
   const [friends, setFriends] = useState();
   const [avatar, setAvatar] = useState();
   const [alert, setAlert] = useState({ show: false, message: "", style: "danger" });
+  const [awards, setAwards] = useState();
   const params = useParams();
   const history = useHistory();
 
@@ -26,6 +28,9 @@ const Profile = () => {
           setAvatar(link);
           setuserState(user);
         });
+        getAllAwardIcons(user.showcasedAwards ? user.showcasedAwards : []).then((awards) =>
+          setAwards(awards),
+        );
       })
       .catch((e) => history.push(`/search?searchQuery=${params.username}`));
     getUser(user.username)
@@ -140,16 +145,7 @@ const Profile = () => {
             </div>
             <div className="profile-section">
               <h3>AWARDS</h3>
-              <div id="account-awards-shelf">
-                {userState.awards &&
-                  userState.awards
-                    .filter((award) => award.isShowcased)
-                    .map((award, index) => (
-                      <div key={`award-${index}`} className="account-award">
-                        <img alt="award" src="award.url" />
-                      </div>
-                    ))}
-              </div>
+              <AwardCarousel awards={awards} />
             </div>
           </div>
         </div>
