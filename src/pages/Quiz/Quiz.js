@@ -8,7 +8,7 @@ import QuestionCard from "../../components/Card/QuestionCard/QuestionCard.js";
 import Timer from "../../components/Timer/Timer";
 import useInterval from "../../components/Timer/Interval";
 import award from "../../award.svg";
-import Button from "../../components/Buttons/Button/Button";
+import Button from "react-bootstrap/Button";
 import InfoModal from "../../components/Modals/InfoModal/InfoModal";
 import "./styles.scss";
 
@@ -144,8 +144,10 @@ const Quiz = () => {
             <div className="color-secondary fw-bold fs-1">
               Score Required: <br /> 100%
             </div>
+            <Button size="lg" className="submit-button" onClick={quizOver}>
+              Submit
+            </Button>
           </div>
-          <Button onClick={quizOver}>Submit</Button>
         </div>
       </div>
       <InfoModal

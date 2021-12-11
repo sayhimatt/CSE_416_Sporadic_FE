@@ -10,7 +10,6 @@ import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
 import ImageUploader from "../../components/ImageUploader/ImageUploader";
-import CustomToggle from "../../components/CustomToggle/CustomToggle";
 import {
   getPlatformIcon,
   getPlatformBanner,
@@ -23,6 +22,7 @@ import {
 import LoadingSpinner from "../../components/LoadingIndicators/LoadingSpinner";
 
 import "./styles.scss";
+import SortDirectionButtons from "../../components/Buttons/SortDirection/SortDirectionButtons";
 
 const Platform = () => {
   const history = useHistory();
@@ -191,7 +191,6 @@ const Platform = () => {
       );
     });
     Promise.all(cards).then((cards) => {
-      //console.log(cards);
       setQuizCards(cards);
     });
   };
@@ -243,55 +242,49 @@ const Platform = () => {
       <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
         <div className="d-flex flex-column m-5 mt-0 align-items-end">
           <div className="d-flex flex-row sort">
-            <Dropdown>
-              <Dropdown.Toggle className="sort-dropdowns mb-2 me-3">Sort By</Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => {
-                    setSortBy("title");
-                  }}
-                >
-                  Title
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => {
-                    setSortBy("upvotes");
-                  }}
-                >
-                  Upvotes
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => {
-                    setSortBy("downvotes");
-                  }}
-                >
-                  Downvotes
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => {
-                    setSortBy("timeLimit");
-                  }}
-                >
-                  Time Limit
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <img
-              style={{ cursor: "pointer" }}
-              alt="ascending"
-              src="/ascending.svg"
-              onClick={() => {
-                setSortDirection("ascending");
-              }}
-            />
-            <img
-              style={{ cursor: "pointer" }}
-              alt="descending"
-              src="/descending.svg"
-              onClick={() => {
-                setSortDirection("descending");
-              }}
-            />
+            <div className="d-flex align-items-center justify-content-center pe-3">
+              <Dropdown>
+                <Dropdown.Toggle className="sort-dropdowns me-3">
+                  {sortBy === "timeLimit" ? "Time Limit" : sortBy}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Header>sort by</Dropdown.Header>
+                  <Dropdown.Item
+                    onClick={() => {
+                      setSortBy("title");
+                    }}
+                  >
+                    Title
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => {
+                      setSortBy("upvotes");
+                    }}
+                  >
+                    Upvotes
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => {
+                      setSortBy("downvotes");
+                    }}
+                  >
+                    Downvotes
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => {
+                      setSortBy("timeLimit");
+                    }}
+                  >
+                    Time Limit
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+              <SortDirectionButtons
+                sortDirection={sortDirection}
+                onAscendingClick={() => setSortDirection("ascending")}
+                onDescendingClick={() => setSortDirection("descending")}
+              />
+            </div>
           </div>
 
           <div id="platform-quizzes" className="quizzes d-flex flex-column m-10">

@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { UserContext } from "../../contexts/UserContext/UserContext";
-import { getUser, patchUserAbout } from "../../API/API";
+import { getUser, patchUserAbout, getAllAwardIcons } from "../../API/API";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Buttons/Button/Button";
 import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
+import AwardCarousel from "../../components/AwardCarousel/AwardCarousel";
 
 import "./styles.scss";
 import ImageUploader from "../../components/ImageUploader/ImageUploader";
@@ -16,6 +17,7 @@ const MyAccount = () => {
   const [userState, setuserState] = useState();
   const [about, setAbout] = useState("");
   const [showAvatarUpload, setShowAvatarUpload] = useState(false);
+  const [awards, setAwards] = useState();
   const [alerts, setAlerts] = useState({ show: false, style: "danger", message: "" });
 
   useEffect(() => {
@@ -23,6 +25,7 @@ const MyAccount = () => {
       .then((user) => {
         setuserState(user);
         setAbout(user.aboutSection);
+        //setAwards(getAllAwardIcons(user.showCasedAwards));
       })
       .catch(() => console.log("Could not retrieve user"));
   }, []);
@@ -114,16 +117,7 @@ const MyAccount = () => {
             </div>
             <div className="account-section">
               <h2>AWARDS</h2>
-              <div id="account-awards-shelf">
-                {userState.awards &&
-                  userState.awards
-                    .filter((award) => award.isShowcased)
-                    .map((award, index) => (
-                      <div key={`award-${index}`} className="account-award">
-                        <img alt="award" src="award.url" />
-                      </div>
-                    ))}
-              </div>
+              <AwardCarousel awards={awards} />
               <div id="manage-awards-button-container" className="align-self-center">
                 <LinkButton to="/awardCase">Manage Awards</LinkButton>
               </div>
