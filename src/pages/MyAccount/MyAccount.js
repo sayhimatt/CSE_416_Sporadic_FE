@@ -82,18 +82,18 @@ const MyAccount = () => {
             </div>
             <div className="account-section">
               <h2>STATS</h2>
-              <div className="d-flex w-75 justify-content-between">
-                <h3>
+              <div className="d-flex justify-content-between">
+                <h3 className="stat-box text-end">
                   <b className="color-secondary">
                     {(userState.awards && userState.awards.length) || 0}
                   </b>{" "}
                   Awards
                 </h3>
-                <h3>
-                  <b className="color-secondary">{userState.followedUsers.length}</b> Following
-                </h3>
-                <h3>
+                <h3 className="stat-box text-center ms-5 me-5">
                   <b className="color-secondary">{userState.subscriptions.length}</b> Subscriptions
+                </h3>
+                <h3 className="stat-box text-start">
+                  <b className="color-secondary">{userState.followedUsers.length}</b> Following
                 </h3>
               </div>
             </div>

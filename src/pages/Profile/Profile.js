@@ -123,14 +123,14 @@ const Profile = () => {
             </div>
             <div className="profile-section">
               <h3>STATS</h3>
-              <div className="d-flex w-50 justify-content-around">
-                <h3>
+              <div className="d-flex">
+                <h3 className="stat-box text-center">
                   <b className="color-secondary">
                     {(userState.awards && userState.awards.length) || 0}
                   </b>{" "}
                   Awards
                 </h3>
-                <h3>
+                <h3 className="stat-box text-center">
                   <b className="color-secondary">{userState.followedUsers.length}</b> Following
                 </h3>
               </div>
