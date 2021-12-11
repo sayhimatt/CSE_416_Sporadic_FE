@@ -19,6 +19,7 @@ import {
   patchUnsubscribe,
   deleteQuiz,
   putUpdatePinStatus,
+  getLeaderboard,
 } from "./../../API/API";
 import LoadingSpinner from "../../components/LoadingIndicators/LoadingSpinner";
 import Leaderboard from "../../components/Leaderboard/Leaderboard";
@@ -33,6 +34,7 @@ const Platform = () => {
   const [platform, setPlatform] = useState();
   const [quizzes, setQuizzes] = useState();
   const [quizCards, setQuizCards] = useState([]);
+  const [leaderboard, setLeaderboard] = useState();
   const [subscribed, setSubscribed] = useState(user.subscriptions.includes(params.platform));
   const [modView, setModView] = useState(false);
   const [isBanned, setIsBanned] = useState(false);
@@ -47,7 +49,14 @@ const Platform = () => {
     getCurrentPlatform();
     getImageMedia();
     setModView(false);
+    setLeaderboard({ page: 0, hasMore: true, scores: [], currentUser: {} });
   }, [params]);
+
+  useEffect(() => {
+    if (leaderboard && leaderboard.page === 0) {
+      getLeaderboardResults();
+    }
+  }, [leaderboard]);
 
   useEffect(() => {
     if (quizzes) {
@@ -63,6 +72,29 @@ const Platform = () => {
       setQuizzes({ page: 0, hasMore: true, quizzes: [] }); // wait before platform loads before getting quizzes
     }
   }, [platform, sortBy, sortDirection]);
+
+  const getLeaderboardResults = () => {
+    const name = params.platform;
+    const newPage = leaderboard.page + 1;
+    getLeaderboard(name, newPage)
+      .then((res) => {
+        if (res.items.length !== 0) {
+          addResultsToLeaderboard(res.items, res.currentUserData);
+        } else {
+          setLeaderboard((prevState) => ({ ...prevState, hasMore: false, page: -1 }));
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const addResultsToLeaderboard = (newResults, userScore) => {
+    setLeaderboard((prevState) => ({
+      ...prevState,
+      page: prevState.page + 1,
+      scores: prevState.scores.concat(newResults),
+      currentUser: { ...userScore, username: user.username },
+    }));
+  };
 
   const getImageMedia = async () => {
     await getPlatformBanner(params.platform).then((banner) => {
@@ -330,19 +362,15 @@ const Platform = () => {
           <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">
             {platform.description}
           </div>
-          <Leaderboard
-            className="mt-3"
-            scores={[
-              { username: "matt", score: 10, position: 1 },
-              { username: "jackson", score: 15, position: 2 },
-              { username: "sayhimatt", score: 11, position: 3 },
-              { username: "luke", score: 13, position: 4 },
-            ]}
-          />
-          <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
-            <div>Your Platform IQ</div>
-            <div className="color-special fw-bold fs-1">100</div>
-          </div>
+          {leaderboard && (
+            <Leaderboard
+              className="mt-3"
+              scores={leaderboard.scores}
+              nextResultsHandler={getLeaderboardResults}
+              hasMore={leaderboard.hasMore}
+              userScore={leaderboard.currentUser}
+            />
+          )}
         </div>
       </div>
       <ImageUploader

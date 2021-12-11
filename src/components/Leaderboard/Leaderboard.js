@@ -5,17 +5,20 @@ import LoadingSpinner from "../LoadingIndicators/LoadingSpinner";
 
 import "./styles.scss";
 
-const Leaderboard = ({ scores = [], hasMore, nextResultsHandler, className }) => {
+const Leaderboard = ({ scores = [], hasMore, nextResultsHandler, className, userScore }) => {
   const loadResults = () => {
     return scores.map((score, index) => (
-      <div key={index} className="d-flex">
-        <div className="board-position leaderboard-cell">{score.position}</div>
+      <div
+        key={index}
+        className={`d-flex ${score.username === userScore.username ? "user-row" : ""}`}
+      >
+        <div className="board-position leaderboard-cell">{index + 1}</div>
         <div className="board-name leaderboard-cell">
           <Link className="link" to={`/user/${score.username}`}>
             {score.username}
           </Link>
         </div>
-        <div className="board-score leaderboard-cell">{score.score}</div>
+        <div className="board-score leaderboard-cell">{score.totalCorrect}</div>
       </div>
     ));
   };
@@ -35,19 +38,33 @@ const Leaderboard = ({ scores = [], hasMore, nextResultsHandler, className }) =>
             <b>Score</b>
           </div>
         </div>
-        <InfiniteScroll
-          next={nextResultsHandler}
-          dataLength={scores.length}
-          hasMore={hasMore}
-          loader={
-            <div className="d-flex justify-content-center mt-4">
-              <LoadingSpinner isVisible={true} />
+        {userScore.totalCorrect && (
+          <div className="d-flex user-row">
+            <div className="board-position leaderboard-cell">{userScore.leaderBoardPosition}</div>
+            <div className="board-name leaderboard-cell">
+              <Link className="link" to={`/user/${userScore.username}`}>
+                {userScore.username}
+              </Link>
             </div>
-          }
-          scrollThreshold={0.7}
-        >
-          {loadResults()}
-        </InfiniteScroll>
+            <div className="board-score leaderboard-cell">{userScore.totalCorrect}</div>
+          </div>
+        )}
+        {scores.length !== 0 && (
+          <InfiniteScroll
+            next={nextResultsHandler}
+            dataLength={scores.length}
+            hasMore={hasMore}
+            loader={
+              <div className="d-flex justify-content-center mt-2 mb-2">
+                <LoadingSpinner isVisible={true} />
+              </div>
+            }
+            scrollThreshold={0.7}
+            scrollableTarget="leaderboard-user-list"
+          >
+            {loadResults()}
+          </InfiniteScroll>
+        )}
       </div>
     </div>
   );
