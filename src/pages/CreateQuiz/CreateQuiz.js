@@ -15,8 +15,9 @@ import Button from "../../components/Buttons/Button/Button";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LoadingOverlay from "../../components/LoadingIndicators/LoadingOverlay";
+import award from "../../award.svg";
 
-import "./styles.css";
+import "./styles.scss";
 
 const CreateQuiz = () => {
   const [questions, setQuestions] = useState([defaultQuestion()]);
@@ -27,6 +28,8 @@ const CreateQuiz = () => {
   const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
   const [images, setImages] = useState({ quizIcon: "", awardIcon: "" });
   const [imageUploaders, setImageUploaders] = useState({ quizIcon: false, awardIcon: false });
+  const [awardTitle, setAwardTitle] = useState("");
+  const [awardRequirement, setAwardRequirement] = useState(0);
   const params = useParams();
   const history = useHistory();
 
@@ -69,6 +72,13 @@ const CreateQuiz = () => {
   };
 
   const addQuestion = () => {
+    if (questions.length >= 30){
+      setErrors({
+        show: true,
+        messages: ["Your quiz should be less than 30 questions keep it simple!"]
+      })
+      return;
+    }
     setQuestions((prevState) => [...prevState, defaultQuestion()]);
   };
 
@@ -154,6 +164,11 @@ const CreateQuiz = () => {
   const customIconSubmit = (file) => {
     setImages((prevState) => ({ ...prevState, quizIcon: file }));
     setImageUploaders((prevState) => ({ ...prevState, quizIcon: false }));
+  };
+
+  const customAwardIconSubmit = (file) => {
+    setImages((prevState) => ({ ...prevState, awardIcon: file }));
+    setImageUploaders((prevState) => ({ ...prevState, awardIcon: false }));
   };
 
   const sendImagesToAWS = async () => {
@@ -381,31 +396,66 @@ const CreateQuiz = () => {
                 />
               </div>
             </div>
-            <div className="quiz-info-section">
-              <label>Time Limit (in seconds)</label>
-              <div id="timer-input" className="input-box">
-                <input
-                  className="input text-center"
-                  placeholder="Time Limit"
-                  maxLength={3}
-                  onChange={(e) => setTimeLimit(e.target.value)}
-                />
+
+            <div className="d-flex flex-row w-100">
+              <div className="d-flex flex-fill flex-column align-items-center">
+                <div className="quiz-info-section align-items-center">
+                  <label>Time Limit (in seconds)</label>
+                  <div id="timer-input" className="input-box w-50">
+                    <input
+                      className="input text-center"
+                      placeholder="Time Limit"
+                      maxLength={3}
+                      onChange={(e) => setTimeLimit(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <Button buttonSize="btn--large" onClick={addQuestion}>
+                    Add Question
+                  </Button>
+                </div>
+                <div className="mt-4">
+                  <Button
+                    buttonSize="btn--large"
+                    onClick={() =>
+                      setImageUploaders((prevState) => ({ ...prevState, quizIcon: true }))
+                    }
+                  >
+                    Upload Quiz Icon
+                  </Button>
+                </div>
+                <div className="mt-4">
+                  <Button
+                    buttonSize="btn--large"
+                    onClick={() =>
+                      setImageUploaders((prevState) => ({ ...prevState, awardIcon: true }))
+                    }
+                  >
+                    Upload Award Icon
+                  </Button>
+                </div>
+              </div>
+              <div className="d-flex flex-fill flex-column flex-grow">
+                <div className="quiz-info-section align-items-center">
+                  <label>Trophy Requirement</label>
+                  <div id="timer-input" className="input-box w-50">
+                    <input
+                      className="input text-center"
+                      placeholder={'Pick 1' + ' - ' + questions.length}
+                      maxLength={2}
+                      onChange={(e) => setAwardRequirement(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div id="award-section">
+                  <img id="trophy-earned" src={award} alt="Icon" />
+                  <div className="ms-3">Trophy Title: {awardTitle}</div>
+                </div>
               </div>
             </div>
-            <div className="mt-4">
-              <Button buttonSize="btn--large" onClick={addQuestion}>
-                Add Question
-              </Button>
-            </div>
-            <div className="mt-4">
-              <Button
-                buttonSize="btn--large"
-                onClick={() => setImageUploaders((prevState) => ({ ...prevState, quizIcon: true }))}
-              >
-                Upload Icon
-              </Button>
-            </div>
           </div>
+
           <div className="d-flex flex-column w-50">
             <Button buttonStyle="btn--special" buttonSize="btn--large" onClick={publishQuiz}>
               Publish Quiz
@@ -426,6 +476,18 @@ const CreateQuiz = () => {
             setImageUploaders((prevState) => ({ ...prevState, quizIcon: false }))
           }
           customSubmit={customIconSubmit}
+        />
+      </div>
+      <div className="uploader">
+        <ImageUploader
+          visible={imageUploaders.awardIcon}
+          desiredFile="award icon"
+          desiredQuiz={quizInfo.quizTitle}
+          desiredPlatform={params.platform}
+          visibilityHandler={() =>
+            setImageUploaders((prevState) => ({ ...prevState, awardIcon: false }))
+          }
+          customSubmit={customAwardIconSubmit}
         />
       </div>
       <LoadingOverlay isVisible={isLoading} />
