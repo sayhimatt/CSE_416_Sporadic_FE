@@ -9,8 +9,7 @@ const AwardCarousel = ({ awards }) => {
       {!awards || awards.length === 0 ? (
         <Carousel.Item className="award-carousel-item">
           <div className="d-flex flex-column justify-content-center h-100 align-items-center">
-            <h5>You have no awards</h5>
-            <h5>Take some quizzes to earn awards!</h5>
+            <h5>There are no awards on display!</h5>
           </div>
         </Carousel.Item>
       ) : (
