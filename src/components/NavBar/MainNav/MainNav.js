@@ -74,15 +74,9 @@ const NavBar = () => {
             </Dropdown.Item>
             <Dropdown.Item
               className="custom-dropdown-item"
-              onClick={() => history.push(`/friends`)}
+              onClick={() => history.push(`/followedUsers`)}
             >
-              Friends
-            </Dropdown.Item>
-            <Dropdown.Item
-              className="custom-dropdown-item"
-              onClick={() => history.push(`/notifications`)}
-            >
-              Notifications
+              Following
             </Dropdown.Item>
             <Dropdown.Item className="custom-dropdown-item" onClick={logout}>
               Logout

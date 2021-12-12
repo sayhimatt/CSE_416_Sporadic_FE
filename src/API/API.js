@@ -1,8 +1,7 @@
 import axios from "axios";
 import Auth from "@aws-amplify/auth";
 
-//const ENDPOINT = "https://cse-416-sporadic-api-prod.herokuapp.com";
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://cse-416-sporadic-api-prod.herokuapp.com";
 const AWS_ENDPOINT = "https://sporadic-development-bucket.s3.us-east-1.amazonaws.com";
 
 const getToken = async () => {
@@ -148,13 +147,14 @@ export const putUpdatePinStatus = async (platform, quizTitle, action) => {
   return response.data;
 };
 
-export const getScores = async (platform) => {
+export const getLeaderboard = async (platform, page, amountPerPage = 10) => {
   const token = await getToken();
-  const response = await axios.get(`${ENDPOINT}/platforms/${platform}/scores`, {
-    headers: { authorization: `Bearer ${token}` },
-  });
+  const response = await axios.get(
+    `${ENDPOINT}/platforms/${platform}/leaderboard?page=${page}&amountPerPage=${amountPerPage}`,
+    { headers: { authorization: `Bearer ${token}` } },
+  );
   return response.data;
-}
+};
 
 /* Login Routing */
 
@@ -195,7 +195,7 @@ export const patchGlobalBanStatus = async (username, action) => {
   return response;
 };
 
-export const manageFriend = async (username, action) => {
+export const manageFollow = async (username, action) => {
   const token = await getToken();
   const response = await axios.put(
     `${ENDPOINT}/users/updateRelationship`,
@@ -219,11 +219,15 @@ export const patchUserAbout = async (username, text) => {
 };
 
 /* Feed routing */
-export const getFeedQuizzes = async (page) => {
-  const AMOUNT_PER_PAGE = 10;
+export const getFeedQuizzes = async (
+  page,
+  amountPerPage = 10,
+  sortBy = "title",
+  sortDirection = "ascending",
+) => {
   const token = await getToken();
   const response = await axios.get(
-    `${ENDPOINT}/quizzes/feed?page=${page}&amountPerPage=${AMOUNT_PER_PAGE}`,
+    `${ENDPOINT}/quizzes/feed?page=${page}&amountPerPage=${amountPerPage}&sortBy=${sortBy}&sortDirection=${sortDirection}`,
     {
       headers: { authorization: `Bearer ${token}` },
     },
@@ -289,6 +293,22 @@ export const getSearchResults = async (type, query, page, userFilter = null) => 
     },
   );
   return response.data.items;
+};
+
+/* Award Routing */
+export const putUpdateAwardDisplayStatus = async (displayedAwards, awards) => {
+  const token = await getToken();
+  const response = await axios.put(
+    `${ENDPOINT}/users/updateDisplayedAwards`,
+    {
+      displayedAwards,
+      awards,
+    },
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  return response;
 };
 
 /* AWS S3 Routing */
@@ -366,6 +386,32 @@ export const getQuizIcon = async (platform, quiz) => {
   }
 };
 
+export const getAwardIcon = async (platform, quiz) => {
+  try {
+    const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/${quiz}/award.png`);
+    if (resp.status != 200) {
+      return "/award.svg";
+    }
+    return `${AWS_ENDPOINT}/platforms/${platform}/${quiz}/award.png`;
+  } catch {
+    return "/award.svg";
+  }
+};
+
+export const getAllAwardIcons = async (awards) => {
+  const promises = [];
+  const newAwards = [];
+  awards.forEach((award) =>
+    promises.push(
+      getAwardIcon(award.platform, award.quiz).then((link) => {
+        newAwards.push({ ...award, image: link });
+      }),
+    ),
+  );
+  await Promise.all(promises);
+  return newAwards;
+};
+
 export const generateSetUserIconURL = async (username) => {
   try {
     const token = await getToken();
@@ -387,6 +433,23 @@ export const generateSetQuizIconURL = async (platform, quiz) => {
   try {
     const token = await getToken();
     const response = await axios.get(`${ENDPOINT}/quizzes/${platform}/${quiz}/set-icon`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const generateSetQuizAwardIconURL = async (platform, quiz) => {
+  try {
+    const token = await getToken();
+    const response = await axios.get(`${ENDPOINT}/quizzes/${platform}/${quiz}/set-award-icon`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (response.status == 200) {

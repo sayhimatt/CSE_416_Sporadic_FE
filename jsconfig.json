@@ -4,5 +4,6 @@
     "target": "es6",
     "checkJs": false
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

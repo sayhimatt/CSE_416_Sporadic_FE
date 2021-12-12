@@ -1,0 +1,33 @@
+@import "../../App.scss";
+
+.award-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 400px;
+  height: 300px;
+  border-radius: 50px;
+  border: 2px solid $secondaryColor;
+  background-color: white;
+  box-shadow: 3px 4px 3px 1px rgba(0, 0, 0, 0.25);
+}
+
+.award-popup > img {
+  width: 128px;
+  height: 128px;
+  border: 1px solid $secondaryColor;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.close-popup {
+  position: absolute;
+  right: 30px;
+  top: 25px;
+  cursor: pointer;
+}

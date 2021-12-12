@@ -9,7 +9,6 @@ import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
 import ImageUploader from "../../components/ImageUploader/ImageUploader";
-import CustomToggle from "../../components/CustomToggle/CustomToggle";
 import {
   getPlatformIcon,
   getPlatformBanner,
@@ -19,11 +18,14 @@ import {
   deleteQuiz,
   putUpdatePinStatus,
   getPlatform,
-  getQuizzesFromPlatform
+  getQuizzesFromPlatform,
+  getLeaderboard
 } from "./../../API/API";
 import LoadingSpinner from "../../components/LoadingIndicators/LoadingSpinner";
+import Leaderboard from "../../components/Leaderboard/Leaderboard";
 
 import "./styles.scss";
+import SortDirectionButtons from "../../components/Buttons/SortDirection/SortDirectionButtons";
 
 const Platform = () => {
   const history = useHistory();
@@ -32,6 +34,7 @@ const Platform = () => {
   const [platform, setPlatform] = useState();
   const [quizzes, setQuizzes] = useState();
   const [quizCards, setQuizCards] = useState([]);
+  const [leaderboard, setLeaderboard] = useState();
   const [subscribed, setSubscribed] = useState(user.subscriptions.includes(params.platform));
   const [modView, setModView] = useState(false);
   const [isBanned, setIsBanned] = useState(false);
@@ -47,7 +50,14 @@ const Platform = () => {
     getCurrentPlatform();
     getImageMedia();
     setModView(false);
+    setLeaderboard({ page: 0, hasMore: true, scores: [], currentUser: {} });
   }, [params]);
+
+  useEffect(() => {
+    if (leaderboard && leaderboard.page === 0) {
+      getLeaderboardResults();
+    }
+  }, [leaderboard]);
 
   useEffect(() => {
     if (quizzes) {
@@ -64,6 +74,29 @@ const Platform = () => {
       getUserIQ();
     }
   }, [platform, sortBy, sortDirection]);
+
+  const getLeaderboardResults = () => {
+    const name = params.platform;
+    const newPage = leaderboard.page + 1;
+    getLeaderboard(name, newPage)
+      .then((res) => {
+        if (res.items.length !== 0) {
+          addResultsToLeaderboard(res.items, res.currentUserData);
+        } else {
+          setLeaderboard((prevState) => ({ ...prevState, hasMore: false, page: -1 }));
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const addResultsToLeaderboard = (newResults, userScore) => {
+    setLeaderboard((prevState) => ({
+      ...prevState,
+      page: prevState.page + 1,
+      scores: prevState.scores.concat(newResults),
+      currentUser: { ...userScore, username: user.username },
+    }));
+  };
 
   const getImageMedia = async () => {
     await getPlatformBanner(params.platform).then((banner) => {
@@ -228,7 +261,6 @@ const Platform = () => {
       );
     });
     Promise.all(cards).then((cards) => {
-      //console.log(cards);
       setQuizCards(cards);
     });
   };
@@ -278,104 +310,106 @@ const Platform = () => {
       </PlatformSubNav>
 
       <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
-        <div className="d-flex flex-column m-5 mt-0 align-items-end">
-          <div className="d-flex flex-row sort">
-            <Dropdown>
-              <Dropdown.Toggle className="sort-dropdowns mb-2 me-3">Sort By</Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => {
-                    setSortBy("title");
-                  }}
-                >
-                  Title
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => {
-                    setSortBy("upvotes");
-                  }}
-                >
-                  Upvotes
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => {
-                    setSortBy("downvotes");
-                  }}
-                >
-                  Downvotes
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => {
-                    setSortBy("timeLimit");
-                  }}
-                >
-                  Time Limit
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <img
-              style={{ cursor: "pointer" }}
-              alt="ascending"
-              src="/ascending.svg"
-              onClick={() => {
-                setSortDirection("ascending");
-              }}
-            />
-            <img
-              style={{ cursor: "pointer" }}
-              alt="descending"
-              src="/descending.svg"
-              onClick={() => {
-                setSortDirection("descending");
-              }}
-            />
-          </div>
+        <div id="platform-left">
+          <div className="d-flex flex-column w-100">
+            <div className="d-flex flex-row sort mb-2 align-self-end">
+              <div className="d-flex align-items-center justify-content-center pe-3">
+                <Dropdown>
+                  <Dropdown.Toggle className="sort-dropdowns me-3">
+                    {sortBy === "timeLimit" ? "Time Limit" : sortBy}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Header>sort by</Dropdown.Header>
+                    <Dropdown.Item
+                      onClick={() => {
+                        setSortBy("title");
+                      }}
+                    >
+                      Title
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() => {
+                        setSortBy("upvotes");
+                      }}
+                    >
+                      Upvotes
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() => {
+                        setSortBy("downvotes");
+                      }}
+                    >
+                      Downvotes
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() => {
+                        setSortBy("timeLimit");
+                      }}
+                    >
+                      Time Limit
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                <SortDirectionButtons
+                  sortDirection={sortDirection}
+                  onAscendingClick={() => setSortDirection("ascending")}
+                  onDescendingClick={() => setSortDirection("descending")}
+                />
+              </div>
+            </div>
 
-          <div id="platform-quizzes" className="quizzes d-flex flex-column m-10">
-            <InfiniteScroll
-              next={getQuizzes}
-              dataLength={quizCards.length}
-              hasMore={quizzes.hasMore}
-              loader={
-                <div className="d-flex justify-content-center mt-4">
-                  <LoadingSpinner isVisible={true} />
-                </div>
-              }
-              endMessage={
-                <div className="d-flex justify-content-center mt-4">
-                  <h4>No more quizzes</h4>
-                </div>
-              }
-              className="pe-3"
-              scrollThreshold={0.8}
-            >
-              {quizCards}
-            </InfiniteScroll>
+            <div id="platform-quizzes" className="quizzes d-flex flex-column m-10">
+              <InfiniteScroll
+                next={getQuizzes}
+                dataLength={quizCards.length}
+                hasMore={quizzes.hasMore}
+                loader={
+                  <div className="d-flex justify-content-center mt-4">
+                    <LoadingSpinner isVisible={true} />
+                  </div>
+                }
+                endMessage={
+                  <div className="d-flex justify-content-center mt-4">
+                    <h4>No more quizzes</h4>
+                  </div>
+                }
+                className="pe-3"
+                scrollThreshold={0.7}
+              >
+                {quizCards}
+              </InfiniteScroll>
+            </div>
           </div>
         </div>
-        <div className="information d-flex flex-column">
-          {modView && (
-            <div className="d-flex flex-column w-100">
-              <LinkButton buttonSize="btn--large" to={`/p/${params.platform}/createQuiz`}>
-                Create Quiz
-              </LinkButton>
-              <div className="p-1"></div>
-              <LinkButton
-                buttonStyle="btn--special"
-                buttonSize="btn--large"
-                to={`/p/${params.platform}/subscribers`}
-              >
-                Manage Subscribers
-              </LinkButton>
+        <div id="platform-right">
+          <div id="platform-sidebar">
+            {modView && (
+              <div className="d-flex flex-column w-100">
+                <LinkButton buttonSize="btn--large" to={`/p/${params.platform}/createQuiz`}>
+                  Create Quiz
+                </LinkButton>
+                <div className="p-1"></div>
+                <LinkButton
+                  buttonStyle="btn--special"
+                  buttonSize="btn--large"
+                  to={`/p/${params.platform}/subscribers`}
+                >
+                  Manage Subscribers
+                </LinkButton>
+              </div>
+            )}
+            <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">
+              {platform.description}
             </div>
-          )}
-          <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">
-            {platform.description}
-          </div>
-          <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
-            <div>Your Platform IQ</div>
-            <div className="color-special fw-bold fs-1">{userIQ}</div>
-            
+            {leaderboard && (
+              <Leaderboard
+                className="mt-3"
+                scores={leaderboard.scores}
+                nextResultsHandler={getLeaderboardResults}
+                hasMore={leaderboard.hasMore}
+                userScore={leaderboard.currentUser}
+              />
+            )}
           </div>
         </div>
       </div>

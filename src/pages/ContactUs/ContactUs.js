@@ -8,10 +8,7 @@ import "iframe-resizer/js/iframeResizer.contentWindow";
 import "./styles.scss";
 
 const ContactUs = () => {
-  const subNavButtons = [
-    <LinkButton to="/createPlatform">Create A Platform</LinkButton>,
-    <LinkButton to="/notifications">Notifications</LinkButton>,
-  ];
+  const subNavButtons = [<LinkButton to="/createPlatform">Create A Platform</LinkButton>];
   return (
     <div>
       <MainNav />

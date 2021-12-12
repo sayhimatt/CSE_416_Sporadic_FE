@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { UserContext } from "../../contexts/UserContext/UserContext";
-import { getUser, patchUserAbout } from "../../API/API";
+import { getUser, patchUserAbout, getAllAwardIcons } from "../../API/API";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import Button from "../../components/Buttons/Button/Button";
 import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
+import AwardCarousel from "../../components/AwardCarousel/AwardCarousel";
 
 import "./styles.scss";
 import ImageUploader from "../../components/ImageUploader/ImageUploader";
@@ -16,6 +17,7 @@ const MyAccount = () => {
   const [userState, setuserState] = useState();
   const [about, setAbout] = useState("");
   const [showAvatarUpload, setShowAvatarUpload] = useState(false);
+  const [awards, setAwards] = useState();
   const [alerts, setAlerts] = useState({ show: false, style: "danger", message: "" });
 
   useEffect(() => {
@@ -23,6 +25,9 @@ const MyAccount = () => {
       .then((user) => {
         setuserState(user);
         setAbout(user.aboutSection);
+        getAllAwardIcons(user.displayedAwards ? user.displayedAwards : []).then((awards) =>
+          setAwards(awards),
+        );
       })
       .catch(() => console.log("Could not retrieve user"));
   }, []);
@@ -45,10 +50,6 @@ const MyAccount = () => {
       );
   };
 
-  const changePassword = () => {
-    // implement change password functionality
-  };
-
   return (
     <div>
       <NavBar />
@@ -57,9 +58,6 @@ const MyAccount = () => {
         buttons={[
           <LinkButton key="navCreatePlatB" to="/createPlatform">
             Create A Platform
-          </LinkButton>,
-          <LinkButton key="navNotificationB" to="/notifications">
-            Notifications
           </LinkButton>,
         ]}
       />
@@ -83,18 +81,18 @@ const MyAccount = () => {
             </div>
             <div className="account-section">
               <h2>STATS</h2>
-              <div className="d-flex w-75 justify-content-between">
-                <h3>
+              <div className="d-flex justify-content-between">
+                <h3 className="stat-box text-end">
                   <b className="color-secondary">
-                    {(userState.awards && userState.awards.length) || 0}
+                    {userState.awards.length + userState.displayedAwards.length}
                   </b>{" "}
                   Awards
                 </h3>
-                <h3>
-                  <b className="color-secondary">{userState.friends.length}</b> Friends
-                </h3>
-                <h3>
+                <h3 className="stat-box text-center ms-5 me-5">
                   <b className="color-secondary">{userState.subscriptions.length}</b> Subscriptions
+                </h3>
+                <h3 className="stat-box text-start">
+                  <b className="color-secondary">{userState.followedUsers.length}</b> Following
                 </h3>
               </div>
             </div>
@@ -114,18 +112,9 @@ const MyAccount = () => {
             </div>
             <div className="account-section">
               <h2>AWARDS</h2>
-              <div id="account-awards-shelf">
-                {userState.awards &&
-                  userState.awards
-                    .filter((award) => award.isShowcased)
-                    .map((award, index) => (
-                      <div key={`award-${index}`} className="account-award">
-                        <img alt="award" src="award.url" />
-                      </div>
-                    ))}
-              </div>
+              <AwardCarousel awards={awards} />
               <div id="manage-awards-button-container" className="align-self-center">
-                <Button>Manage Awards</Button>
+                <LinkButton to="/awardCase">Manage Awards</LinkButton>
               </div>
             </div>
             <div className="account-section">
@@ -135,9 +124,7 @@ const MyAccount = () => {
                 <p>{userState.email}</p>
                 <div className="account-info-heading">Username</div>
                 <p>{userState.username}</p>
-                <div className="account-info-heading mb-2">Password</div>
               </div>
-              <Button>Change Password</Button>
             </div>
           </div>
           <ImageUploader

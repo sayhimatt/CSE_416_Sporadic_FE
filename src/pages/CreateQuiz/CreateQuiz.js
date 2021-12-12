@@ -7,6 +7,7 @@ import {
   getPlatformIcon,
   getPlatformBanner,
   generateSetQuizIconURL,
+  generateSetQuizAwardIconURL,
   setImage,
 } from "../../API/API";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard";
@@ -15,8 +16,7 @@ import Button from "../../components/Buttons/Button/Button";
 import NavBar from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import LoadingOverlay from "../../components/LoadingIndicators/LoadingOverlay";
-
-import "./styles.css";
+import "./styles.scss";
 
 const CreateQuiz = () => {
   const [questions, setQuestions] = useState([defaultQuestion()]);
@@ -25,8 +25,10 @@ const CreateQuiz = () => {
   const [errors, setErrors] = useState({ show: false, messages: [] });
   const [banner, setBanner] = useState("/banner.svg");
   const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
-  const [images, setImages] = useState({ icon: "" });
-  const [imageUploaders, setImageUploaders] = useState({ icon: false });
+  const [images, setImages] = useState({ quizIcon: "/quizIcon.png", awardIcon: "/award.svg" });
+  const [imageUploaders, setImageUploaders] = useState({ quizIcon: false, awardIcon: false });
+  const [awardTitle, setAwardTitle] = useState("");
+  const [awardRequirement, setAwardRequirement] = useState(0);
   const params = useParams();
   const history = useHistory();
 
@@ -69,15 +71,26 @@ const CreateQuiz = () => {
   };
 
   const addQuestion = () => {
+    if (questions.length >= 30) {
+      setErrors((prevState) => ({
+        ...prevState,
+        messages: prevState.messages.concat([
+          "Your quiz should be less than 30 questions keep it simple!",
+        ]),
+        show: true,
+      }));
+      return;
+    }
     setQuestions((prevState) => [...prevState, defaultQuestion()]);
   };
 
   const deleteQuestion = (questionNumber) => {
     if (questions.length === 1) {
-      setErrors({
+      setErrors((prevState) => ({
+        ...prevState,
+        messages: prevState.messages.concat(["Your quiz must have at least one question"]),
         show: true,
-        messages: ["Your quiz must have at least one question"],
-      });
+      }));
       return;
     }
     setQuestions((prevState) => prevState.filter((question, index) => questionNumber !== index));
@@ -98,10 +111,11 @@ const CreateQuiz = () => {
       );
     } else {
       // Set an error message
-      setErrors({
-        messages: ["Ten is too many choices for a single question"],
+      setErrors((prevState) => ({
+        ...prevState,
+        messages: prevState.messages.concat(["Ten is too many choices for a single question"]),
         show: true,
-      });
+      }));
     }
     setQuestions((prevState) => [...prevState]);
   };
@@ -120,10 +134,11 @@ const CreateQuiz = () => {
       );
     } else {
       // Set an error message
-      setErrors({
-        messages: ["All questions must have at least two choices"],
+      setErrors((prevState) => ({
+        ...prevState,
+        messages: prevState.messages.concat(["All questions must have at least two choices"]),
         show: true,
-      });
+      }));
     }
     setQuestions((prevState) => [...prevState]);
   };
@@ -152,22 +167,35 @@ const CreateQuiz = () => {
   };
 
   const customIconSubmit = (file) => {
-    setImages((prevState) => ({ ...prevState, icon: file }));
-    setImageUploaders((prevState) => ({ ...prevState, icon: false }));
+    setImages((prevState) => ({ ...prevState, quizIcon: file }));
+    setImageUploaders((prevState) => ({ ...prevState, quizIcon: false }));
+  };
+
+  const customAwardIconSubmit = (file) => {
+    setImages((prevState) => ({ ...prevState, awardIcon: file }));
+    setImageUploaders((prevState) => ({ ...prevState, awardIcon: false }));
   };
 
   const sendImagesToAWS = async () => {
     const promises = [];
-    if (images.icon !== "") {
+    if (images.quizIcon !== "/quizIcon.svg") {
       promises.push(
         generateSetQuizIconURL(params.platform, quizInfo.quizTitle)
-          .then((putURL) => setImage(putURL, images.icon))
+          .then((putURL) => setImage(putURL, images.quizIcon))
           .catch((e) => {
             throw `Error Uploading: ${e}`;
           }),
       );
     }
-    // TODO: Add Award
+    if (images.awardIcon !== "/award.svg") {
+      promises.push(
+        generateSetQuizAwardIconURL(params.platform, quizInfo.quizTitle)
+          .then((putURL) => setImage(putURL, images.awardIcon))
+          .catch((e) => {
+            throw `Error Uploading: ${e}`;
+          }),
+      );
+    }
     return await Promise.all(promises).catch((e) => {
       throw `Error Uploading: ${e}`;
     });
@@ -175,6 +203,7 @@ const CreateQuiz = () => {
 
   const publishQuiz = () => {
     if (!checkFields()) {
+      console.log("Bad check");
       return;
     }
     const correctAnswers = questions.map((question) => question.correctAnswer);
@@ -186,9 +215,11 @@ const CreateQuiz = () => {
       ...quizInfo,
       platformTitle: params.platform,
       questions: quizQuestions,
+      awardTitle: awardTitle,
       correctAnswers,
     };
     quiz.timeLimit = parseInt(quiz.timeLimit);
+    quiz.awardRequirement = parseInt(awardRequirement);
     setIsLoading(true);
     postCreateQuiz(quiz)
       .then(() => {
@@ -213,7 +244,17 @@ const CreateQuiz = () => {
     const validTimer = checkTimer();
     const validQuestions = checkQuestions();
     const validAnswers = checkAnswers();
-    if (!validQuizTitle || !validDescription || !validTimer || !validQuestions || !validAnswers) {
+    const validAwardReq = checkAwardRequirement(awardRequirement);
+    const validAwardTitle = checkAwardTitle();
+    if (
+      !validQuizTitle ||
+      !validDescription ||
+      !validTimer ||
+      !validQuestions ||
+      !validAnswers ||
+      !validAwardReq ||
+      !validAwardTitle
+    ) {
       setErrors((prevState) => ({ ...prevState, show: true }));
       return false;
     }
@@ -260,6 +301,24 @@ const CreateQuiz = () => {
         addErrorMessage("Answer choices cannot be left empty");
         return false;
       }
+      return true;
+    }
+  };
+
+  const checkAwardRequirement = (awardReq) => {
+    if (awardReq < 1 || awardReq > questions.length) {
+      addErrorMessage(`Award Requirement Invalid, Pick [1 - ${questions.length}]`);
+      return false;
+    } else {
+      setAwardRequirement(awardReq);
+      return true;
+    }
+  };
+  const checkAwardTitle = () => {
+    if (awardTitle.length <= 1 || awardTitle.length > 30) {
+      addErrorMessage(`Award Title Invalid Size Maximum Length of 30 Characters`);
+      return false;
+    } else {
       return true;
     }
   };
@@ -351,7 +410,7 @@ const CreateQuiz = () => {
       <NavBar />
       <PlatformSubNav
         platformName={"Quiz: " + quizInfo.quizTitle}
-        bannerSrc={banner}
+        //bannerSrc={banner}
         iconSrc={platformIcon}
       />
       <div className="quiz-alerts">{renderErrors()}</div>
@@ -381,32 +440,90 @@ const CreateQuiz = () => {
                 />
               </div>
             </div>
-            <div className="quiz-info-section">
-              <label>Time Limit (in seconds)</label>
-              <div id="timer-input" className="input-box">
-                <input
-                  className="input text-center"
-                  placeholder="Time Limit"
-                  maxLength={3}
-                  onChange={(e) => setTimeLimit(e.target.value)}
-                />
+            <div className="d-flex w-100 mb-4 mt-3 justify-content-center">
+              <div className="d-flex flex-column fs-5 align-items-center justify-content-center">
+                <label>Time Limit (seconds)</label>
+                <div id="timer-input" className="input-box w-50">
+                  <input
+                    className="input text-center"
+                    placeholder="Time Limit"
+                    maxLength={3}
+                    onChange={(e) => setTimeLimit(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="d-flex flex-column fs-5 align-items-center justify-content-center">
+                <label>Award Requirement</label>
+                <div id="timer-input" className="input-box w-50">
+                  <input
+                    className="input text-center"
+                    placeholder={"Pick 1" + " - " + questions.length}
+                    maxLength={2}
+                    onChange={(e) => checkAwardRequirement(e.target.value)}
+                  />
+                </div>
               </div>
             </div>
-            <div className="mt-4">
-              <Button buttonSize="btn--large" onClick={addQuestion}>
-                Add Question
-              </Button>
-            </div>
-            <div className="mt-4">
-              <Button
-                buttonSize="btn--large"
-                onClick={() => setImageUploaders((prevState) => ({ ...prevState, icon: true }))}
-              >
-                Upload Icon
-              </Button>
+            <div className="d-flex flex-row w-100 justify-content-center">
+              <div className="d-flex flex-column align-items-center">
+                <div className="d-flex flex-row w-100 align-items-center">
+                  <div className="upload-button-container">
+                    <Button
+                      onClick={() =>
+                        setImageUploaders((prevState) => ({ ...prevState, awardIcon: true }))
+                      }
+                    >
+                      Upload Award Icon
+                    </Button>
+                  </div>
+                  <img
+                    id="trophy"
+                    src={
+                      images.awardIcon === "/award.svg"
+                        ? "/award.svg"
+                        : URL.createObjectURL(images.awardIcon)
+                    }
+                    alt="Icon"
+                  />
+                  <div className="upload-right">
+                    <div className="input-box">
+                      <input
+                        className="input text-center"
+                        placeholder="Trophy Title"
+                        maxLength={30}
+                        onChange={(e) => setAwardTitle(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-1 d-flex flex-row w-100 align-items-center mt-3">
+                  <div className="upload-button-container">
+                    <Button
+                      onClick={() =>
+                        setImageUploaders((prevState) => ({ ...prevState, quizIcon: true }))
+                      }
+                    >
+                      Upload Quiz Icon
+                    </Button>
+                  </div>
+                  <img
+                    id="quiz-icon"
+                    src={
+                      images.quizIcon === "/quizIcon.png"
+                        ? "/quizIcon.png"
+                        : URL.createObjectURL(images.quizIcon)
+                    }
+                    alt="Icon"
+                  />
+                  <div className="fs-5 upload-right">
+                    <label>Quiz Icon</label>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="d-flex flex-column w-50">
+
+          <div className="prime-buttons d-flex flex-column w-50">
             <Button buttonStyle="btn--special" buttonSize="btn--large" onClick={publishQuiz}>
               Publish Quiz
             </Button>
@@ -414,18 +531,35 @@ const CreateQuiz = () => {
         </div>
         <div className="quiz-cards d-flex flex-column flex-grow-1 me-4">
           {questions && renderCards()}
+          <div className="w-25 align-self-center mt-4">
+            <Button buttonStyle="btn--primary" buttonSize="btn--large" onClick={addQuestion}>
+              Add Question
+            </Button>
+          </div>
         </div>
       </div>
       <div className="uploader">
         <ImageUploader
-          visible={imageUploaders.icon}
+          visible={imageUploaders.quizIcon}
           desiredFile="quiz icon"
           desiredQuiz={quizInfo.quizTitle}
           desiredPlatform={params.platform}
           visibilityHandler={() =>
-            setImageUploaders((prevState) => ({ ...prevState, icon: false }))
+            setImageUploaders((prevState) => ({ ...prevState, quizIcon: false }))
           }
           customSubmit={customIconSubmit}
+        />
+      </div>
+      <div className="uploader">
+        <ImageUploader
+          visible={imageUploaders.awardIcon}
+          desiredFile="award icon"
+          desiredQuiz={quizInfo.quizTitle}
+          desiredPlatform={params.platform}
+          visibilityHandler={() =>
+            setImageUploaders((prevState) => ({ ...prevState, awardIcon: false }))
+          }
+          customSubmit={customAwardIconSubmit}
         />
       </div>
       <LoadingOverlay isVisible={isLoading} />
