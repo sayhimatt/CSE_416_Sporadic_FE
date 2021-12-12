@@ -193,14 +193,14 @@ const CreateQuiz = () => {
           }),
       );
     }
-    if(images.awardIcon !== "/award.svg") {
+    if (images.awardIcon !== "/award.svg") {
       promises.push(
         generateSetQuizAwardIconURL(params.platform, quizInfo.quizTitle)
-        .then((putURL) => setImage(putURL, images.awardIcon))
-        .catch((e) => {
-          throw `Error Uploading: ${e}`;
-        }),
-      )
+          .then((putURL) => setImage(putURL, images.awardIcon))
+          .catch((e) => {
+            throw `Error Uploading: ${e}`;
+          }),
+      );
     }
     return await Promise.all(promises).catch((e) => {
       throw `Error Uploading: ${e}`;
@@ -223,7 +223,6 @@ const CreateQuiz = () => {
       questions: quizQuestions,
       awardTitle: awardTitle,
       correctAnswers,
-      
     };
     quiz.timeLimit = parseInt(quiz.timeLimit);
     quiz.awardRequirement = parseInt(awardRequirement);
@@ -253,7 +252,15 @@ const CreateQuiz = () => {
     const validAnswers = checkAnswers();
     const validAwardReq = checkAwardRequirement(awardRequirement);
     const validAwardTitle = checkAwardTitle();
-    if (!validQuizTitle || !validDescription || !validTimer || !validQuestions || !validAnswers || !validAwardReq || !validAwardTitle) {
+    if (
+      !validQuizTitle ||
+      !validDescription ||
+      !validTimer ||
+      !validQuestions ||
+      !validAnswers ||
+      !validAwardReq ||
+      !validAwardTitle
+    ) {
       setErrors((prevState) => ({ ...prevState, show: true }));
       return false;
     }
@@ -305,15 +312,8 @@ const CreateQuiz = () => {
   };
 
   const checkAwardRequirement = (awardReq) => {
-    removeErrorMessage("Award Requirement Invalid");
     if (awardReq < 1 || awardReq > questions.length) {
-      setErrors((prevState) => ({
-        ...prevState,
-        messages: prevState.messages.concat([
-          `Award Requirement Invalid, Pick [1 - ${questions.length}]`,
-        ]),
-        show: true,
-      }));
+      addErrorMessage(`Award Requirement Invalid, Pick [1 - ${questions.length}]`);
       return false;
     } else {
       setAwardRequirement(awardReq);
@@ -321,16 +321,8 @@ const CreateQuiz = () => {
     }
   };
   const checkAwardTitle = () => {
-    removeErrorMessage("Award Title Invalid Size");
-    console.log(awardTitle + "    size " + awardTitle.length);
     if (awardTitle.length <= 1 || awardTitle.length > 30) {
-      setErrors((prevState) => ({
-        ...prevState,
-        messages: prevState.messages.concat([
-          `Award Title Invalid Size Maximum Length of 30 Characters`,
-        ]),
-        show: true,
-      }));
+      addErrorMessage(`Award Title Invalid Size Maximum Length of 30 Characters`);
       return false;
     } else {
       return true;
@@ -341,14 +333,6 @@ const CreateQuiz = () => {
     setErrors((prevState) => ({
       ...prevState,
       messages: prevState.messages.concat([message]),
-    }));
-  };
-
-  const removeErrorMessage = (messageStart) => {
-    const messageList = errors.messages.filter((message) => !message.startsWith(messageStart));
-    setErrors((prevState) => ({
-      ...prevState,
-      messages: messageList,
     }));
   };
 
@@ -515,7 +499,15 @@ const CreateQuiz = () => {
                   </div>
                 </div>
                 <div className="d-flex flex-row w-100 align-items-center">
-                  <img id="trophy" src={images.awardIcon === "/award.svg" ? "/award.svg" : URL.createObjectURL(images.awardIcon)} alt="Icon" />
+                  <img
+                    id="trophy"
+                    src={
+                      images.awardIcon === "/award.svg"
+                        ? "/award.svg"
+                        : URL.createObjectURL(images.awardIcon)
+                    }
+                    alt="Icon"
+                  />
                   <div className="input-box m-4">
                     <input
                       className="input text-center"
@@ -526,7 +518,15 @@ const CreateQuiz = () => {
                   </div>
                 </div>
                 <div className="mt-1 d-flex flex-row w-100 align-items-center">
-                  <img id="quiz-icon" src={images.quizIcon === "/quizIcon.png" ? "/quizIcon.png" : URL.createObjectURL(images.quizIcon)} alt="Icon" />
+                  <img
+                    id="quiz-icon"
+                    src={
+                      images.quizIcon === "/quizIcon.png"
+                        ? "/quizIcon.png"
+                        : URL.createObjectURL(images.quizIcon)
+                    }
+                    alt="Icon"
+                  />
                   <div className="quiz-info-section align-items-left mx-4">
                     <label>Quiz Icon</label>
                   </div>
