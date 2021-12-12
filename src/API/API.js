@@ -219,11 +219,15 @@ export const patchUserAbout = async (username, text) => {
 };
 
 /* Feed routing */
-export const getFeedQuizzes = async (page) => {
-  const AMOUNT_PER_PAGE = 10;
+export const getFeedQuizzes = async (
+  page,
+  amountPerPage = 10,
+  sortBy = "title",
+  sortDirection = "ascending",
+) => {
   const token = await getToken();
   const response = await axios.get(
-    `${ENDPOINT}/quizzes/feed?page=${page}&amountPerPage=${AMOUNT_PER_PAGE}`,
+    `${ENDPOINT}/quizzes/feed?page=${page}&amountPerPage=${amountPerPage}&sortBy=${sortBy}&sortDirection=${sortDirection}`,
     {
       headers: { authorization: `Bearer ${token}` },
     },

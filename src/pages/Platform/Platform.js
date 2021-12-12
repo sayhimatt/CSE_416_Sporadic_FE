@@ -274,103 +274,107 @@ const Platform = () => {
       </PlatformSubNav>
 
       <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
-        <div className="d-flex flex-column m-5 mt-0 align-items-end">
-          <div className="d-flex flex-row sort mb-2">
-            <div className="d-flex align-items-center justify-content-center pe-3">
-              <Dropdown>
-                <Dropdown.Toggle className="sort-dropdowns me-3">
-                  {sortBy === "timeLimit" ? "Time Limit" : sortBy}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Header>sort by</Dropdown.Header>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setSortBy("title");
-                    }}
-                  >
-                    Title
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setSortBy("upvotes");
-                    }}
-                  >
-                    Upvotes
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setSortBy("downvotes");
-                    }}
-                  >
-                    Downvotes
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setSortBy("timeLimit");
-                    }}
-                  >
-                    Time Limit
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-              <SortDirectionButtons
-                sortDirection={sortDirection}
-                onAscendingClick={() => setSortDirection("ascending")}
-                onDescendingClick={() => setSortDirection("descending")}
-              />
+        <div id="platform-left">
+          <div className="d-flex flex-column w-100">
+            <div className="d-flex flex-row sort mb-2 align-self-end">
+              <div className="d-flex align-items-center justify-content-center pe-3">
+                <Dropdown>
+                  <Dropdown.Toggle className="sort-dropdowns me-3">
+                    {sortBy === "timeLimit" ? "Time Limit" : sortBy}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Header>sort by</Dropdown.Header>
+                    <Dropdown.Item
+                      onClick={() => {
+                        setSortBy("title");
+                      }}
+                    >
+                      Title
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() => {
+                        setSortBy("upvotes");
+                      }}
+                    >
+                      Upvotes
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() => {
+                        setSortBy("downvotes");
+                      }}
+                    >
+                      Downvotes
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() => {
+                        setSortBy("timeLimit");
+                      }}
+                    >
+                      Time Limit
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                <SortDirectionButtons
+                  sortDirection={sortDirection}
+                  onAscendingClick={() => setSortDirection("ascending")}
+                  onDescendingClick={() => setSortDirection("descending")}
+                />
+              </div>
             </div>
-          </div>
 
-          <div id="platform-quizzes" className="quizzes d-flex flex-column m-10">
-            <InfiniteScroll
-              next={getQuizzes}
-              dataLength={quizCards.length}
-              hasMore={quizzes.hasMore}
-              loader={
-                <div className="d-flex justify-content-center mt-4">
-                  <LoadingSpinner isVisible={true} />
-                </div>
-              }
-              endMessage={
-                <div className="d-flex justify-content-center mt-4">
-                  <h4>No more quizzes</h4>
-                </div>
-              }
-              className="pe-3"
-              scrollThreshold={0.7}
-            >
-              {quizCards}
-            </InfiniteScroll>
+            <div id="platform-quizzes" className="quizzes d-flex flex-column m-10">
+              <InfiniteScroll
+                next={getQuizzes}
+                dataLength={quizCards.length}
+                hasMore={quizzes.hasMore}
+                loader={
+                  <div className="d-flex justify-content-center mt-4">
+                    <LoadingSpinner isVisible={true} />
+                  </div>
+                }
+                endMessage={
+                  <div className="d-flex justify-content-center mt-4">
+                    <h4>No more quizzes</h4>
+                  </div>
+                }
+                className="pe-3"
+                scrollThreshold={0.7}
+              >
+                {quizCards}
+              </InfiniteScroll>
+            </div>
           </div>
         </div>
-        <div className="information d-flex flex-column">
-          {modView && (
-            <div className="d-flex flex-column w-100">
-              <LinkButton buttonSize="btn--large" to={`/p/${params.platform}/createQuiz`}>
-                Create Quiz
-              </LinkButton>
-              <div className="p-1"></div>
-              <LinkButton
-                buttonStyle="btn--special"
-                buttonSize="btn--large"
-                to={`/p/${params.platform}/subscribers`}
-              >
-                Manage Subscribers
-              </LinkButton>
+        <div id="platform-right">
+          <div id="platform-sidebar">
+            {modView && (
+              <div className="d-flex flex-column w-100">
+                <LinkButton buttonSize="btn--large" to={`/p/${params.platform}/createQuiz`}>
+                  Create Quiz
+                </LinkButton>
+                <div className="p-1"></div>
+                <LinkButton
+                  buttonStyle="btn--special"
+                  buttonSize="btn--large"
+                  to={`/p/${params.platform}/subscribers`}
+                >
+                  Manage Subscribers
+                </LinkButton>
+              </div>
+            )}
+            <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">
+              {platform.description}
             </div>
-          )}
-          <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">
-            {platform.description}
+            {leaderboard && (
+              <Leaderboard
+                className="mt-3"
+                scores={leaderboard.scores}
+                nextResultsHandler={getLeaderboardResults}
+                hasMore={leaderboard.hasMore}
+                userScore={leaderboard.currentUser}
+              />
+            )}
           </div>
-          {leaderboard && (
-            <Leaderboard
-              className="mt-3"
-              scores={leaderboard.scores}
-              nextResultsHandler={getLeaderboardResults}
-              hasMore={leaderboard.hasMore}
-              userScore={leaderboard.currentUser}
-            />
-          )}
         </div>
       </div>
       <ImageUploader
