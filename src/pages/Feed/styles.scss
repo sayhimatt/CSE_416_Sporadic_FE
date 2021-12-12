@@ -4,6 +4,14 @@
   min-height: 80vh;
 }
 
+#feed-left {
+  display: flex;
+  flex-direction: column;
+  margin: 5px 0px 30px 40px;
+  align-items: start;
+  width: 70%;
+}
+
 #feed-right {
   display: flex;
   width: 30%;
@@ -37,4 +45,11 @@
   border: 1px solid $secondaryColor;
   background-color: white;
   margin-bottom: 8px;
+}
+
+#sort {
+  display: flex;
+  align-self: end;
+  margin-right: 20px;
+  margin-bottom: 10px;
 }
