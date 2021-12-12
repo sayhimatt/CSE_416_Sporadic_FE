@@ -18,7 +18,7 @@
 
 #leaderboard-user-list {
   max-height: 300px;
-  overflow-y: scroll;
+  overflow: auto;
 }
 
 .leaderboard-cell {
@@ -39,7 +39,7 @@
 .board-name {
   width: 55%;
   border-right: 1px solid black;
-  overflow-x: scroll;
+  overflow: auto;
 }
 
 .board-score {
