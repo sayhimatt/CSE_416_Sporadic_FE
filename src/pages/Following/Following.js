@@ -46,7 +46,7 @@ const Following = () => {
     <div>
       <NavBar />
       <SubNav
-        heading="Manage Friends"
+        heading="Manage Followers"
         buttons={[<LinkButton to="/createPlatform">Create A Platform</LinkButton>]}
       />
       <div className="page-content d-flex flex-column align-items-center">
