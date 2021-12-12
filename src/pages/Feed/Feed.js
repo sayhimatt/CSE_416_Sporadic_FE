@@ -188,13 +188,20 @@ const Feed = ({ children }) => {
         <div id="feed-right">
           <div id="feed-sidebar">
             <h3 className="mb-4">Your Awards</h3>
-            {awards &&
+            {awards && awards.length !== 0 ? (
               awards.map((award) => (
                 <div className="feed-award-container">
                   <img src={award.image} alt="award" />
                   <p>{award.title}</p>
                 </div>
-              ))}
+              ))
+            ) : (
+              <div className="mt-5 fs-5">
+                You have no awards.
+                <br />
+                Take some quizzes to start earning awards!
+              </div>
+            )}
           </div>
         </div>
       </div>
