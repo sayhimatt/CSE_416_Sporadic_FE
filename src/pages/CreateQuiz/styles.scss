@@ -26,6 +26,8 @@
 
 #quiz-controller .input-box {
   width: 100%;
+  height: min-content;
+
 }
 
 #quiz-title-input {
@@ -49,6 +51,11 @@
   justify-content: center;
 }
 
+.quiz-info-limit {
+  width: 100%;
+}
+
+
 .quiz-info-section > label {
   font-size: 1.5em;
 }
@@ -60,10 +67,9 @@
   z-index: 1;
 }
 
-#trophy-earned {
-  height: 3em;
-  width: 3em;
-  padding: 5px;
+#trophy, #quiz-icon {
+  height: 8em;
+  width: 8em;
   border-radius: 50%;
   border: 2px solid $secondaryColor;
 }
