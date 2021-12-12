@@ -208,7 +208,6 @@ const Platform = () => {
 
       // get array of just scores, no usernames
       const scoresSet = scores.map(score => score.totalCorrect);
-      console.log(scoresSet);
 
       // calculate standard deviation of scores set
       const n = scoresSet.length
@@ -400,6 +399,10 @@ const Platform = () => {
             )}
             <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">
               {platform.description}
+            </div>
+            <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
+              <div>Your Platform IQ</div>
+              <div className="color-special fw-bold fs-1">{userIQ}</div>            
             </div>
             {leaderboard && (
               <Leaderboard
