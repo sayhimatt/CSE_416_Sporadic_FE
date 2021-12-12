@@ -111,7 +111,7 @@ const Platform = () => {
     const name = params.platform;
     getPlatform(name)
       .then((platformData) => {
-        //console.log(platformData);
+        console.log(platformData);
         setPlatform(platformData);
       })
       .catch((error) => {
@@ -199,15 +199,22 @@ const Platform = () => {
 
   const getUserIQ = () => {        
     try {
+      console.log(platform);
+      console.log(params.platform);
+
       const scores = platform.scores;
+      console.log("scores: " + scores);
 
       // find users score
       const userScore = scores.find( (score) => {
         return score.username == user.username;
       }).totalCorrect;
+      console.log("user score: " + userScore);
 
       // get array of just scores, no usernames
       const scoresSet = scores.map(score => score.totalCorrect);
+      console.log("scores set: " + scoresSet);
+
 
       // calculate standard deviation of scores set
       const n = scoresSet.length
