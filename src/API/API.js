@@ -291,6 +291,22 @@ export const getSearchResults = async (type, query, page, userFilter = null) => 
   return response.data.items;
 };
 
+/* Award Routing */
+export const putUpdateAwardDisplayStatus = async (displayedAwards, awards) => {
+  const token = await getToken();
+  const response = await axios.put(
+    `${ENDPOINT}/users/updateDisplayedAwards`,
+    {
+      displayedAwards,
+      awards,
+    },
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+  return response;
+};
+
 /* AWS S3 Routing */
 export const getUserIcon = async (username) => {
   try {

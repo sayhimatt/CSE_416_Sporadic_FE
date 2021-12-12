@@ -25,7 +25,9 @@ const MyAccount = () => {
       .then((user) => {
         setuserState(user);
         setAbout(user.aboutSection);
-        //setAwards(getAllAwardIcons(user.showCasedAwards));
+        getAllAwardIcons(user.displayedAwards ? user.displayedAwards : []).then((awards) =>
+          setAwards(awards),
+        );
       })
       .catch(() => console.log("Could not retrieve user"));
   }, []);
@@ -79,18 +81,18 @@ const MyAccount = () => {
             </div>
             <div className="account-section">
               <h2>STATS</h2>
-              <div className="d-flex w-75 justify-content-between">
-                <h3>
+              <div className="d-flex justify-content-between">
+                <h3 className="stat-box text-end">
                   <b className="color-secondary">
-                    {(userState.awards && userState.awards.length) || 0}
+                    {userState.awards.length + userState.displayedAwards.length}
                   </b>{" "}
                   Awards
                 </h3>
-                <h3>
-                  <b className="color-secondary">{userState.followedUsers.length}</b> Following
-                </h3>
-                <h3>
+                <h3 className="stat-box text-center ms-5 me-5">
                   <b className="color-secondary">{userState.subscriptions.length}</b> Subscriptions
+                </h3>
+                <h3 className="stat-box text-start">
+                  <b className="color-secondary">{userState.followedUsers.length}</b> Following
                 </h3>
               </div>
             </div>
@@ -112,7 +114,7 @@ const MyAccount = () => {
               <h2>AWARDS</h2>
               <AwardCarousel awards={awards} />
               <div id="manage-awards-button-container" className="align-self-center">
-                <Button>Manage Awards</Button>
+                <LinkButton to="/awardCase">Manage Awards</LinkButton>
               </div>
             </div>
             <div className="account-section">
