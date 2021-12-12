@@ -62,7 +62,7 @@ const QuizComplete = () => {
     });
     await getAwardIcon(params.platform, params.quiz).then((icon) => {
       setAward(icon);
-    })
+    });
   };
 
   const getQuiz = async () => {
@@ -70,7 +70,7 @@ const QuizComplete = () => {
     const quizName = params.quiz;
     try {
       const response = await getQuizByTitle(platformName, quizName);
-      if(response.awardRequirement <= response.score.score){
+      if (response.awardRequirement <= response.score.score) {
         setAwardWon(true);
       }
       console.log(response);
@@ -78,8 +78,7 @@ const QuizComplete = () => {
       const pictures = await getAllUserIcons(response.comments.map((comment) => comment.user));
       setUserIcons(pictures);
       setVote(response.score.vote);
-      setAwardTitle(response.awardTitle)
-      
+      setAwardTitle(response.awardTitle);
     } catch (error) {
       console.log(error);
     }
@@ -160,171 +159,182 @@ const QuizComplete = () => {
       .catch((e) => setShowAlert({ show: true, message: "Could not record your vote" }));
   };
 
-  
-  if(!quiz){
+  if (!quiz) {
     return <MainNav />;
-  }
-  else if(quiz && awardWon){
-    return <div>
-      <MainNav />
-      <PlatformSubNav platformName={"Quiz: " + params.quiz} iconSrc={platformIcon} />
-      <div className="quiz-alerts">
-        <Alert
-          show={showAlert.show}
-          variant="danger"
-          onClose={() => setShowAlert({ show: false, message: "" })}
-          dismissible
-        >
-          {showAlert.message}
-        </Alert>
-      </div>
-      <div className="page-content d-flex flex-column align-items-center">
-        <div id="main-results">
-          <div id="score-bubble">{`${Math.round(
-            (quiz.score.score / quiz.totalQuestions) * 100,
-          )}%`}</div>
-          <div id="results-breakdown">
-            <div id="score-breakdown">
-              <div className="d-flex flex-column align-items-center">
-                <div id="questions-right">{quiz.score.score}</div>
-                <div className="score-divider" />
-                <div id="total-questions">{quiz.totalQuestions}</div>
-              </div>
-              <div className="d-flex flex-column align-items-start ms-4">
-                <div>Correct</div>
-                <div className="score-divider invisible" />
-                <div>Questions</div>
-              </div>
-            </div>
-            <div id="award-section">
-              <img id="trophy-earned" src={award} alt="Icon" />
-              <div className="ms-3">{awardTitle}</div>
-            </div>
-          </div>
+  } else if (quiz && awardWon) {
+    return (
+      <div>
+        <MainNav />
+        <PlatformSubNav platformName={"Quiz: " + params.quiz} iconSrc={platformIcon} />
+        <div className="quiz-alerts">
+          <Alert
+            show={showAlert.show}
+            variant="danger"
+            onClose={() => setShowAlert({ show: false, message: "" })}
+            dismissible
+          >
+            {showAlert.message}
+          </Alert>
         </div>
-        <div id="results-feedback">
-          <div id="feedback">
-            <div id="quiz-title">{quiz.title}</div>
-            <div className="d-flex justify-content-around w-75 mt-3">
-              <img
-                id="upvote"
-                className="feedback-image"
-                src={voteImages.upvote.src}
-                alt="upvote"
-                onClick={() => makeVote("upvote")}
-                onMouseEnter={(e) => (e.target.src = voteImages.upvote.enter)}
-                onMouseLeave={(e) => (e.target.src = voteImages.upvote.leave)}
-              />
-              <img
-                id="downvote"
-                className="feedback-image"
-                src={voteImages.downvote.src}
-                alt="downvote"
-                onClick={() => makeVote("downvote")}
-                onMouseEnter={(e) => (e.target.src = voteImages.downvote.enter)}
-                onMouseLeave={(e) => (e.target.src = voteImages.downvote.leave)}
-              />
+        <div className="page-content d-flex flex-column align-items-center">
+          <div id="main-results">
+            <div id="score-bubble">{`${Math.round(
+              (quiz.score.score / quiz.totalQuestions) * 100,
+            )}%`}</div>
+            <div id="results-breakdown">
+              <div id="score-breakdown">
+                <div className="d-flex flex-column align-items-center">
+                  <div id="questions-right">{quiz.score.score}</div>
+                  <div className="score-divider" />
+                  <div id="total-questions">{quiz.totalQuestions}</div>
+                </div>
+                <div className="d-flex flex-column align-items-start ms-4">
+                  <div>Correct</div>
+                  <div className="score-divider invisible" />
+                  <div>Questions</div>
+                </div>
+              </div>
+              <div id="award-section">
+                <img id="trophy-earned" src={award} alt="Icon" />
+                <div className="ms-4 text-center">
+                  Earned:
+                  <br />
+                  {awardTitle}
+                </div>
+              </div>
             </div>
           </div>
-          <div id="comments-section">
-            <div id="make-comment">
-              <div className="comment-box flex-grow-1">
-                <textarea
-                  className="input"
-                  placeholder="Enter a comment"
-                  onChange={(e) => setComment(e.target.value)}
+          <div id="results-feedback">
+            <div id="feedback">
+              <div id="quiz-title">{quiz.title}</div>
+              <div className="d-flex justify-content-around w-75 mt-3">
+                <img
+                  id="upvote"
+                  className="feedback-image"
+                  src={voteImages.upvote.src}
+                  alt="upvote"
+                  onClick={() => makeVote("upvote")}
+                  onMouseEnter={(e) => (e.target.src = voteImages.upvote.enter)}
+                  onMouseLeave={(e) => (e.target.src = voteImages.upvote.leave)}
+                />
+                <img
+                  id="downvote"
+                  className="feedback-image"
+                  src={voteImages.downvote.src}
+                  alt="downvote"
+                  onClick={() => makeVote("downvote")}
+                  onMouseEnter={(e) => (e.target.src = voteImages.downvote.enter)}
+                  onMouseLeave={(e) => (e.target.src = voteImages.downvote.leave)}
                 />
               </div>
-              <div className="ms-3">
-                <Button onClick={makeComment}>Make Comment</Button>
-              </div>
             </div>
-            <div id="comments-list" className="mb-5">
-              {quiz.comments && userIcons && generateCommentCards()}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>;
-  }
-  else{
-    return <div>
-      <MainNav />
-      <PlatformSubNav platformName={"Quiz: " + params.quiz} iconSrc={platformIcon} />
-      <div className="quiz-alerts">
-        <Alert
-          show={showAlert.show}
-          variant="danger"
-          onClose={() => setShowAlert({ show: false, message: "" })}
-          dismissible
-        >
-          {showAlert.message}
-        </Alert>
-      </div>
-      <div className="page-content d-flex flex-column align-items-center">
-        <div id="main-results">
-          <div id="score-bubble">{`${Math.round(
-            (quiz.score.score / quiz.totalQuestions) * 100,
-          )}%`}</div>
-          <div id="results-breakdown">
-            <div id="score-breakdown">
-              <div className="d-flex flex-column align-items-center">
-                <div id="questions-right">{quiz.score.score}</div>
-                <div className="score-divider" />
-                <div id="total-questions">{quiz.totalQuestions}</div>
+            <div id="comments-section">
+              <div id="make-comment">
+                <div className="comment-box flex-grow-1">
+                  <textarea
+                    className="input"
+                    placeholder="Enter a comment"
+                    onChange={(e) => setComment(e.target.value)}
+                  />
+                </div>
+                <div className="ms-3">
+                  <Button onClick={makeComment}>Make Comment</Button>
+                </div>
               </div>
-              <div className="d-flex flex-column align-items-start ms-4">
-                <div>Correct</div>
-                <div className="score-divider invisible" />
-                <div>Questions</div>
+              <div id="comments-list" className="mb-5">
+                {quiz.comments && userIcons && generateCommentCards()}
               </div>
             </div>
           </div>
         </div>
-        <div id="results-feedback">
-          <div id="feedback">
-            <div id="quiz-title">{quiz.title}</div>
-            <div className="d-flex justify-content-around w-75 mt-3">
-              <img
-                id="upvote"
-                className="feedback-image"
-                src={voteImages.upvote.src}
-                alt="upvote"
-                onClick={() => makeVote("upvote")}
-                onMouseEnter={(e) => (e.target.src = voteImages.upvote.enter)}
-                onMouseLeave={(e) => (e.target.src = voteImages.upvote.leave)}
-              />
-              <img
-                id="downvote"
-                className="feedback-image"
-                src={voteImages.downvote.src}
-                alt="downvote"
-                onClick={() => makeVote("downvote")}
-                onMouseEnter={(e) => (e.target.src = voteImages.downvote.enter)}
-                onMouseLeave={(e) => (e.target.src = voteImages.downvote.leave)}
-              />
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <MainNav />
+        <PlatformSubNav platformName={"Quiz: " + params.quiz} iconSrc={platformIcon} />
+        <div className="quiz-alerts">
+          <Alert
+            show={showAlert.show}
+            variant="danger"
+            onClose={() => setShowAlert({ show: false, message: "" })}
+            dismissible
+          >
+            {showAlert.message}
+          </Alert>
+        </div>
+        <div className="page-content d-flex flex-column align-items-center">
+          <div id="main-results">
+            <div id="score-bubble">{`${Math.round(
+              (quiz.score.score / quiz.totalQuestions) * 100,
+            )}%`}</div>
+            <div id="results-breakdown">
+              <div id="score-breakdown">
+                <div className="d-flex flex-column align-items-center">
+                  <div id="questions-right">{quiz.score.score}</div>
+                  <div className="score-divider" />
+                  <div id="total-questions">{quiz.totalQuestions}</div>
+                </div>
+                <div className="d-flex flex-column align-items-start ms-4">
+                  <div>Correct</div>
+                  <div className="score-divider invisible" />
+                  <div>Questions</div>
+                </div>
+              </div>
+              <div id="award-section">
+                <img id="trophy-earned" src={award} alt="Icon" />
+                <div className="ms-3 fs-5 text-center">
+                  Sorry! You did not score high enough to earn the award
+                </div>
+              </div>
             </div>
           </div>
-          <div id="comments-section">
-            <div id="make-comment">
-              <div className="comment-box flex-grow-1">
-                <textarea
-                  className="input"
-                  placeholder="Enter a comment"
-                  onChange={(e) => setComment(e.target.value)}
+          <div id="results-feedback">
+            <div id="feedback">
+              <div id="quiz-title">{quiz.title}</div>
+              <div className="d-flex justify-content-around w-75 mt-3">
+                <img
+                  id="upvote"
+                  className="feedback-image"
+                  src={voteImages.upvote.src}
+                  alt="upvote"
+                  onClick={() => makeVote("upvote")}
+                  onMouseEnter={(e) => (e.target.src = voteImages.upvote.enter)}
+                  onMouseLeave={(e) => (e.target.src = voteImages.upvote.leave)}
+                />
+                <img
+                  id="downvote"
+                  className="feedback-image"
+                  src={voteImages.downvote.src}
+                  alt="downvote"
+                  onClick={() => makeVote("downvote")}
+                  onMouseEnter={(e) => (e.target.src = voteImages.downvote.enter)}
+                  onMouseLeave={(e) => (e.target.src = voteImages.downvote.leave)}
                 />
               </div>
-              <div className="ms-3">
-                <Button onClick={makeComment}>Make Comment</Button>
-              </div>
             </div>
-            <div id="comments-list" className="mb-5">
-              {quiz.comments && userIcons && generateCommentCards()}
+            <div id="comments-section">
+              <div id="make-comment">
+                <div className="comment-box flex-grow-1">
+                  <textarea
+                    className="input"
+                    placeholder="Enter a comment"
+                    onChange={(e) => setComment(e.target.value)}
+                  />
+                </div>
+                <div className="ms-3">
+                  <Button onClick={makeComment}>Make Comment</Button>
+                </div>
+              </div>
+              <div id="comments-list" className="mb-5">
+                {quiz.comments && userIcons && generateCommentCards()}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>;
+    );
   }
 };
 export default QuizComplete;

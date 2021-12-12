@@ -1,8 +1,7 @@
 import axios from "axios";
 import Auth from "@aws-amplify/auth";
 
-//const ENDPOINT = "https://cse-416-sporadic-api-prod.herokuapp.com";
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://cse-416-sporadic-api-prod.herokuapp.com";
 const AWS_ENDPOINT = "https://sporadic-development-bucket.s3.us-east-1.amazonaws.com";
 
 const getToken = async () => {
