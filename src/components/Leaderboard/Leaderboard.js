@@ -11,7 +11,7 @@ const Leaderboard = ({ scores = [], hasMore, nextResultsHandler, className, user
       <div
         key={index}
         className={`d-flex ${score.username === userScore.username ? "user-row" : ""} ${
-          userScore.leaderBoardPosition === index + 1 ? "background-cell-corner" : ""
+          userScore.leaderBoardPosition === scores.length ? "background-cell-corner" : ""
         }`}
       >
         <div className="board-position leaderboard-cell">{index + 1}</div>
