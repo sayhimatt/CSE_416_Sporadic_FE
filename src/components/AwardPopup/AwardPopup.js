@@ -12,7 +12,7 @@ const AwardPopup = ({ award, displayHandler, visible, visibilityHandler }) => {
       </div>
       <img src={award.image} alt="award" />
       <h3>{award.title}</h3>
-      <h5 className="mb-3">
+      <h5 className="mb-3 text-center">
         {`Earned from ${award.quiz} on `}
         <Link className="link" to={`/p/${award.platform}`}>{`/p/${award.platform}`}</Link>
       </h5>
