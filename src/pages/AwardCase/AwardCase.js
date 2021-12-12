@@ -75,24 +75,64 @@ const AwardCase = () => {
   };
 
   const updateDisplay = (platform, quiz, awardTitle, action) => {
-    putUpdateAwardDisplayStatus(platform, quiz, action)
-      .then((res) => {
-        if (action === "remove") {
-          const award = findAward(platform, quiz, awardTitle, "onDisplay");
-          removeFromAwardDisplayState(award);
-        } else {
-          const award = findAward(platform, quiz, awardTitle, "notOnDisplay");
+    if (action === "remove") {
+      const award = findAward(platform, quiz, awardTitle, "onDisplay");
+      const body = buildRemoveRequestBody(award);
+      putUpdateAwardDisplayStatus(body.displayedAwards, body.awards)
+        .then((res) => removeFromAwardDisplayState(award))
+        .catch((e) => showAlert(`Could not ${action} award`));
+    } else {
+      const award = findAward(platform, quiz, awardTitle, "notOnDisplay");
+      const body = buildDisplayRequestBody(award);
+      putUpdateAwardDisplayStatus(body.displayedAwards, body.awards)
+        .then((res) => {
           addToAwardDisplayState(award);
           closePopup();
-        }
-      })
-      .catch((e) => showAlert(`Could not ${action} award`));
+        })
+        .catch((e) => showAlert(`Could not ${action} award`));
+    }
   };
 
   const findAward = (platform, quiz, awardTitle, type) => {
     return awards[type].find(
       (award) => award.platform === platform && award.quiz === quiz && award.title === awardTitle,
     );
+  };
+
+  const buildRemoveRequestBody = (award) => {
+    return {
+      displayedAwards: awards.onDisplay
+        .filter(
+          (listAward) =>
+            !(
+              listAward.platform === award.platform &&
+              listAward.quiz === award.quiz &&
+              listAward.title === award.title
+            ),
+        )
+        .map((award) => ({ platform: award.platform, quiz: award.quiz, title: award.title })),
+      awards: awards.notOnDisplay
+        .concat([award])
+        .map((award) => ({ platform: award.platform, quiz: award.quiz, title: award.title })),
+    };
+  };
+
+  const buildDisplayRequestBody = (award) => {
+    return {
+      awards: awards.notOnDisplay
+        .filter(
+          (listAward) =>
+            !(
+              listAward.platform === award.platform &&
+              listAward.quiz === award.quiz &&
+              listAward.title === award.title
+            ),
+        )
+        .map((award) => ({ platform: award.platform, quiz: award.quiz, title: award.title })),
+      displayedAwards: awards.onDisplay
+        .concat([award])
+        .map((award) => ({ platform: award.platform, quiz: award.quiz, title: award.title })),
+    };
   };
 
   const addToAwardDisplayState = (award) => {

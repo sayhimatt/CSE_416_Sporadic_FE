@@ -283,12 +283,13 @@ export const getSearchResults = async (type, query, page, userFilter = null) => 
 };
 
 /* Award Routing */
-export const putUpdateAwardDisplayStatus = async (platform, quiz, action) => {
+export const putUpdateAwardDisplayStatus = async (displayedAwards, awards) => {
   const token = await getToken();
   const response = await axios.put(
-    `${ENDPOINT}/` /* finish endpoint */,
+    `${ENDPOINT}/updateShowcasedAwards`,
     {
-      /* fill in body */
+      displayedAwards,
+      awards,
     },
     {
       headers: { authorization: `Bearer ${token}` },
