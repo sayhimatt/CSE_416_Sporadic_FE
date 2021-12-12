@@ -193,14 +193,14 @@ const CreateQuiz = () => {
           }),
       );
     }
-    if(images.awardIcon !== "/award.svg") {
+    if (images.awardIcon !== "/award.svg") {
       promises.push(
         generateSetQuizAwardIconURL(params.platform, quizInfo.quizTitle)
-        .then((putURL) => setImage(putURL, images.awardIcon))
-        .catch((e) => {
-          throw `Error Uploading: ${e}`;
-        }),
-      )
+          .then((putURL) => setImage(putURL, images.awardIcon))
+          .catch((e) => {
+            throw `Error Uploading: ${e}`;
+          }),
+      );
     }
     return await Promise.all(promises).catch((e) => {
       throw `Error Uploading: ${e}`;
@@ -223,7 +223,6 @@ const CreateQuiz = () => {
       questions: quizQuestions,
       awardTitle: awardTitle,
       correctAnswers,
-      
     };
     quiz.timeLimit = parseInt(quiz.timeLimit);
     quiz.awardRequirement = parseInt(awardRequirement);
@@ -253,7 +252,15 @@ const CreateQuiz = () => {
     const validAnswers = checkAnswers();
     const validAwardReq = checkAwardRequirement(awardRequirement);
     const validAwardTitle = checkAwardTitle();
-    if (!validQuizTitle || !validDescription || !validTimer || !validQuestions || !validAnswers || !validAwardReq || !validAwardTitle) {
+    if (
+      !validQuizTitle ||
+      !validDescription ||
+      !validTimer ||
+      !validQuestions ||
+      !validAnswers ||
+      !validAwardReq ||
+      !validAwardTitle
+    ) {
       setErrors((prevState) => ({ ...prevState, show: true }));
       return false;
     }
@@ -477,11 +484,6 @@ const CreateQuiz = () => {
                   </div>
                 </div>
                 <div className="mt-4">
-                  <Button buttonSize="btn--large" onClick={addQuestion}>
-                    Add Question
-                  </Button>
-                </div>
-                <div className="mt-4">
                   <Button
                     buttonSize="btn--large"
                     onClick={() =>
@@ -515,7 +517,15 @@ const CreateQuiz = () => {
                   </div>
                 </div>
                 <div className="d-flex flex-row w-100 align-items-center">
-                  <img id="trophy" src={images.awardIcon === "/award.svg" ? "/award.svg" : URL.createObjectURL(images.awardIcon)} alt="Icon" />
+                  <img
+                    id="trophy"
+                    src={
+                      images.awardIcon === "/award.svg"
+                        ? "/award.svg"
+                        : URL.createObjectURL(images.awardIcon)
+                    }
+                    alt="Icon"
+                  />
                   <div className="input-box m-4">
                     <input
                       className="input text-center"
@@ -526,7 +536,15 @@ const CreateQuiz = () => {
                   </div>
                 </div>
                 <div className="mt-1 d-flex flex-row w-100 align-items-center">
-                  <img id="quiz-icon" src={images.quizIcon === "/quizIcon.png" ? "/quizIcon.png" : URL.createObjectURL(images.quizIcon)} alt="Icon" />
+                  <img
+                    id="quiz-icon"
+                    src={
+                      images.quizIcon === "/quizIcon.png"
+                        ? "/quizIcon.png"
+                        : URL.createObjectURL(images.quizIcon)
+                    }
+                    alt="Icon"
+                  />
                   <div className="quiz-info-section align-items-left mx-4">
                     <label>Quiz Icon</label>
                   </div>
@@ -535,7 +553,10 @@ const CreateQuiz = () => {
             </div>
           </div>
 
-          <div className="d-flex flex-column w-50">
+          <div className="prime-buttons d-flex flex-column w-50">
+            <Button buttonStyle="btn--primary" buttonSize="btn--large" onClick={addQuestion}>
+              Add Question
+            </Button>
             <Button buttonStyle="btn--special" buttonSize="btn--large" onClick={publishQuiz}>
               Publish Quiz
             </Button>
