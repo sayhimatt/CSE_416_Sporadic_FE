@@ -10,7 +10,9 @@ const Leaderboard = ({ scores = [], hasMore, nextResultsHandler, className, user
     return scores.map((score, index) => (
       <div
         key={index}
-        className={`d-flex ${score.username === userScore.username ? "user-row" : ""}`}
+        className={`d-flex ${score.username === userScore.username ? "user-row" : ""} ${
+          userScore.leaderBoardPosition === index + 1 ? "background-cell-corner" : ""
+        }`}
       >
         <div className="board-position leaderboard-cell">{index + 1}</div>
         <div className="board-name leaderboard-cell">
