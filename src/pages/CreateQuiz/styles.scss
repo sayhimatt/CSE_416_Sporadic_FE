@@ -27,7 +27,6 @@
 #quiz-controller .input-box {
   width: 100%;
   height: min-content;
-
 }
 
 #quiz-title-input {
@@ -55,7 +54,6 @@
   width: 100%;
 }
 
-
 .quiz-info-section > label {
   font-size: 1.5em;
 }
@@ -67,14 +65,28 @@
   z-index: 1;
 }
 
-#trophy, #quiz-icon {
-  height: 8em;
-  width: 8em;
+#trophy,
+#quiz-icon {
+  height: 6em;
+  width: 6em;
   border-radius: 50%;
   border: 2px solid $secondaryColor;
 }
 
-.prime-buttons *{
+.prime-buttons * {
   margin: 1em;
 }
 
+#quiz-controller .upload-right {
+  width: 30%;
+  display: flex;
+  justify-content: start;
+  margin: 0px 10px 0px 40px;
+}
+
+.upload-button-container {
+  display: flex;
+  justify-content: center;
+  width: 35%;
+  margin-right: 10px;
+}

@@ -71,7 +71,6 @@ const CreateQuiz = () => {
   };
 
   const addQuestion = () => {
-    removeErrorMessage("Your quiz");
     if (questions.length >= 30) {
       setErrors((prevState) => ({
         ...prevState,
@@ -86,7 +85,6 @@ const CreateQuiz = () => {
   };
 
   const deleteQuestion = (questionNumber) => {
-    removeErrorMessage("Your quiz");
     if (questions.length === 1) {
       setErrors((prevState) => ({
         ...prevState,
@@ -99,8 +97,6 @@ const CreateQuiz = () => {
   };
 
   const addChoice = (questionNumber) => {
-    removeErrorMessage("Ten is too many choices for a single question");
-    removeErrorMessage("All questions");
     if (questions[questionNumber].answers.length < 10) {
       console.log(questions[questionNumber].answers.length);
       setQuestions((prevState) =>
@@ -125,8 +121,6 @@ const CreateQuiz = () => {
   };
 
   const subChoice = (questionNumber) => {
-    removeErrorMessage("Ten is too many choices for a single question");
-    removeErrorMessage("All questions");
     if (questions[questionNumber].answers.length > 2) {
       setQuestions((prevState) =>
         prevState.map((question, index) =>
@@ -416,7 +410,7 @@ const CreateQuiz = () => {
       <NavBar />
       <PlatformSubNav
         platformName={"Quiz: " + quizInfo.quizTitle}
-        bannerSrc={banner}
+        //bannerSrc={banner}
         iconSrc={platformIcon}
       />
       <div className="quiz-alerts">{renderErrors()}</div>
@@ -446,54 +440,42 @@ const CreateQuiz = () => {
                 />
               </div>
             </div>
-
-            <div className="d-flex flex-fill flex-row w-100">
-              <div className="d-flex flex-fill flex-column align-items-center">
-                <div className="quiz-info-section quiz-info-limit align-items-center">
-                  <label>Time Limit (in seconds)</label>
-                  <div id="timer-input" className="input-box w-50">
-                    <input
-                      className="input text-center"
-                      placeholder="Time Limit"
-                      maxLength={3}
-                      onChange={(e) => setTimeLimit(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <Button
-                    buttonSize="btn--large"
-                    onClick={() =>
-                      setImageUploaders((prevState) => ({ ...prevState, awardIcon: true }))
-                    }
-                  >
-                    Upload Award Icon
-                  </Button>
-                </div>
-                <div className="mt-4">
-                  <Button
-                    buttonSize="btn--large"
-                    onClick={() =>
-                      setImageUploaders((prevState) => ({ ...prevState, quizIcon: true }))
-                    }
-                  >
-                    Upload Quiz Icon
-                  </Button>
+            <div className="d-flex w-100 mb-4 mt-3 justify-content-center">
+              <div className="d-flex flex-column fs-5 align-items-center justify-content-center">
+                <label>Time Limit (seconds)</label>
+                <div id="timer-input" className="input-box w-50">
+                  <input
+                    className="input text-center"
+                    placeholder="Time Limit"
+                    maxLength={3}
+                    onChange={(e) => setTimeLimit(e.target.value)}
+                  />
                 </div>
               </div>
-              <div className="d-flex flex-fill flex-column align-items-center">
-                <div className="quiz-info-section align-items-center">
-                  <label>Trophy Requirement</label>
-                  <div id="timer-input" className="input-box w-50">
-                    <input
-                      className="input text-center"
-                      placeholder={"Pick 1" + " - " + questions.length}
-                      maxLength={2}
-                      onChange={(e) => checkAwardRequirement(e.target.value)}
-                    />
-                  </div>
+              <div className="d-flex flex-column fs-5 align-items-center justify-content-center">
+                <label>Award Requirement</label>
+                <div id="timer-input" className="input-box w-50">
+                  <input
+                    className="input text-center"
+                    placeholder={"Pick 1" + " - " + questions.length}
+                    maxLength={2}
+                    onChange={(e) => checkAwardRequirement(e.target.value)}
+                  />
                 </div>
+              </div>
+            </div>
+            <div className="d-flex flex-row w-100 justify-content-center">
+              <div className="d-flex flex-column align-items-center">
                 <div className="d-flex flex-row w-100 align-items-center">
+                  <div className="upload-button-container">
+                    <Button
+                      onClick={() =>
+                        setImageUploaders((prevState) => ({ ...prevState, awardIcon: true }))
+                      }
+                    >
+                      Upload Award Icon
+                    </Button>
+                  </div>
                   <img
                     id="trophy"
                     src={
@@ -503,16 +485,27 @@ const CreateQuiz = () => {
                     }
                     alt="Icon"
                   />
-                  <div className="input-box m-4">
-                    <input
-                      className="input text-center"
-                      placeholder="Trophy Title"
-                      maxLength={30}
-                      onChange={(e) => setAwardTitle(e.target.value)}
-                    />
+                  <div className="upload-right">
+                    <div className="input-box">
+                      <input
+                        className="input text-center"
+                        placeholder="Trophy Title"
+                        maxLength={30}
+                        onChange={(e) => setAwardTitle(e.target.value)}
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="mt-1 d-flex flex-row w-100 align-items-center">
+                <div className="mt-1 d-flex flex-row w-100 align-items-center mt-3">
+                  <div className="upload-button-container">
+                    <Button
+                      onClick={() =>
+                        setImageUploaders((prevState) => ({ ...prevState, quizIcon: true }))
+                      }
+                    >
+                      Upload Quiz Icon
+                    </Button>
+                  </div>
                   <img
                     id="quiz-icon"
                     src={
@@ -522,7 +515,7 @@ const CreateQuiz = () => {
                     }
                     alt="Icon"
                   />
-                  <div className="quiz-info-section align-items-left mx-4">
+                  <div className="fs-5 upload-right">
                     <label>Quiz Icon</label>
                   </div>
                 </div>
@@ -531,9 +524,6 @@ const CreateQuiz = () => {
           </div>
 
           <div className="prime-buttons d-flex flex-column w-50">
-            <Button buttonStyle="btn--primary" buttonSize="btn--large" onClick={addQuestion}>
-              Add Question
-            </Button>
             <Button buttonStyle="btn--special" buttonSize="btn--large" onClick={publishQuiz}>
               Publish Quiz
             </Button>
@@ -541,6 +531,11 @@ const CreateQuiz = () => {
         </div>
         <div className="quiz-cards d-flex flex-column flex-grow-1 me-4">
           {questions && renderCards()}
+          <div className="w-25 align-self-center mt-4">
+            <Button buttonStyle="btn--primary" buttonSize="btn--large" onClick={addQuestion}>
+              Add Question
+            </Button>
+          </div>
         </div>
       </div>
       <div className="uploader">
