@@ -23,7 +23,7 @@ const AwardCase = () => {
   useEffect(() => {
     getUser(user.username)
       .then((res) => {
-        const showCased = getAllAwardIcons(res.showCasedAwards ? res.showCasedAwards : []);
+        const showCased = getAllAwardIcons(res.displayedAwards ? res.displayedAwards : []);
         const awards = getAllAwardIcons(res.awards ? res.awards : []);
         Promise.all([showCased, awards]).then(([showCased, awards]) => {
           setAwards({

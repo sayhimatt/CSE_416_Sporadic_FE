@@ -25,7 +25,9 @@ const MyAccount = () => {
       .then((user) => {
         setuserState(user);
         setAbout(user.aboutSection);
-        //setAwards(getAllAwardIcons(user.showCasedAwards));
+        getAllAwardIcons(user.displayedAwards ? user.displayedAwards : []).then((awards) =>
+          setAwards(awards),
+        );
       })
       .catch(() => console.log("Could not retrieve user"));
   }, []);
@@ -85,7 +87,7 @@ const MyAccount = () => {
               <div className="d-flex justify-content-between">
                 <h3 className="stat-box text-end">
                   <b className="color-secondary">
-                    {(userState.awards && userState.awards.length) || 0}
+                    {userState.awards.length + userState.displayedAwards.length}
                   </b>{" "}
                   Awards
                 </h3>

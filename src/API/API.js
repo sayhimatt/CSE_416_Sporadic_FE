@@ -286,7 +286,7 @@ export const getSearchResults = async (type, query, page, userFilter = null) => 
 export const putUpdateAwardDisplayStatus = async (displayedAwards, awards) => {
   const token = await getToken();
   const response = await axios.put(
-    `${ENDPOINT}/updateShowcasedAwards`,
+    `${ENDPOINT}/users/updateDisplayedAwards`,
     {
       displayedAwards,
       awards,

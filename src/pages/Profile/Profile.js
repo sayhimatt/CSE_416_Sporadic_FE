@@ -28,7 +28,7 @@ const Profile = () => {
           setAvatar(link);
           setuserState(user);
         });
-        getAllAwardIcons(user.showcasedAwards ? user.showcasedAwards : []).then((awards) =>
+        getAllAwardIcons(user.displayedAwards ? user.displayedAwards : []).then((awards) =>
           setAwards(awards),
         );
       })
@@ -126,7 +126,9 @@ const Profile = () => {
               <div className="d-flex">
                 <h3 className="stat-box text-center">
                   <b className="color-secondary">
-                    {(userState.awards && userState.awards.length) || 0}
+                    {params.username === user.username
+                      ? userState.awards.length + userState.displayedAwards.length
+                      : userState.awardCount || 0}
                   </b>{" "}
                   Awards
                 </h3>
