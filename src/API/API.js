@@ -173,6 +173,10 @@ export const postConfirmCode = async (username, confirmCode) => {
   });
 };
 
+export const postResendConfirmationCode = async (username) => {
+  await axios.post(`${ENDPOINT}/users/${username}/resendConfirmationCode`);
+};
+
 /* User routing */
 
 export const getUser = async (username) => {

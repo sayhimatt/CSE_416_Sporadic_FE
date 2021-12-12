@@ -5,7 +5,7 @@ import { Auth } from "aws-amplify";
 import { UserContext } from "../../../contexts/UserContext/UserContext";
 import Button from "../../../components/Buttons/Button/Button";
 import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
-import { getUser, getUserIcon } from "../../../API/API";
+import { getUser, getUserIcon, postResendConfirmationCode } from "../../../API/API";
 
 import "../styles.css";
 import LoadingOverlay from "../../../components/LoadingIndicators/LoadingOverlay";
@@ -40,10 +40,16 @@ const MainLogin = ({ auth, authHandler }) => {
       });
       authHandler(true);
     } catch (error) {
-      console.log(error);
       const errorMessage = error.toString();
       if (errorMessage.includes("User is disabled")) {
         setShowMsg({ show: true, message: `${username} is banned` });
+      } else if (errorMessage.includes("User is not confirmed")) {
+        postResendConfirmationCode(credentials.username).then(
+          history.push({
+            pathname: "/createAccount/confirmation",
+            state: { username: credentials.username },
+          }),
+        );
       } else {
         setShowMsg({ show: true, message: "Invalid Login" });
       }
