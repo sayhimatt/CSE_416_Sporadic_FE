@@ -19,8 +19,7 @@ import {
   deleteQuiz,
   putUpdatePinStatus,
   getPlatform,
-  getQuizzesFromPlatform,
-  getScores
+  getQuizzesFromPlatform
 } from "./../../API/API";
 import LoadingSpinner from "../../components/LoadingIndicators/LoadingSpinner";
 
@@ -165,37 +164,37 @@ const Platform = () => {
       .catch((error) => alert("Could not delete quiz"));
   };
 
-  const getUserIQ = () => {
-//    getScores(params.platform)
-//      .then((scores) => {
-        // find users score
-        try {
-        const scores = platform.scores;
+  const getUserIQ = () => {        
+    try {
+      const scores = platform.scores;
 
-        const userScore = scores.find( (score) => {
-          return score.username == user.username;
-        }).totalCorrect;
+      // find users score
+      const userScore = scores.find( (score) => {
+        return score.username == user.username;
+      }).totalCorrect;
 
-        // get array of just scores, no usernames
-        const scoresSet = scores.map(score => score.totalCorrect);
-        console.log(scoresSet);
-        // calculate standard deviation of scores set
-        const n = scoresSet.length
-        if (n == 0) throw 'No users have taken a quiz in this platform';
-        const mean = scoresSet.reduce((a, b) => a + b) / n
-        var sd = Math.sqrt(scoresSet.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
-        if (sd == 0) sd = 1;
-        //console.log(`n: ` + n + ` mean: ` + mean + ` sd: ` + sd);
-        // calculate z score
-        const z = ((userScore - mean) / sd);
-        // iq = a + bz, where a = baseline and b = weight of z score
-        const a = 100;
-        const b = 15;
-        const IQ = Math.round(a + (b*z)); 
+      // get array of just scores, no usernames
+      const scoresSet = scores.map(score => score.totalCorrect);
+      console.log(scoresSet);
 
-        setUserIQ(IQ);
-  //    })
-        } catch(error){ setUserIQ(0) };
+      // calculate standard deviation of scores set
+      const n = scoresSet.length
+      if (n == 0) throw 'No users have taken a quiz in this platform';
+      const mean = scoresSet.reduce((a, b) => a + b) / n
+      var sd = Math.sqrt(scoresSet.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
+      if (sd == 0) sd = 1;
+
+      // calculate z score
+      const z = ((userScore - mean) / sd);
+
+      // iq = a + bz, where a = baseline and b = weight of z score
+      const a = 100;
+      const b = 15;
+      const IQ = Math.round(a + (b*z)); 
+
+      setUserIQ(IQ);
+
+    } catch(error){ setUserIQ(0) };
   }
 
   const renderCards = async () => {
