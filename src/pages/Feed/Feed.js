@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import { UserContext } from "../../contexts/UserContext/UserContext";
-import { getFeedQuizzes, getQuizIcon, getUser } from "../../API/API";
+import { getFeedQuizzes, getQuizIcon, getUser, getAllAwardIcons } from "../../API/API";
 import LinkButton from "../../components/Buttons/LinkButton/LinkButton";
 import SubNav from "../../components/NavBar/SubNav/SubNav";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
@@ -16,13 +16,18 @@ import "./styles.scss";
 const Feed = ({ children }) => {
   const { user } = useContext(UserContext);
   const [quizzes, setQuizzes] = useState({ page: 0, hasMore: true, quizzes: [] });
+  const [awards, setAwards] = useState();
   const [isGlobalAdmin, setIsGlobalAdmin] = useState(false);
   const [quizCards, setQuizCards] = useState([]);
 
   useEffect(() => {
     getQuizzes();
     getUser(user.username)
-      .then((res) => setIsGlobalAdmin(res.isGlobalAdmin))
+      .then((res) => {
+        setIsGlobalAdmin(res.isGlobalAdmin);
+        const threeAwards = takeThreeAwards(res.awards.concat(res.displayedAwards));
+        getAllAwardIcons(threeAwards).then((awards) => setAwards(awards));
+      })
       .catch((e) => console.log(e));
   }, []);
 
@@ -46,6 +51,23 @@ const Feed = ({ children }) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const takeThreeAwards = (awards) => {
+    console.log(awards);
+    const result = [];
+    while (result.length !== 3 && awards.length !== result.length) {
+      let index = getRandomIndex(awards);
+      if (awards[index] !== -1) {
+        result.push(awards[index]);
+        awards[index] = -1;
+      }
+    }
+    return result;
+  };
+
+  const getRandomIndex = (array) => {
+    return Math.floor(Math.random() * array.length);
   };
 
   const renderCards = async () => {
@@ -89,7 +111,7 @@ const Feed = ({ children }) => {
     <div>
       <MainNav />
       <SubNav heading={`Welcome Back ${user.username}!`} buttons={subNavButtons} />
-      <div className="content d-flex flex-row align-items-start me-5 mt-4 justify-content-between">
+      <div className="content d-flex flex-row align-items-start me-5 mt-4">
         <div className="d-flex flex-column m-5 align-items-end">
           <div className="sort"></div>
           <div id="feed-quizzes" className="quizzes d-flex flex-column mb-4">
@@ -112,6 +134,18 @@ const Feed = ({ children }) => {
             >
               {quizCards}
             </InfiniteScroll>
+          </div>
+        </div>
+        <div id="feed-right">
+          <div id="feed-sidebar">
+            <h3 className="mb-4">Your Awards</h3>
+            {awards &&
+              awards.map((award) => (
+                <div className="feed-award-container">
+                  <img src={award.image} alt="award" />
+                  <p>{award.title}</p>
+                </div>
+              ))}
           </div>
         </div>
       </div>

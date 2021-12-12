@@ -1,3 +1,40 @@
+@import "../../App.scss";
+
 #feed-quizzes {
   min-height: 80vh;
+}
+
+#feed-right {
+  display: flex;
+  width: 30%;
+  justify-content: end;
+  margin-right: 10px;
+}
+
+#feed-sidebar {
+  text-align: center;
+  width: 300px;
+  border: 1px solid $secondaryColor;
+  border-radius: 10px;
+  margin-top: 30px;
+  min-height: 500px;
+  padding: 20px 0px;
+}
+
+.feed-award-container {
+  display: flex;
+  flex-direction: column;
+  color: black;
+  align-items: center;
+  margin: 10px 0px;
+  font-size: 20px;
+}
+
+.feed-award-container img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 1px solid $secondaryColor;
+  background-color: white;
+  margin-bottom: 8px;
 }
