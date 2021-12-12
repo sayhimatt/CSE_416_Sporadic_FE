@@ -147,6 +147,15 @@ export const putUpdatePinStatus = async (platform, quizTitle, action) => {
   return response.data;
 };
 
+export const getLeaderboard = async (platform, page, amountPerPage = 10) => {
+  const token = await getToken();
+  const response = await axios.get(
+    `${ENDPOINT}/platforms/${platform}/leaderboard?page=${page}&amountPerPage=${amountPerPage}`,
+    { headers: { authorization: `Bearer ${token}` } },
+  );
+  return response.data;
+};
+
 /* Login Routing */
 
 export const postCreateAccount = async (username, password, email) => {

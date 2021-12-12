@@ -7,7 +7,7 @@ import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNa
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard.js";
 import Timer from "../../components/Timer/Timer";
 import useInterval from "../../components/Timer/Interval";
-import award from "../../award.svg";
+import awardImage from "../../award.svg";
 import Button from "react-bootstrap/Button";
 import InfoModal from "../../components/Modals/InfoModal/InfoModal";
 import "./styles.scss";
@@ -18,6 +18,7 @@ const Quiz = () => {
   const [answers, setAnswers] = useState([]);
   const [isAlreadySubmittedModalVisible, setIsAlreadySubmittedModalVisible] = useState(false);
   const [isSubmittedModalVisible, setIsSubmittedModalVisible] = useState(false);
+  const [award, setAward] = useState();
   const [timeLeft, setTimeLeft] = useState(0);
   const [banner, setBanner] = useState("/banner.jpg");
   const [platformIcon, setPlatformIcon] = useState("/platformIcon.png");
@@ -66,6 +67,7 @@ const Quiz = () => {
     const quiz = params.quiz;
     try {
       const response = await postStartQuiz(platform, quiz);
+      setAward(response.award);
       setQuestions(response.questions);
       initAnswers(response.questions);
       setTimeLeft(response.timeLimit);
@@ -132,22 +134,22 @@ const Quiz = () => {
         iconSrc={platformIcon}
       />
       <div className="content d-flex m-4 flex-row align-items-start">
-        <div className="d-flex flex-column flex-md-fill">{questionsCards}</div>
-        <div className="information d-flex flex-column align-items-center">
+        <div className="d-flex flex-column flex-md-fill w-75">{questionsCards}</div>
+        <div id="quiz-sidebar">
           <Timer
             timerSeconds={String(Math.trunc(timeLeft % 60)).padStart(2, "0")}
             timerMinutes={String(Math.trunc(timeLeft / 60)).padStart(2, "0")}
           />
-          <div className="platform-text-block iq d-flex flex-column align-items-center mt-4">
-            <div className="color-secondary fw-bold fs-1">Star Trophy</div>
-            <img src={award} alt="Icon" />
-            <div className="color-secondary fw-bold fs-1">
-              Score Required: <br /> 100%
+          <div className="award-box d-flex flex-column align-items-center">
+            <div className="color-secondary fw-bold fs-3 mb-3">Star Trophy</div>
+            <img id="quiz-award-image" src={awardImage} alt="Icon" />
+            <div className="color-secondary fs-5">
+              Earn with <b> 100% </b> or more
             </div>
-            <Button size="lg" className="submit-button" onClick={quizOver}>
-              Submit
-            </Button>
           </div>
+          <Button size="lg" className="submit-button" onClick={quizOver}>
+            Submit
+          </Button>
         </div>
       </div>
       <InfoModal
