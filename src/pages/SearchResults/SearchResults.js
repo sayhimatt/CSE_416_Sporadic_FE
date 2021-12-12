@@ -9,7 +9,12 @@ import Tab from "../../components/Tab/Tab";
 import LargeCard from "../../components/Card/LargeCard/LargeCard";
 import LoadingSpinner from "../../components/LoadingIndicators/LoadingSpinner";
 
-import { getSearchResults, getAllUserIcons, getAllPlatformIcons } from "../../API/API";
+import {
+  getSearchResults,
+  getAllUserIcons,
+  getAllPlatformIcons,
+  getAllQuizIcons,
+} from "../../API/API";
 
 import "./styles.scss";
 
@@ -93,8 +98,7 @@ const SearchResults = ({ location }) => {
       const platforms = data.map((platform) => platform.title);
       return getAllPlatformIcons(platforms);
     } else if (type === "quizzes") {
-      const quizzes = data.map((quiz) => quiz.platform);
-      return getAllPlatformIcons(quizzes);
+      return getAllQuizIcons(data);
     } else {
       const users = data.map((user) => user.username);
       return getAllUserIcons(users);
@@ -207,7 +211,7 @@ const SearchResults = ({ location }) => {
     return quizzes.map((quiz, index) => (
       <LargeCard
         key={index}
-        iconSrc={images[quiz.platform]}
+        iconSrc={images[quiz.title]}
         cardInfo={{
           title: quiz.title,
           description: quiz.description,

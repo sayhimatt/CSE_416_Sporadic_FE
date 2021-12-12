@@ -386,6 +386,20 @@ export const getQuizIcon = async (platform, quiz) => {
   }
 };
 
+export const getAllQuizIcons = async (quizzes) => {
+  const promises = [];
+  const icons = {};
+  quizzes.forEach((quiz) =>
+    promises.push(
+      getQuizIcon(quiz.platform, quiz.title).then((link) => {
+        icons[quiz.title] = link;
+      }),
+    ),
+  );
+  await Promise.all(promises);
+  return icons;
+};
+
 export const getAwardIcon = async (platform, quiz) => {
   try {
     const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/${quiz}/award.png`);
