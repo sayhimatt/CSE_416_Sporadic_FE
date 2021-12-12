@@ -25,8 +25,8 @@ const CreateQuiz = () => {
   const [errors, setErrors] = useState({ show: false, messages: [] });
   const [banner, setBanner] = useState("/banner.svg");
   const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
-  const [images, setImages] = useState({ icon: "" });
-  const [imageUploaders, setImageUploaders] = useState({ quizIcon: false });
+  const [images, setImages] = useState({ quizIcon: "", awardIcon: "" });
+  const [imageUploaders, setImageUploaders] = useState({ quizIcon: false, awardIcon: false });
   const params = useParams();
   const history = useHistory();
 
@@ -152,16 +152,16 @@ const CreateQuiz = () => {
   };
 
   const customIconSubmit = (file) => {
-    setImages((prevState) => ({ ...prevState, icon: file }));
+    setImages((prevState) => ({ ...prevState, quizIcon: file }));
     setImageUploaders((prevState) => ({ ...prevState, quizIcon: false }));
   };
 
   const sendImagesToAWS = async () => {
     const promises = [];
-    if (images.icon !== "") {
+    if (images.quizIcon !== "") {
       promises.push(
         generateSetQuizIconURL(params.platform, quizInfo.quizTitle)
-          .then((putURL) => setImage(putURL, images.icon))
+          .then((putURL) => setImage(putURL, images.quizIcon))
           .catch((e) => {
             throw `Error Uploading: ${e}`;
           }),
