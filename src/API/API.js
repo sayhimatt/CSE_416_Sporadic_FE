@@ -378,7 +378,7 @@ export const getQuizIcon = async (platform, quiz) => {
   try {
     const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/${quiz}/icon.png`);
     if (resp.status != 200) {
-      return "/quizIcon.svg";
+      return "/quizIcon.png";
     }
     return `${AWS_ENDPOINT}/platforms/${platform}/${quiz}/icon.png`;
   } catch {
