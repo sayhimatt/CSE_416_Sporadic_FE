@@ -26,9 +26,15 @@ const MainCreateAccount = () => {
     errorBox: false,
   });
 
+  const usernameReqTextContainer = document.querySelector("#usernameReqTextDiv");
   const lengthTextContainer = document.querySelector("#lengthTextDiv");
-
   const matchTextContainer = document.querySelector("#matchTextDiv");
+
+  const checkUsernameInput = (input) => {
+    if (!input.match(/^[a-z0-9]*$/))
+      ReactDOM.render(<ErrorText text="Username may contain only lowercase letters and numbers" />, usernameReqTextContainer);
+    else ReactDOM.unmountComponentAtNode(usernameReqTextContainer);
+  };
 
   const checkPasswordInput = (input) => {
     if (input.length > 0 && input.length < 8)
@@ -114,12 +120,14 @@ const MainCreateAccount = () => {
                 className="textInput"
                 placeholder="Username"
                 onChange={(e) => {
+                  checkUsernameInput(e.target.value);
                   setCredentials((prevState) => {
                     return { ...prevState, username: e.target.value };
                   });
                 }}
               ></input>
             </div>
+            <div id="usernameReqTextDiv" />
             <div className="inputBox">
               <input
                 id="password"
