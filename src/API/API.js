@@ -446,6 +446,23 @@ export const generateSetQuizIconURL = async (platform, quiz) => {
   }
 };
 
+export const generateSetQuizAwardIconURL = async (platform, quiz) => {
+  try {
+    const token = await getToken();
+    const response = await axios.get(`${ENDPOINT}/quizzes/${platform}/${quiz}/set-award-icon`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
 export const generateSetPlatformIconURL = async (platform) => {
   try {
     const token = await getToken();
