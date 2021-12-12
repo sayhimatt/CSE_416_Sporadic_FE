@@ -26,7 +26,7 @@ const CreateQuiz = () => {
   const [banner, setBanner] = useState("/banner.svg");
   const [platformIcon, setPlatformIcon] = useState("/platformIcon.svg");
   const [images, setImages] = useState({ icon: "" });
-  const [imageUploaders, setImageUploaders] = useState({ icon: false });
+  const [imageUploaders, setImageUploaders] = useState({ quizIcon: false });
   const params = useParams();
   const history = useHistory();
 
@@ -153,7 +153,7 @@ const CreateQuiz = () => {
 
   const customIconSubmit = (file) => {
     setImages((prevState) => ({ ...prevState, icon: file }));
-    setImageUploaders((prevState) => ({ ...prevState, icon: false }));
+    setImageUploaders((prevState) => ({ ...prevState, quizIcon: false }));
   };
 
   const sendImagesToAWS = async () => {
@@ -400,7 +400,7 @@ const CreateQuiz = () => {
             <div className="mt-4">
               <Button
                 buttonSize="btn--large"
-                onClick={() => setImageUploaders((prevState) => ({ ...prevState, icon: true }))}
+                onClick={() => setImageUploaders((prevState) => ({ ...prevState, quizIcon: true }))}
               >
                 Upload Icon
               </Button>
@@ -418,12 +418,12 @@ const CreateQuiz = () => {
       </div>
       <div className="uploader">
         <ImageUploader
-          visible={imageUploaders.icon}
+          visible={imageUploaders.quizIcon}
           desiredFile="quiz icon"
           desiredQuiz={quizInfo.quizTitle}
           desiredPlatform={params.platform}
           visibilityHandler={() =>
-            setImageUploaders((prevState) => ({ ...prevState, icon: false }))
+            setImageUploaders((prevState) => ({ ...prevState, quizIcon: false }))
           }
           customSubmit={customIconSubmit}
         />
