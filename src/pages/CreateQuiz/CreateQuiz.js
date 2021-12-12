@@ -312,15 +312,8 @@ const CreateQuiz = () => {
   };
 
   const checkAwardRequirement = (awardReq) => {
-    removeErrorMessage("Award Requirement Invalid");
     if (awardReq < 1 || awardReq > questions.length) {
-      setErrors((prevState) => ({
-        ...prevState,
-        messages: prevState.messages.concat([
-          `Award Requirement Invalid, Pick [1 - ${questions.length}]`,
-        ]),
-        show: true,
-      }));
+      addErrorMessage(`Award Requirement Invalid, Pick [1 - ${questions.length}]`);
       return false;
     } else {
       setAwardRequirement(awardReq);
@@ -328,16 +321,8 @@ const CreateQuiz = () => {
     }
   };
   const checkAwardTitle = () => {
-    removeErrorMessage("Award Title Invalid Size");
-    console.log(awardTitle + "    size " + awardTitle.length);
     if (awardTitle.length <= 1 || awardTitle.length > 30) {
-      setErrors((prevState) => ({
-        ...prevState,
-        messages: prevState.messages.concat([
-          `Award Title Invalid Size Maximum Length of 30 Characters`,
-        ]),
-        show: true,
-      }));
+      addErrorMessage(`Award Title Invalid Size Maximum Length of 30 Characters`);
       return false;
     } else {
       return true;
@@ -348,14 +333,6 @@ const CreateQuiz = () => {
     setErrors((prevState) => ({
       ...prevState,
       messages: prevState.messages.concat([message]),
-    }));
-  };
-
-  const removeErrorMessage = (messageStart) => {
-    const messageList = errors.messages.filter((message) => !message.startsWith(messageStart));
-    setErrors((prevState) => ({
-      ...prevState,
-      messages: messageList,
     }));
   };
 
