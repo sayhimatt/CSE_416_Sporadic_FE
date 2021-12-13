@@ -451,7 +451,7 @@ const CreateQuiz = () => {
             <div className="d-flex w-100 mb-4 mt-3 justify-content-center">
               <div className="d-flex flex-column fs-5 align-items-center justify-content-center">
                 <label>Time Limit (seconds)</label>
-                <div id="timer-input" className="input-box w-50">
+                <div id="timer-input" className="input-box w-75">
                   <input
                     className="input text-center"
                     placeholder="Time Limit"
@@ -462,7 +462,7 @@ const CreateQuiz = () => {
               </div>
               <div className="d-flex flex-column fs-5 align-items-center justify-content-center">
                 <label>Award Requirement</label>
-                <div id="timer-input" className="input-box w-50">
+                <div id="timer-input" className="input-box w-75">
                   <input
                     className="input text-center"
                     placeholder={"Pick 1" + " - " + questions.length}
