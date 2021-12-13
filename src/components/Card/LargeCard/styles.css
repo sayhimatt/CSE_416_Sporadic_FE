@@ -54,3 +54,19 @@
   width: 24px;
   height: 24px;
 }
+
+.time-limit {
+  padding-right: 5px;
+  padding-top: 10px;
+  font-size:18px
+}
+
+.time-limit-number {
+  color: #138096; 
+  font-weight: bold;
+  padding-top: 10px;
+  padding-right: 50px;
+  font-size:18px
+
+  
+}
