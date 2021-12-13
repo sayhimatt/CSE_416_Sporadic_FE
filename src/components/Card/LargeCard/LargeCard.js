@@ -34,6 +34,9 @@ const LargeCard = ({
       return `${votesString}m`;
     }
   };
+  const convertTime = (time) => {
+    return `${Math.floor(time/60)}m ${time%60}s`
+  }
 
   return (
     <div className="cardContainer cardContainer--large link">
@@ -51,6 +54,9 @@ const LargeCard = ({
             <div className="description">
               {cardInfo.description ? cardInfo.description : "No Description"}
             </div>
+          </div>
+          <div classname ="time-limit justify-content-between align-items-end">
+            Time Limit: {convertTime(cardInfo.time)}
           </div>
           <div className="d-flex align-items-start">
             {modOptions && (

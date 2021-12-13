@@ -202,6 +202,8 @@ const Platform = () => {
     const cards = allQuizzes.map(async (quiz, index) => {
       const name = params.platform;
       const quizImg = await getQuizIcon(params.platform, quiz.title);
+      //const timeLimit = quiz.getTimeLimit();
+      console.log(quiz);
       return (
         <LargeCard
           key={index}
@@ -211,6 +213,7 @@ const Platform = () => {
             description: quiz.description,
             upvotes: quiz.upvotes,
             downvotes: quiz.downvotes,
+            time: quiz.timeLimit,
             subtext: (
               <Link className="link" to={`/p/${name}`}>
                 {name}
