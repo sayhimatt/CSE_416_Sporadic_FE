@@ -12,6 +12,7 @@ import {
   getAwardIcon,
   putComment,
   patchVote,
+  getQuizIcon,
 } from "./../../API/API";
 import { Alert } from "react-bootstrap";
 
@@ -26,6 +27,7 @@ const QuizComplete = () => {
   const [quiz, setQuiz] = useState();
   const [platformIcon, setPlatformIcon] = useState("/platformIcon.png");
   const [award, setAward] = useState("/award.svg");
+  const [quizIcon, setQuizIcon] = useState("/icon.png")
   const [awardTitle, setAwardTitle] = useState("Trophy");
   const [awardWon, setAwardWon] = useState(false);
   const [comment, setComment] = useState("");
@@ -62,6 +64,9 @@ const QuizComplete = () => {
     });
     await getAwardIcon(params.platform, params.quiz).then((icon) => {
       setAward(icon);
+    });
+    await getQuizIcon(params.platform, params.quiz).then((icon) => {
+      setQuizIcon(icon);
     });
   };
 
@@ -165,7 +170,7 @@ const QuizComplete = () => {
     return (
       <div>
         <MainNav />
-        <PlatformSubNav platformName={"Quiz: " + params.quiz} iconSrc={platformIcon} />
+        <PlatformSubNav platformName={params.platform} iconSrc={platformIcon}/>
         <div className="quiz-alerts">
           <Alert
             show={showAlert.show}
@@ -204,7 +209,7 @@ const QuizComplete = () => {
               </div>
             </div>
           </div>
-          <div id="results-feedback">
+          <div id="results-feedback">       
             <div id="feedback">
               <div id="quiz-title">{quiz.title}</div>
               <div className="d-flex justify-content-around w-75 mt-3">
@@ -253,7 +258,7 @@ const QuizComplete = () => {
     return (
       <div>
         <MainNav />
-        <PlatformSubNav platformName={"Quiz: " + params.quiz} iconSrc={platformIcon} />
+        <PlatformSubNav platformName={params.platform} iconSrc={platformIcon}/>
         <div className="quiz-alerts">
           <Alert
             show={showAlert.show}
