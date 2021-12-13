@@ -113,7 +113,7 @@ const CreateQuiz = () => {
       // Set an error message
       setErrors((prevState) => ({
         ...prevState,
-        messages: prevState.messages.concat(["Ten is too many choices for a single question"]),
+        messages: (["Ten is too many choices for a single question"]),
         show: true,
       }));
     }
@@ -136,7 +136,7 @@ const CreateQuiz = () => {
       // Set an error message
       setErrors((prevState) => ({
         ...prevState,
-        messages: prevState.messages.concat(["All questions must have at least two choices"]),
+        messages: (["All questions must have at least two choices"]),
         show: true,
       }));
     }
@@ -312,6 +312,8 @@ const CreateQuiz = () => {
   };
 
   const checkAwardRequirement = (awardReq) => {
+    console.log("Award req " + awardReq);
+    console.log("Questions size" + questions.length);
     if (awardReq < 1 || awardReq > questions.length) {
       addErrorMessage(`Award Requirement Invalid, Pick [1 - ${questions.length}]`);
       return false;
@@ -465,7 +467,7 @@ const CreateQuiz = () => {
                     className="input text-center"
                     placeholder={"Pick 1" + " - " + questions.length}
                     maxLength={2}
-                    onChange={(e) => checkAwardRequirement(e.target.value)}
+                    onChange={(e) => setAwardRequirement(parseInt(e.target.value))}
                   />
                 </div>
               </div>
