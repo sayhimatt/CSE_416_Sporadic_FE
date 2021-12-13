@@ -267,7 +267,7 @@ const QuizComplete = () => {
         <div className="page-content d-flex flex-column align-items-center">
           <div id="main-results">
             <div id="score-bubble">
-              {quiz.score.score ? (
+              {quiz.score.score || quiz.score.score === 0 ? (
                 `${Math.round((quiz.score.score / quiz.totalQuestions) * 100)}%`
               ) : (
                 <div className="fs-3">Incomplete</div>
