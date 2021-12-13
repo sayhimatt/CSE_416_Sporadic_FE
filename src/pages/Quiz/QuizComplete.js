@@ -171,7 +171,6 @@ const QuizComplete = () => {
       <div>
         <MainNav />
         <PlatformSubNav platformName={params.platform} iconSrc={platformIcon}/>
-        {/* <PlatformSubNav platformName={params.platform} iconSrc={quizIcon} quizName={params.quiz} /> */}
         <div className="quiz-alerts">
           <Alert
             show={showAlert.show}
@@ -187,10 +186,7 @@ const QuizComplete = () => {
             <div id="score-bubble">{`${Math.round(
               (quiz.score.score / quiz.totalQuestions) * 100,
             )}%`}</div>
-            <img id="icon-bubble" src={quizIcon} alt="Icon" /> 
             <div id="results-breakdown">
-
-
               <div id="score-breakdown">
                 <div className="d-flex flex-column align-items-center">
                   <div id="questions-right">{quiz.score.score}</div>
@@ -213,9 +209,7 @@ const QuizComplete = () => {
               </div>
             </div>
           </div>
-          <div id="results-feedback">  
-          {/* <img id="icon-bubble" src={quizIcon} alt="Icon" />    */}
-     
+          <div id="results-feedback">       
             <div id="feedback">
               <div id="quiz-title">{quiz.title}</div>
               <div className="d-flex justify-content-around w-75 mt-3">
