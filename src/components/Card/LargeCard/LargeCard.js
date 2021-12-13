@@ -35,8 +35,8 @@ const LargeCard = ({
     }
   };
   const convertTime = (time) => {
-    return `${Math.floor(time/60)}:${(time%60 < 10) ? `0` : ``}${time%60}`
-  }
+    return `${Math.floor(time / 60)}:${time % 60 < 10 ? `0` : ``}${time % 60}`;
+  };
 
   return (
     <div className="cardContainer cardContainer--large link">
@@ -55,10 +55,10 @@ const LargeCard = ({
               {cardInfo.description ? cardInfo.description : "No Description"}
             </div>
           </div>
-          <div className ="time-limit">
-            Time Limit:
-          </div>
-          <div className="time-limit-number">{convertTime(cardInfo.time)}</div>
+          {cardInfo.time && [
+            <div className="time-limit">Time Limit:</div>,
+            <div className="time-limit-number">{convertTime(cardInfo.time)}</div>,
+          ]}
           <div className="d-flex align-items-start">
             {modOptions && (
               <Dropdown>

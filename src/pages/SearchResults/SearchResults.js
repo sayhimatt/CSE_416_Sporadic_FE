@@ -215,7 +215,12 @@ const SearchResults = ({ location }) => {
         cardInfo={{
           title: quiz.title,
           description: quiz.description,
-          subtext: `${quiz.platform}`,
+          time: quiz.timeLimit,
+          subtext: (
+            <Link to={`/p/${quiz.platform}`} className="link">
+              {quiz.platform}
+            </Link>
+          ),
           upvotes: quiz.upvotes,
           downvotes: quiz.downvotes,
         }}
