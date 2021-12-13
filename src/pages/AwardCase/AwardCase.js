@@ -82,6 +82,10 @@ const AwardCase = () => {
         .then((res) => removeFromAwardDisplayState(award))
         .catch((e) => showAlert(`Could not ${action} award`));
     } else {
+      if (awards.onDisplay.length >= 5) {
+        showAlert("Cannot display more than 5 trophies at a time!");
+        return;
+      }
       const award = findAward(platform, quiz, awardTitle, "notOnDisplay");
       const body = buildDisplayRequestBody(award);
       putUpdateAwardDisplayStatus(body.displayedAwards, body.awards)
