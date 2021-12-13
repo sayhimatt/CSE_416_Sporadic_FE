@@ -135,7 +135,7 @@ const Quiz = () => {
     <div>
       <MainNav />
       <PlatformSubNav
-        platformName={"Quiz: " + params.quiz}
+        platformName={params.quiz}
         bannerSrc={banner}
         iconSrc={platformIcon}
       />

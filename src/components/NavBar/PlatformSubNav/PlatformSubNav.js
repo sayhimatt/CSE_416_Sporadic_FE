@@ -5,7 +5,7 @@ import SubNav from "../SubNav/SubNav";
 
 import "./styles.css";
 
-const PlatformSubNav = ({ children, platformName, bannerSrc, iconSrc, modView, showUpload }) => {
+const PlatformSubNav = ({ children, platformName, bannerSrc, iconSrc, modView, showUpload, quizName }) => {
   return (
     <div className="platformSubNav">
       {bannerSrc && (
@@ -17,8 +17,8 @@ const PlatformSubNav = ({ children, platformName, bannerSrc, iconSrc, modView, s
       )}
       <SubNav
         heading={
-          <Link className="link color-secondary" to={`/p/${platformName}`}>
-            {platformName}
+          <Link className="link color-secondary" to={`/p/${platformName}` + (quizName ? `/${quizName}` : ``)}>
+            {quizName ? quizName : platformName}
           </Link>
         }
         buttons={children}
