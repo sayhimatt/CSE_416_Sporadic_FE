@@ -376,6 +376,10 @@ const Platform = () => {
             <div className="platform-text-block d-flex align-items-center justify-content-center mt-4">
               {platform.description}
             </div>
+            <div className="platform-text-block d-flex flex-column align-items-center justify-content-center mt-4">
+              <div className="d-flex flex-row">{"Your Leaderboard Position:"}<div>{leaderboard.currentUser.leaderBoardPosition}</div></div>
+              <div className="d-flex flex-row">Your Score: <div>{leaderboard.currentUser.totalCorrect ? leaderboard.currentUser.totalCorrect : 0}</div></div>
+            </div>
             {leaderboard && (
               <Leaderboard
                 className="mt-3"

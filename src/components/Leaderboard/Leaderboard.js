@@ -40,17 +40,6 @@ const Leaderboard = ({ scores = [], hasMore, nextResultsHandler, className, user
             <b>Score</b>
           </div>
         </div>
-        {userScore.username && (
-          <div className="d-flex user-row">
-            <div className="board-position leaderboard-cell">{userScore.leaderBoardPosition}</div>
-            <div className="board-name leaderboard-cell">
-              <Link className="link" to={`/user/${userScore.username}`}>
-                {userScore.username}
-              </Link>
-            </div>
-            <div className="board-score leaderboard-cell">{userScore.totalCorrect}</div>
-          </div>
-        )}
         {scores.length !== 0 && (
           <InfiniteScroll
             next={nextResultsHandler}
