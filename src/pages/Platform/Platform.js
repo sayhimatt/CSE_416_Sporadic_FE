@@ -42,13 +42,14 @@ const Platform = () => {
   const [platformIcon, setPlatformIcon] = useState();
   const [uploadBanner, setUploadBanner] = useState(false);
   const [uploadIcon, setUploadIcon] = useState(false);
-  const [sortBy, setSortBy] = useState("title");
-  const [sortDirection, setSortDirection] = useState("ascending");
+  const [sortBy, setSortBy] = useState("upvotes");
+  const [sortDirection, setSortDirection] = useState("descending");
 
   useEffect(() => {
     getCurrentPlatform();
     getImageMedia();
     setModView(false);
+    setSubscribed(user.subscriptions.includes(params.platform));
     setLeaderboard({ page: 0, hasMore: true, scores: [], currentUser: {} });
   }, [params]);
 
@@ -282,10 +283,17 @@ const Platform = () => {
               <div className="d-flex align-items-center justify-content-center pe-3">
                 <Dropdown>
                   <Dropdown.Toggle className="sort-dropdowns me-3">
-                    {sortBy === "timeLimit" ? "Time Limit" : sortBy}
+                    {sortBy === "_id" ? "New" : sortBy === "timeLimit" ? "Time Limit" : sortBy}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Header>sort by</Dropdown.Header>
+                    <Dropdown.Item
+                      onClick={() => {
+                        setSortBy("_id");
+                      }}
+                    >
+                      New
+                    </Dropdown.Item>
                     <Dropdown.Item
                       onClick={() => {
                         setSortBy("title");
