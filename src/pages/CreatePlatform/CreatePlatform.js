@@ -48,9 +48,9 @@ const CreatePlatform = () => {
       return;
     }
     postCreatePlatform(platformData)
-      .then((res) => {
+      .then(async (res) => {
         dispatch({ type: "SUBSCRIBE", payload: platformData.title });
-        return sendImagesToAWS();
+        await sendImagesToAWS();
       })
       .then((res) => {
         history.push(`/p/${platformData.title}`);
