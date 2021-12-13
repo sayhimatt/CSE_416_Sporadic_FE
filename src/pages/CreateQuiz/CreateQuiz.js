@@ -178,7 +178,7 @@ const CreateQuiz = () => {
 
   const sendImagesToAWS = async () => {
     const promises = [];
-    if (images.quizIcon !== "/quizIcon.svg") {
+    if (images.quizIcon !== "/quizIcon.png") {
       promises.push(
         generateSetQuizIconURL(params.platform, quizInfo.quizTitle)
           .then((putURL) => setImage(putURL, images.quizIcon))

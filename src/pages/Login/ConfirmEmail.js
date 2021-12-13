@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useHistory } from "react-router";
+import { Redirect, useHistory } from "react-router";
 
 import { postConfirmCode } from "../../API/API";
 import Button from "../../components/Buttons/Button/Button";
@@ -28,13 +28,16 @@ const ConfirmEmail = () => {
     return () => setIsLoading(false);
   }, []);
 
-  return (
+  return !history.location.state.username ? (
+    <Redirect to="/login" />
+  ) : (
     <div className="page d-flex flex-column align-items-center justify-content-start">
       <div className="logo">
         <img className="logoImage" src="/logo.svg" alt="logo" />
       </div>
       <div className="loginContainer d-flex flex-column">
-        <form className="loginForm d-flex flex-column">
+        <form className="loginForm d-flex flex-column text-center">
+          <h4 className="mb-3">A code was sent to your email</h4>
           <div className="inputs d-flex flex-column">
             <div className="inputBox">
               <input

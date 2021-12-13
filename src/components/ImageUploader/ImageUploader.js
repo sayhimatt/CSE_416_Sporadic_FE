@@ -88,7 +88,13 @@ const ImageUploader = ({
               type="submit"
               value="Upload"
               className="btn btn-primary btn-block upload-button"
-              onClick={customSubmit ? () => customSubmit(file) : onSubmit}
+              onClick={
+                file === "" && file.type !== "image/png"
+                  ? null
+                  : customSubmit
+                  ? () => customSubmit(file)
+                  : onSubmit
+              }
             />
             <p>{uploadStatus}</p>
           </div>

@@ -56,13 +56,13 @@ const CreatePlatform = () => {
         history.push(`/p/${platformData.title}`);
       })
       .catch((error) => {
-        setShowLoading(false);
         if (error.response.status === 400) {
           setShowInUseMsg(true);
         } else {
           history.push(`/p/${platformData.title}`);
         }
-      });
+      })
+      .finally(setShowLoading(false));
   };
 
   const sendImagesToAWS = async () => {

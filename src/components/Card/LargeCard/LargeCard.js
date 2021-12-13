@@ -40,7 +40,7 @@ const LargeCard = ({
       <div className="card d-flex flex-column justify-content-between">
         <div className="topCard d-flex flex-row">
           <div>
-            <img className="icon" src={iconSrc} alt="what" />
+            <img className="icon" src={iconSrc} alt="icon" />
           </div>
           <div className="info flex-grow-1">
             <div className="d-flex">

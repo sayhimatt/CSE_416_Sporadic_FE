@@ -173,6 +173,10 @@ export const postConfirmCode = async (username, confirmCode) => {
   });
 };
 
+export const postResendConfirmationCode = async (username) => {
+  await axios.post(`${ENDPOINT}/users/${username}/resendConfirmationCode`);
+};
+
 /* User routing */
 
 export const getUser = async (username) => {
@@ -378,12 +382,26 @@ export const getQuizIcon = async (platform, quiz) => {
   try {
     const resp = await axios.get(`${AWS_ENDPOINT}/platforms/${platform}/${quiz}/icon.png`);
     if (resp.status != 200) {
-      return "/quizIcon.svg";
+      return "/quizIcon.png";
     }
     return `${AWS_ENDPOINT}/platforms/${platform}/${quiz}/icon.png`;
   } catch {
     return "/quizIcon.png";
   }
+};
+
+export const getAllQuizIcons = async (quizzes) => {
+  const promises = [];
+  const icons = {};
+  quizzes.forEach((quiz) =>
+    promises.push(
+      getQuizIcon(quiz.platform, quiz.title).then((link) => {
+        icons[quiz.title] = link;
+      }),
+    ),
+  );
+  await Promise.all(promises);
+  return icons;
 };
 
 export const getAwardIcon = async (platform, quiz) => {
