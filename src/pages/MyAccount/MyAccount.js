@@ -73,7 +73,7 @@ const MyAccount = () => {
         <div className="page-content ms-5 me-5">
           <div className="d-flex flex-column justify-content-center align-items-center">
             <div className="account-section">
-              <h2>AVATAR</h2>
+              <h1 className="color-secondary">{user.username}</h1>
               <img className="profile-avatar" alt="avatar" src={user.profilePicture} />
               <div>
                 <Button onClick={() => setShowAvatarUpload(true)}>Change Avatar</Button>
