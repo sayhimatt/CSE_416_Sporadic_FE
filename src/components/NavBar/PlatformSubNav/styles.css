@@ -6,6 +6,7 @@
   height: 8em;
   width: 8em;
   border-radius: 50%;
+  background-color: white;
   overflow-y: visible;
   align-self: end;
   transition: background 1s;
@@ -15,6 +16,7 @@
   height: 42px;
   width: 42px;
   border-radius: 50%;
+  background-color: white;
   align-self: center;
 }
 
