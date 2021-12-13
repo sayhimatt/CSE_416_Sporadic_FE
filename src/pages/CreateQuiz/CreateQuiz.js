@@ -222,9 +222,9 @@ const CreateQuiz = () => {
     quiz.awardRequirement = parseInt(awardRequirement);
     setIsLoading(true);
     postCreateQuiz(quiz)
-      .then(() => {
+      .then(async () => {
         try {
-          sendImagesToAWS();
+          await sendImagesToAWS();
         } catch (e) {
           alert(e);
         }
@@ -264,6 +264,12 @@ const CreateQuiz = () => {
   const checkQuizTitle = () => {
     if (quizInfo.quizTitle.length === 0) {
       addErrorMessage("Quiz title cannot be empty");
+      return false;
+    }
+    if (!quizInfo.quizTitle.match(/^[\w\-\s]*$/)) {
+      addErrorMessage(
+        "Quiz title must only contain alphanumeric characters, hypens, and/or spaces",
+      );
       return false;
     }
     return true;
