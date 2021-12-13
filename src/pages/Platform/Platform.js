@@ -49,6 +49,7 @@ const Platform = () => {
     getCurrentPlatform();
     getImageMedia();
     setModView(false);
+    setSubscribed(user.subscriptions.includes(params.platform));
     setLeaderboard({ page: 0, hasMore: true, scores: [], currentUser: {} });
   }, [params]);
 
@@ -280,7 +281,7 @@ const Platform = () => {
               <div className="d-flex align-items-center justify-content-center pe-3">
                 <Dropdown>
                   <Dropdown.Toggle className="sort-dropdowns me-3">
-                    {sortBy === "_id" ? "New" : (sortBy === "timeLimit" ? "Time Limit" : sortBy) }                   
+                    {sortBy === "_id" ? "New" : sortBy === "timeLimit" ? "Time Limit" : sortBy}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Header>sort by</Dropdown.Header>
@@ -290,7 +291,7 @@ const Platform = () => {
                       }}
                     >
                       New
-                    </Dropdown.Item>                    
+                    </Dropdown.Item>
                     <Dropdown.Item
                       onClick={() => {
                         setSortBy("title");
