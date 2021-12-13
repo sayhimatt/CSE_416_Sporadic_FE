@@ -76,7 +76,11 @@ const SearchResults = ({ location }) => {
   const setResultsType = (type, page, newResults) => {
     setResults((prevState) => ({
       ...prevState,
-      [type]: { ...prevState[type], page, results: prevState[type].results.concat(newResults) },
+      [type]: {
+        ...prevState[type],
+        page,
+        results: page === 1 ? newResults : prevState[type].results.concat(newResults),
+      },
     }));
   };
 

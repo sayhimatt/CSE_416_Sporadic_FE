@@ -56,7 +56,7 @@ const Feed = ({ children }) => {
         setQuizzes((prevState) => ({
           ...prevState,
           page: newPage,
-          quizzes: prevState.quizzes.concat(response.items),
+          quizzes: newPage === 1 ? response.items : prevState.quizzes.concat(response.items),
         }));
       }
     } catch (error) {
@@ -130,7 +130,7 @@ const Feed = ({ children }) => {
             <div id="sort">
               <Dropdown>
                 <Dropdown.Toggle className="sort-dropdowns me-3">
-                {sortBy === "_id" ? "New" : sortBy }
+                  {sortBy === "_id" ? "New" : sortBy}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Header>sort by</Dropdown.Header>

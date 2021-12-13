@@ -136,7 +136,8 @@ const Platform = () => {
         setQuizzes((prevState) => ({
           ...prevState,
           page: newPage,
-          quizzes: prevState.quizzes.concat(quizzesWithoutPinned),
+          quizzes:
+            newPage === 1 ? quizzesWithoutPinned : prevState.quizzes.concat(quizzesWithoutPinned),
         }));
       }
     } catch (error) {
