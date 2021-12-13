@@ -19,8 +19,8 @@ const Feed = ({ children }) => {
   const { user } = useContext(UserContext);
   const [quizzes, setQuizzes] = useState();
   const [awards, setAwards] = useState();
-  const [sortBy, setSortBy] = useState("title");
-  const [sortDirection, setSortDirection] = useState("ascending");
+  const [sortBy, setSortBy] = useState("_id");
+  const [sortDirection, setSortDirection] = useState("descending");
 
   const [isGlobalAdmin, setIsGlobalAdmin] = useState(false);
   const [quizCards, setQuizCards] = useState([]);
@@ -128,9 +128,18 @@ const Feed = ({ children }) => {
           <div className="d-flex flex-column w-100">
             <div id="sort">
               <Dropdown>
-                <Dropdown.Toggle className="sort-dropdowns me-3">{sortBy}</Dropdown.Toggle>
+                <Dropdown.Toggle className="sort-dropdowns me-3">
+                {sortBy === "_id" ? "New" : sortBy }
+                </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Header>sort by</Dropdown.Header>
+                  <Dropdown.Item
+                    onClick={() => {
+                      setSortBy("_id");
+                    }}
+                  >
+                    New
+                  </Dropdown.Item>
                   <Dropdown.Item
                     onClick={() => {
                       setSortBy("title");
