@@ -26,19 +26,21 @@ const CreatePlatform = () => {
   });
   const [showInvalidMsg, setShowInvalidMsg] = useState(false);
   const [showInUseMsg, setShowInUseMsg] = useState(false);
+  const [showEmptyDescMsg, setShowEmptyDescMsg] = useState(false);
   const [images, setImages] = useState({ icon: "", banner: "" });
   const [imageUploaders, setImageUploaders] = useState({ icon: false, banner: false });
   const [showLoading, setShowLoading] = useState(false);
+  
   const { dispatch } = useContext(UserContext);
 
   const history = useHistory();
 
   const setTitle = (e) => {
-    setPlatformData({ ...platformData, title: e.target.value });
+    setPlatformData({ ...platformData, title: (e.target.value).trim() });
   };
 
   const setDescription = (e) => {
-    setPlatformData({ ...platformData, description: e.target.value });
+    setPlatformData({ ...platformData, description: (e.target.value).trim() });
   };
 
   const createPlatform = async () => {
@@ -97,7 +99,8 @@ const CreatePlatform = () => {
 
   const invalidInputs = () => {
     setShowInvalidMsg(platformData.title.includes(" "));
-    return platformData.title.includes(" ");
+    setShowEmptyDescMsg((platformData.description.length < 1 ));
+    return (platformData.title.includes(" ") || (platformData.description.length < 1 ));
   };
 
   return (
@@ -109,6 +112,11 @@ const CreatePlatform = () => {
           visible={showInvalidMsg}
           errorStyle="errorBox"
           text="Platform Title cannot contain spaces"
+        />
+        <ErrorMessage
+          visible={showEmptyDescMsg}
+          errorStyle="errorBox"
+          text="Platform Description cannot be empty"
         />
         <ErrorMessage
           visible={showInUseMsg}
