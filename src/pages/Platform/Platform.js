@@ -202,7 +202,6 @@ const Platform = () => {
     const cards = allQuizzes.map(async (quiz, index) => {
       const name = params.platform;
       const quizImg = await getQuizIcon(params.platform, quiz.title);
-      //const timeLimit = quiz.getTimeLimit();
       console.log(quiz);
       return (
         <LargeCard

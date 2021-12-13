@@ -35,7 +35,7 @@ const LargeCard = ({
     }
   };
   const convertTime = (time) => {
-    return `${Math.floor(time/60)}m ${time%60}s`
+    return `${Math.floor(time/60)}m ${time%60 > 0 ? (time%60)+ 's': '' }`
   }
 
   return (
@@ -55,7 +55,7 @@ const LargeCard = ({
               {cardInfo.description ? cardInfo.description : "No Description"}
             </div>
           </div>
-          <div classname ="time-limit justify-content-between align-items-end">
+          <div classname ="time-limit ">
             Time Limit: {convertTime(cardInfo.time)}
           </div>
           <div className="d-flex align-items-start">

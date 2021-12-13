@@ -93,6 +93,7 @@ const Feed = ({ children }) => {
             description: quiz.description,
             upvotes: quiz.upvotes,
             downvotes: quiz.downvotes,
+            time: quiz.timeLimit,
             subtext: (
               <Link className="link" to={`/p/${quiz.platform}`}>
                 {quiz.platform}
