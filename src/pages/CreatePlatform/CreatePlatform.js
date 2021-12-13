@@ -45,6 +45,7 @@ const CreatePlatform = () => {
     setShowLoading(true);
     setShowInUseMsg(false);
     if (invalidInputs()) {
+      setShowLoading(false);
       return;
     }
     postCreatePlatform(platformData)
