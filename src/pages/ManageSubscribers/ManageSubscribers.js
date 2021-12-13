@@ -34,7 +34,9 @@ const ManageSubscribers = () => {
     getPlatform(platformName)
       .then((platformData) => {
         setPlatform(platformData);
-        getAllUserIcons(platformData.subscribers).then((icons) => setProfilePictures(icons));
+        getAllUserIcons([...platformData.subscribers, ...platformData.bannedUsers]).then((icons) =>
+          setProfilePictures(icons),
+        );
         getPlatformIcon(params.platform).then((icon) => {
           setPlatformIcon(icon);
         });

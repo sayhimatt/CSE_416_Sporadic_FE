@@ -40,7 +40,7 @@ const Leaderboard = ({ scores = [], hasMore, nextResultsHandler, className, user
             <b>Score</b>
           </div>
         </div>
-        {userScore.username && (
+        {userScore.username && userScore.totalScore && userScore.leaderBoardPosition && (
           <div className="d-flex user-row">
             <div className="board-position leaderboard-cell">{userScore.leaderBoardPosition}</div>
             <div className="board-name leaderboard-cell">
