@@ -266,8 +266,10 @@ const CreateQuiz = () => {
       addErrorMessage("Quiz title cannot be empty");
       return false;
     }
-    if (!quizInfo.quizTitle.match(/^[0-9a-zA-Z]+$/)) {
-      addErrorMessage("Quiz title must only contain alphanumeric characters");
+    if (!quizInfo.quizTitle.match(/^[\w\-\s]*$/)) {
+      addErrorMessage(
+        "Quiz title must only contain alphanumeric characters, hypens, and/or spaces",
+      );
       return false;
     }
     return true;
