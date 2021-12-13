@@ -17,9 +17,13 @@ const PlatformSubNav = ({ children, platformName, bannerSrc, iconSrc, modView, s
       )}
       <SubNav
         heading={
-          <Link className="link color-secondary" to={`/p/${platformName}` + (quizName ? `/${quizName}` : ``)}>
-            {quizName ? quizName : platformName}
-          </Link>
+          (quizName) ?
+            <div className="link color-secondary"> {quizName} </div>
+            :
+            <Link className="link color-secondary" to={`/p/${platformName}`}>
+              {platformName}
+            </Link>
+
         }
         buttons={children}
       >

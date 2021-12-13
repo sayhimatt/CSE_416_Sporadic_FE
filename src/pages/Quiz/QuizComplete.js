@@ -264,7 +264,7 @@ const QuizComplete = () => {
     return (
       <div>
         <MainNav />
-        <PlatformSubNav platformName={"Quiz: " + params.quiz} iconSrc={platformIcon} />
+        <PlatformSubNav platformName={params.platform} iconSrc={platformIcon}/>
         <div className="quiz-alerts">
           <Alert
             show={showAlert.show}

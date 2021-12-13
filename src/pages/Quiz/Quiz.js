@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 
-import { postStartQuiz, postSubmitQuiz, getPlatformIcon, getPlatformBanner, getAwardIcon } from "./../../API/API";
+import { postStartQuiz, postSubmitQuiz, getPlatformIcon, getPlatformBanner, getAwardIcon, getQuizIcon } from "./../../API/API";
 import MainNav from "../../components/NavBar/MainNav/MainNav";
 import PlatformSubNav from "../../components/NavBar/PlatformSubNav/PlatformSubNav";
 import QuestionCard from "../../components/Card/QuestionCard/QuestionCard.js";
@@ -23,6 +23,7 @@ const Quiz = () => {
   const [timeLeft, setTimeLeft] = useState(0);
   const [banner, setBanner] = useState("/banner.jpg");
   const [platformIcon, setPlatformIcon] = useState("/platformIcon.png");
+  const [quizIcon, setQuizIcon] = useState("/icon.png")
   const history = useHistory();
   const params = useParams();
 
@@ -63,7 +64,10 @@ const Quiz = () => {
     });
     await getAwardIcon(params.platform, params.quiz).then((icon) => {
       setAward(icon);
-    })
+    });
+    await getQuizIcon(params.platform, params.quiz).then((icon) => {
+      setQuizIcon(icon);
+    });
   };
 
   const getQuestions = async () => {
@@ -135,9 +139,10 @@ const Quiz = () => {
     <div>
       <MainNav />
       <PlatformSubNav
-        platformName={params.quiz}
+        platformName={params.platform}
+        quizName={params.quiz}
         bannerSrc={banner}
-        iconSrc={platformIcon}
+        iconSrc={quizIcon}
       />
       <div className="content d-flex m-4 flex-row align-items-start">
         <div className="d-flex flex-column flex-md-fill w-75">{questionsCards}</div>
