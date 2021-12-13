@@ -114,6 +114,7 @@
   width: 25%;
 }
 
+
 #quiz-title {
   display: flex;
   justify-content: center;
@@ -130,6 +131,31 @@
   width: 64px;
   height: 64px;
   cursor: pointer;
+}
+
+#icon-bubble {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 200px;
+  width: 200px;
+  background-color: $primaryColor;
+  border-radius: 50%;
+  box-shadow: 4px 8px 15px 3px #189ab456;
+  flex-direction: column;
+
+}
+
+#results-breakdown {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 70%;
+  margin-top: 2em;
+  font-size: 2em;
+  font-weight: 500;
+  color: $secondaryColor;
 }
 
 #comments-section {
